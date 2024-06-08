@@ -2,5 +2,8 @@ Flask
 Flask-Cors
 Flask-PyMongo
 automium_web
-mondodb==GITHUBSTUDENT50-BIEHHL
 pymongo
+gunicorn
+dnspython
+python-dotenv
+mondodb==GITHUBSTUDENT50-BIEHHL

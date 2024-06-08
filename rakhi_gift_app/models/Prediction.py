@@ -1,9 +1,9 @@
 # models/Prediction.py
 from pymongo import MongoClient
 from datetime import datetime
-import os
 
-client = MongoClient(os.getenv('MONGO_URI'))
+
+client = MongoClient('mongodb+srv://harshitghosh7:rakhi@cluster0.5vlwifq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
 db = client['rakhi_gift_app']
 
 class Prediction:
