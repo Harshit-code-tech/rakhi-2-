@@ -1,3 +1,4 @@
+# server.py
 from flask import Flask, request, jsonify
 from models.Goal import Goal
 from models.Mood import Mood
@@ -22,7 +23,6 @@ def add_mood():
     data = request.json
     mood = Mood(mood=data['mood'])
     mood.save()
-    # Assuming we have a function get_recommendations(mood) in recommendation_service.py
     from services.recommendation_service import get_recommendations
     recommendations = get_recommendations(data['mood'])
     return jsonify({'recommendations': recommendations}), 201
