@@ -1,14 +1,14 @@
+# models/Prediction.py
 from pymongo import MongoClient
 from datetime import datetime
+import os
 
-client = MongoClient('mongodb+srv://harshitghosh7:rakhi@cluster0.5vlwifq.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0')
+client = MongoClient(os.getenv('MONGO_URI'))
 db = client['rakhi_gift_app']
 
-
 class Prediction:
-    def __init__(self, mood, recommendations, date=None):
-        self.mood = mood
-        self.recommendations = recommendations
+    def __init__(self, recommendation, date=None):
+        self.recommendation = recommendation
         self.date = date or datetime.utcnow()
 
     def save(self):

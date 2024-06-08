@@ -16,5 +16,12 @@ habits = {
     ]
 }
 
+# services/recommendation_service.py
 def get_recommendations(mood):
-    return habits.get(mood, [])
+    # Basic example of mood-based recommendations
+    recommendations = {
+        'happy': ['Keep smiling!', 'Spread the joy!'],
+        'sad': ['It\'s okay to feel sad sometimes.', 'Talk to a friend.'],
+        'anxious': ['Take deep breaths.', 'Go for a walk.']
+    }
+    return recommendations.get(mood, ['Stay positive!'])
