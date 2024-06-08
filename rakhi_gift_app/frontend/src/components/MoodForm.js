@@ -5,11 +5,12 @@ const MoodForm = () => {
     const [mood, setMood] = useState('');
     const [recommendations, setRecommendations] = useState([]);
     const [allGoalsCompleted, setAllGoalsCompleted] = useState(false);
+    const backendUrl = process.env.REACT_APP_BACKEND_URL;
 
     useEffect(() => {
         const checkGoals = async () => {
             try {
-                const response = await axios.get('http://localhost:5000/goals');
+                const response = await axios.get(`${backendUrl}/goals`);
                 const goals = response.data;
                 const allCompleted = goals.every(goal => goal.completed);
                 setAllGoalsCompleted(allCompleted);
@@ -18,12 +19,12 @@ const MoodForm = () => {
             }
         };
         checkGoals();
-    }, []);
+    }, [backendUrl]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post('http://localhost:5000/moods', { mood });
+            const response = await axios.post(`${backendUrl}/moods`, { mood });
             setMood('');
             setRecommendations(response.data.recommendations);
         } catch (error) {
@@ -54,7 +55,7 @@ const MoodForm = () => {
                 {allGoalsCompleted ? (
                     <div>
                         <h3>Congratulations! You've completed all your goals!</h3>
-                        <img src="path_to_your_rakhi_image" alt="Rakhi Gift" />
+                        <img src={`${process.env.PUBLIC_URL}/images/rakhi_gift.png`} alt="Rakhi Gift" />
                     </div>
                 ) : (
                     <h3>Keep trying! You can complete all your goals!</h3>
