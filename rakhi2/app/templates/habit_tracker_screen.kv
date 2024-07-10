@@ -1,0 +1,13 @@
+<HabitTrackerScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Habit Tracker'
+        TextInput:
+            id: goal_input
+            hint_text: 'Enter your goal'
+        Button:
+            text: 'Save'
+            on_release:
+                app.root.current = 'home'
+                logging.info(f"Goal entered: {goal_input.text}")

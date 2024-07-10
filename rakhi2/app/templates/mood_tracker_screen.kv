@@ -1,0 +1,13 @@
+<MoodTrackerScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Mood Tracker'
+        TextInput:
+            id: mood_input
+            hint_text: 'Enter your mood'
+        Button:
+            text: 'Save'
+            on_release:
+                app.root.current = 'home'
+                logging.info(f"Mood entered: {mood_input.text}")

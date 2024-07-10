@@ -1,0 +1,10 @@
+<RewardScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Reward Screen'
+        Button:
+            text: 'Back to Home'
+            on_release:
+                app.root.current = 'home'
+                logging.info("Button pressed: Back to Home")

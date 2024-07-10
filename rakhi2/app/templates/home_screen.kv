@@ -1,0 +1,20 @@
+<HomeScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Home Screen'
+        Button:
+            text: 'Track Mood'
+            on_release:
+                app.root.current = 'mood_tracker'
+                logging.info("Button pressed: Track Mood")
+        Button:
+            text: 'Track Habits'
+            on_release:
+                app.root.current = 'habit_tracker'
+                logging.info("Button pressed: Track Habits")
+        Button:
+            text: 'View Rewards'
+            on_release:
+                app.root.current = 'reward'
+                logging.info("Button pressed: View Rewards")
