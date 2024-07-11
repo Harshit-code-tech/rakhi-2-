@@ -14,7 +14,7 @@ logging.basicConfig(level=logging.INFO)
 Builder.load_file(os.path.join('app', 'templates', 'home_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'mood_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'habit_tracker_screen.kv'))
-Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))  # Updated this line
+Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))
 
 class HomeScreen(Screen):
     pass
@@ -35,12 +35,15 @@ class HistoricalDataScreen(Screen):
         return []
 
     def display_data(self, moods, habits):
-        self.ids.moods_list.clear_widgets()
-        self.ids.habits_list.clear_widgets()
-        for mood in moods:
-            self.ids.moods_list.add_widget(Label(text=mood))
-        for habit in habits:
-            self.ids.habits_list.add_widget(Label(text=habit))
+        try:
+            self.ids.moods_list.clear_widgets()
+            self.ids.habits_list.clear_widgets()
+            for mood in moods:
+                self.ids.moods_list.add_widget(Label(text=mood))
+            for habit in habits:
+                self.ids.habits_list.add_widget(Label(text=habit))
+        except KeyError as e:
+            logging.error(f"ID not found: {e}")
 
 class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
@@ -79,14 +82,17 @@ class MoodTrackerScreen(Screen):
         self.display_moods(moods)
 
     def display_moods(self, moods):
-        self.ids.moods_list.clear_widgets()
-        for mood in moods:
-            box = BoxLayout(orientation='horizontal')
-            box.add_widget(Label(text=mood))
-            btn = Button(text='Delete', size_hint_x=0.2)
-            btn.bind(on_release=lambda btn, mood=mood: self.delete_mood(mood))
-            box.add_widget(btn)
-            self.ids.moods_list.add_widget(box)
+        try:
+            self.ids.moods_list.clear_widgets()
+            for mood in moods:
+                box = BoxLayout(orientation='horizontal')
+                box.add_widget(Label(text=mood))
+                btn = Button(text='Delete', size_hint_x=0.2)
+                btn.bind(on_release=lambda btn, mood=mood: self.delete_mood(mood))
+                box.add_widget(btn)
+                self.ids.moods_list.add_widget(box)
+        except KeyError as e:
+            logging.error(f"ID not found: {e}")
 
 class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
@@ -125,14 +131,17 @@ class HabitTrackerScreen(Screen):
         self.display_habits(habits)
 
     def display_habits(self, habits):
-        self.ids.habits_list.clear_widgets()
-        for habit in habits:
-            box = BoxLayout(orientation='horizontal')
-            box.add_widget(Label(text=habit))
-            btn = Button(text='Delete', size_hint_x=0.2)
-            btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
-            box.add_widget(btn)
-            self.ids.habits_list.add_widget(box)
+        try:
+            self.ids.habits_list.clear_widgets()
+            for habit in habits:
+                box = BoxLayout(orientation='horizontal')
+                box.add_widget(Label(text=habit))
+                btn = Button(text='Delete', size_hint_x=0.2)
+                btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
+                box.add_widget(btn)
+                self.ids.habits_list.add_widget(box)
+        except KeyError as e:
+            logging.error(f"ID not found: {e}")
 
 class RewardsScreen(Screen):
     pass

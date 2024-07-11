@@ -1,22 +1,21 @@
 <HistoricalDataScreen>:
     BoxLayout:
         orientation: 'vertical'
-        Label:
-            text: 'Historical Data'
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Moods'
+            Label:
+                text: 'Habits'
         BoxLayout:
             orientation: 'horizontal'
             ScrollView:
+                id: moods_list
                 BoxLayout:
                     id: moods_list
                     orientation: 'vertical'
-                    size_hint_y: None
-                    height: self.minimum_height
             ScrollView:
+                id: habits_list
                 BoxLayout:
                     id: habits_list
                     orientation: 'vertical'
-                    size_hint_y: None
-                    height: self.minimum_height
-        Button:
-            text: 'Back to Home'
-            on_release: app.root.current = 'home'
