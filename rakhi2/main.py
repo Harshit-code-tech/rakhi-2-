@@ -17,6 +17,8 @@ Builder.load_file(os.path.join('app', 'templates', 'mood_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'habit_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'historical_data_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))
+Builder.load_file(os.path.join('app', 'templates', 'settings_screen.kv'))  # Ensure this line is added
+
 
 class HomeScreen(Screen):
     pass

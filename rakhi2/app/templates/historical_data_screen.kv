@@ -20,3 +20,8 @@
                     id: habits_list
                     orientation: 'vertical'
                     on_kv_post: app.on_kv_post_habits_list(self)
+        Button:
+            text: 'Back to Home'
+            size_hint_y: None
+            height: '40dp'
+            on_release: app.root.current = 'home'
