@@ -1,3 +1,4 @@
+# main.py
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -14,6 +15,7 @@ logging.basicConfig(level=logging.INFO)
 Builder.load_file(os.path.join('app', 'templates', 'home_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'mood_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'habit_tracker_screen.kv'))
+Builder.load_file(os.path.join('app', 'templates', 'historical_data_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))
 
 class HomeScreen(Screen):
@@ -71,6 +73,7 @@ class HistoricalDataScreen(Screen):
             logging.error(f"KeyError in display_data: {e}")
         except Exception as e:
             logging.error(f"Error in display_data: {e}")
+
 
 class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
@@ -237,11 +240,19 @@ class MyScreenManager(ScreenManager):
         self.add_widget(RewardsScreen(name='rewards'))
         self.add_widget(HistoricalDataScreen(name='historical_data'))
 
+
 class MyDailyCompanionApp(App):
     def build(self):
         sm = MyScreenManager()
         return sm
 
+    def on_kv_post_moods_list(self, instance):
+        logging.info(f"moods_list ID set: {instance}")
+
+    def on_kv_post_habits_list(self, instance):
+        logging.info(f"habits_list ID set: {instance}")
+
 if __name__ == '__main__':
     logging.info("Starting My Daily Companion App")
     MyDailyCompanionApp().run()
+
