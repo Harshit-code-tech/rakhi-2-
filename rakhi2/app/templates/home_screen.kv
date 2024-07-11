@@ -1,20 +1,31 @@
 <HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1
+            Rectangle:
+                pos: self.pos
+                size: self.size
         Label:
-            text: 'Home Screen'
+            text: 'Welcome to My Daily Companion App'
+            font_size: 32
+            color: 1, 1, 1, 1
         Button:
             text: 'Track Mood'
-            on_release:
-                app.root.current = 'mood_tracker'
-                logging.info("Button pressed: Track Mood")
+            font_size: 24
+            on_release: app.root.current = 'mood_tracker'
         Button:
-            text: 'Track Habits'
-            on_release:
-                app.root.current = 'habit_tracker'
-                logging.info("Button pressed: Track Habits")
+            text: 'Track Habit'
+            font_size: 24
+            on_release: app.root.current = 'habit_tracker'
         Button:
             text: 'View Rewards'
-            on_release:
-                app.root.current = 'reward'
-                logging.info("Button pressed: View Rewards")
+            font_size: 24
+            on_release: app.root.current = 'rewards'
+        Button:
+            text: 'View Historical Data'
+            font_size: 24
+            on_release: app.root.current = 'historical_data'
