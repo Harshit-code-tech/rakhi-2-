@@ -14,125 +14,215 @@ logging.basicConfig(level=logging.INFO)
 Builder.load_file(os.path.join('app', 'templates', 'home_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'mood_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'habit_tracker_screen.kv'))
-Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))  # Updated this line
+Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))
 
 class HomeScreen(Screen):
     pass
 
 class HistoricalDataScreen(Screen):
     def on_pre_enter(self):
-        self.load_data()
+        try:
+            self.load_data()
+        except Exception as e:
+            logging.error(f"Error in on_pre_enter: {e}")
 
     def load_data(self):
-        moods = self.read_file('moods.txt')
-        habits = self.read_file('habits.txt')
-        self.display_data(moods, habits)
+        try:
+            moods = self.read_file('moods.txt')
+            habits = self.read_file('habits.txt')
+            self.display_data(moods, habits)
+        except Exception as e:
+            logging.error(f"Error in load_data: {e}")
 
     def read_file(self, filename):
-        if os.path.exists(filename):
-            with open(filename, 'r') as f:
-                return f.read().splitlines()
-        return []
+        try:
+            if os.path.exists(filename):
+                with open(filename, 'r') as f:
+                    return f.read().splitlines()
+            return []
+        except Exception as e:
+            logging.error(f"Error reading file {filename}: {e}")
+            return []
 
     def display_data(self, moods, habits):
-        self.ids.moods_list.clear_widgets()
-        self.ids.habits_list.clear_widgets()
-        for mood in moods:
-            self.ids.moods_list.add_widget(Label(text=mood))
-        for habit in habits:
-            self.ids.habits_list.add_widget(Label(text=habit))
+        try:
+            if 'moods_list' in self.ids:
+                self.ids.moods_list.clear_widgets()
+            else:
+                logging.error("moods_list ID not found")
+
+            if 'habits_list' in self.ids:
+                self.ids.habits_list.clear_widgets()
+            else:
+                logging.error("habits_list ID not found")
+
+            for mood in moods:
+                if 'moods_list' in self.ids:
+                    self.ids.moods_list.add_widget(Label(text=mood))
+                else:
+                    logging.error("moods_list ID not found")
+
+            for habit in habits:
+                if 'habits_list' in self.ids:
+                    self.ids.habits_list.add_widget(Label(text=habit))
+                else:
+                    logging.error("habits_list ID not found")
+        except KeyError as e:
+            logging.error(f"KeyError in display_data: {e}")
+        except Exception as e:
+            logging.error(f"Error in display_data: {e}")
 
 class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
         logging.info(f"Mood submitted: {mood}")
-        self.save_mood(mood)
-        self.ids.mood_input.text = ''
-        self.load_moods()
+        try:
+            self.save_mood(mood)
+            self.ids.mood_input.text = ''
+            self.load_moods()
+        except Exception as e:
+            logging.error(f"Error in submit_mood: {e}")
 
     def save_mood(self, mood):
-        with open('moods.txt', 'a') as f:
-            f.write(f"{mood}\n")
+        try:
+            with open('moods.txt', 'a') as f:
+                f.write(f"{mood}\n")
+        except Exception as e:
+            logging.error(f"Error saving mood: {e}")
 
     def delete_mood(self, mood):
-        moods = self.read_file('moods.txt')
-        if mood in moods:
-            moods.remove(mood)
-            self.write_file('moods.txt', moods)
-            self.load_moods()
+        try:
+            moods = self.read_file('moods.txt')
+            if mood in moods:
+                moods.remove(mood)
+                self.write_file('moods.txt', moods)
+                self.load_moods()
+        except Exception as e:
+            logging.error(f"Error deleting mood: {e}")
 
     def read_file(self, filename):
-        if os.path.exists(filename):
-            with open(filename, 'r') as f:
-                return f.read().splitlines()
-        return []
+        try:
+            if os.path.exists(filename):
+                with open(filename, 'r') as f:
+                    return f.read().splitlines()
+            return []
+        except Exception as e:
+            logging.error(f"Error reading file {filename}: {e}")
+            return []
 
     def write_file(self, filename, data):
-        with open(filename, 'w') as f:
-            for item in data:
-                f.write(f"{item}\n")
+        try:
+            with open(filename, 'w') as f:
+                for item in data:
+                    f.write(f"{item}\n")
+        except Exception as e:
+            logging.error(f"Error writing file {filename}: {e}")
 
     def on_pre_enter(self):
-        self.load_moods()
+        try:
+            self.load_moods()
+        except Exception as e:
+            logging.error(f"Error in on_pre_enter: {e}")
 
     def load_moods(self):
-        moods = self.read_file('moods.txt')
-        self.display_moods(moods)
+        try:
+            moods = self.read_file('moods.txt')
+            self.display_moods(moods)
+        except Exception as e:
+            logging.error(f"Error in load_moods: {e}")
 
     def display_moods(self, moods):
-        self.ids.moods_list.clear_widgets()
-        for mood in moods:
-            box = BoxLayout(orientation='horizontal')
-            box.add_widget(Label(text=mood))
-            btn = Button(text='Delete', size_hint_x=0.2)
-            btn.bind(on_release=lambda btn, mood=mood: self.delete_mood(mood))
-            box.add_widget(btn)
-            self.ids.moods_list.add_widget(box)
+        try:
+            if 'moods_list' in self.ids:
+                self.ids.moods_list.clear_widgets()
+                for mood in moods:
+                    box = BoxLayout(orientation='horizontal')
+                    box.add_widget(Label(text=mood))
+                    btn = Button(text='Delete', size_hint_x=0.2)
+                    btn.bind(on_release=lambda btn, mood=mood: self.delete_mood(mood))
+                    box.add_widget(btn)
+                    self.ids.moods_list.add_widget(box)
+            else:
+                logging.error("moods_list ID not found")
+        except KeyError as e:
+            logging.error(f"KeyError in display_moods: {e}")
+        except Exception as e:
+            logging.error(f"Error in display_moods: {e}")
 
 class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
         logging.info(f"Habit submitted: {habit}")
-        self.save_habit(habit)
-        self.ids.habit_input.text = ''
-        self.load_habits()
+        try:
+            self.save_habit(habit)
+            self.ids.habit_input.text = ''
+            self.load_habits()
+        except Exception as e:
+            logging.error(f"Error in submit_habit: {e}")
 
     def save_habit(self, habit):
-        with open('habits.txt', 'a') as f:
-            f.write(f"{habit}\n")
+        try:
+            with open('habits.txt', 'a') as f:
+                f.write(f"{habit}\n")
+        except Exception as e:
+            logging.error(f"Error saving habit: {e}")
 
     def delete_habit(self, habit):
-        habits = self.read_file('habits.txt')
-        if habit in habits:
-            habits.remove(habit)
-            self.write_file('habits.txt', habits)
-            self.load_habits()
+        try:
+            habits = self.read_file('habits.txt')
+            if habit in habits:
+                habits.remove(habit)
+                self.write_file('habits.txt', habits)
+                self.load_habits()
+        except Exception as e:
+            logging.error(f"Error deleting habit: {e}")
 
     def read_file(self, filename):
-        if os.path.exists(filename):
-            with open(filename, 'r') as f:
-                return f.read().splitlines()
-        return []
+        try:
+            if os.path.exists(filename):
+                with open(filename, 'r') as f:
+                    return f.read().splitlines()
+            return []
+        except Exception as e:
+            logging.error(f"Error reading file {filename}: {e}")
+            return []
 
     def write_file(self, filename, data):
-        with open(filename, 'w') as f:
-            for item in data:
-                f.write(f"{item}\n")
+        try:
+            with open(filename, 'w') as f:
+                for item in data:
+                    f.write(f"{item}\n")
+        except Exception as e:
+            logging.error(f"Error writing file {filename}: {e}")
 
     def on_pre_enter(self):
-        self.load_habits()
+        try:
+            self.load_habits()
+        except Exception as e:
+            logging.error(f"Error in on_pre_enter: {e}")
 
     def load_habits(self):
-        habits = self.read_file('habits.txt')
-        self.display_habits(habits)
+        try:
+            habits = self.read_file('habits.txt')
+            self.display_habits(habits)
+        except Exception as e:
+            logging.error(f"Error in load_habits: {e}")
 
     def display_habits(self, habits):
-        self.ids.habits_list.clear_widgets()
-        for habit in habits:
-            box = BoxLayout(orientation='horizontal')
-            box.add_widget(Label(text=habit))
-            btn = Button(text='Delete', size_hint_x=0.2)
-            btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
-            box.add_widget(btn)
-            self.ids.habits_list.add_widget(box)
+        try:
+            if 'habits_list' in self.ids:
+                self.ids.habits_list.clear_widgets()
+                for habit in habits:
+                    box = BoxLayout(orientation='horizontal')
+                    box.add_widget(Label(text=habit))
+                    btn = Button(text='Delete', size_hint_x=0.2)
+                    btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
+                    box.add_widget(btn)
+                    self.ids.habits_list.add_widget(box)
+            else:
+                logging.error("habits_list ID not found")
+        except KeyError as e:
+            logging.error(f"KeyError in display_habits: {e}")
+        except Exception as e:
+            logging.error(f"Error in display_habits: {e}")
 
 class RewardsScreen(Screen):
     pass
