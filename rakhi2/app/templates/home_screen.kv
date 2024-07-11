@@ -1,4 +1,3 @@
-# home_screen.kv
 <HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
@@ -30,3 +29,7 @@
             text: 'View Historical Data'
             font_size: 24
             on_release: app.root.current = 'historical_data'
+        Button:
+            text: 'Settings'
+            font_size: 24
+            on_release: app.root.current = 'settings'

@@ -228,7 +228,50 @@ class HabitTrackerScreen(Screen):
             logging.error(f"Error in display_habits: {e}")
 
 class RewardsScreen(Screen):
-    pass
+    def on_pre_enter(self):
+        try:
+            self.display_rewards()
+        except Exception as e:
+            logging.error(f"Error in on_pre_enter: {e}")
+
+    def read_file(self, filename):
+        try:
+            if os.path.exists(filename):
+                with open(filename, 'r') as f:
+                    return f.read().splitlines()
+            return []
+        except Exception as e:
+            logging.error(f"Error reading file {filename}: {e}")
+            return []
+
+    def display_rewards(self):
+        try:
+            moods = self.read_file('moods.txt')
+            habits = self.read_file('habits.txt')
+
+            mood_count = len(moods)
+            habit_count = len(habits)
+
+            self.ids.mood_rewards.text = f"Total Moods Tracked: {mood_count}"
+            self.ids.habit_rewards.text = f"Total Habits Tracked: {habit_count}"
+
+            reward_message = self.calculate_rewards(mood_count, habit_count)
+            self.ids.reward_message.text = reward_message
+        except KeyError as e:
+            logging.error(f"KeyError in display_rewards: {e}")
+        except Exception as e:
+            logging.error(f"Error in display_rewards: {e}")
+
+    def calculate_rewards(self, mood_count, habit_count):
+        if mood_count >= 10 and habit_count >= 10:
+            return "Congratulations! You've earned a gold star!"
+        elif mood_count >= 5 and habit_count >= 5:
+            return "Great job! You've earned a silver star!"
+        elif mood_count >= 1 and habit_count >= 1:
+            return "Good start! You've earned a bronze star!"
+        else:
+            return "Keep tracking to earn rewards!"
+
 
 class MyScreenManager(ScreenManager):
     def __init__(self, **kwargs):
@@ -239,7 +282,11 @@ class MyScreenManager(ScreenManager):
         self.add_widget(HabitTrackerScreen(name='habit_tracker'))
         self.add_widget(RewardsScreen(name='rewards'))
         self.add_widget(HistoricalDataScreen(name='historical_data'))
+        self.add_widget(SettingsScreen(name='settings'))
 
+
+class SettingsScreen(Screen):
+    pass
 
 class MyDailyCompanionApp(App):
     def build(self):
