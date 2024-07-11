@@ -1,3 +1,4 @@
+# historical_data_screen.kv
 <HistoricalDataScreen>:
     BoxLayout:
         orientation: 'vertical'
@@ -13,7 +14,9 @@
                 BoxLayout:
                     id: moods_list
                     orientation: 'vertical'
+                    on_kv_post: app.on_kv_post_moods_list(self)
             ScrollView:
                 BoxLayout:
                     id: habits_list
                     orientation: 'vertical'
+                    on_kv_post: app.on_kv_post_habits_list(self)
