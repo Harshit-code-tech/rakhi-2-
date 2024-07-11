@@ -1,0 +1,16 @@
+<SettingsScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        Label:
+            text: 'Settings'
+            font_size: 24
+        BoxLayout:
+            orientation: 'horizontal'
+            Label:
+                text: 'Set Daily Reminder:'
+            ToggleButton:
+                text: 'Off'
+                on_state: self.text = 'On' if self.state == 'down' else 'Off'
+        Button:
+            text: 'Back to Home'
+            on_release: app.root.current = 'home'

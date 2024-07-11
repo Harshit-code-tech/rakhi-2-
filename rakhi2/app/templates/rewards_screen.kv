@@ -4,8 +4,18 @@
         orientation: 'vertical'
         Label:
             text: 'Rewards Screen'
+            font_size: 24
         Label:
-            text: 'You will see your rewards here!'
+            id: mood_rewards
+            text: 'Total Moods Tracked: 0'
+        Label:
+            id: habit_rewards
+            text: 'Total Habits Tracked: 0'
+        Label:
+            id: reward_message
+            text: 'Keep tracking to earn rewards!'
+            font_size: 18
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home'
+
