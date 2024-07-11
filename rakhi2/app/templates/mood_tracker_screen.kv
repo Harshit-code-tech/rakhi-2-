@@ -3,11 +3,20 @@
         orientation: 'vertical'
         Label:
             text: 'Mood Tracker'
-        TextInput:
-            id: mood_input
-            hint_text: 'Enter your mood'
+        BoxLayout:
+            orientation: 'horizontal'
+            TextInput:
+                id: mood_input
+                hint_text: 'Enter your mood'
+            Button:
+                text: 'Submit'
+                on_release: app.root.get_screen('mood_tracker').submit_mood(mood_input.text)
+        ScrollView:
+            BoxLayout:
+                id: moods_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
         Button:
-            text: 'Save'
-            on_release:
-                app.root.current = 'home'
-                logging.info(f"Mood entered: {mood_input.text}")
+            text: 'Back to Home'
+            on_release: app.root.current = 'home'
