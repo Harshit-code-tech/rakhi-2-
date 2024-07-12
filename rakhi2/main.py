@@ -169,22 +169,19 @@ class HabitTrackerScreen(Screen):
     def save_habit(self, habit):
         try:
             with open('habits.txt', 'a') as f:
-                f.write(f"{habit},0\n")  # 0 means incomplete
+                f.write(f"{habit}\n")
         except Exception as e:
             logging.error(f"Error saving habit: {e}")
 
-    def mark_habit_complete(self, habit):
+    def delete_habit(self, habit):
         try:
             habits = self.read_file('habits.txt')
-            for i, item in enumerate(habits):
-                h, status = item.split(',')
-                if h == habit:
-                    habits[i] = f"{habit},1"  # 1 means complete
-                    break
-            self.write_file('habits.txt', habits)
-            self.load_habits()
+            if habit in habits:
+                habits.remove(habit)
+                self.write_file('habits.txt', habits)
+                self.load_habits()
         except Exception as e:
-            logging.error(f"Error marking habit complete: {e}")
+            logging.error(f"Error deleting habit: {e}")
 
     def read_file(self, filename):
         try:
@@ -222,14 +219,10 @@ class HabitTrackerScreen(Screen):
             if 'habits_list' in self.ids:
                 self.ids.habits_list.clear_widgets()
                 for habit in habits:
-                    h, status = habit.split(',')
                     box = BoxLayout(orientation='horizontal')
-                    box.add_widget(Label(text=h))
-                    if status == '0':
-                        btn = Button(text='Complete', size_hint_x=0.2)
-                        btn.bind(on_release=lambda btn, habit=h: self.mark_habit_complete(habit))
-                    else:
-                        btn = Button(text='Completed', size_hint_x=0.2, disabled=True)
+                    box.add_widget(Label(text=habit))
+                    btn = Button(text='Delete', size_hint_x=0.2)
+                    btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
                     box.add_widget(btn)
                     self.ids.habits_list.add_widget(box)
             else:
@@ -238,6 +231,7 @@ class HabitTrackerScreen(Screen):
             logging.error(f"KeyError in display_habits: {e}")
         except Exception as e:
             logging.error(f"Error in display_habits: {e}")
+
 
 
 class RewardsScreen(Screen):
@@ -328,7 +322,7 @@ class SettingsScreen(Screen):
 
 class MyDailyCompanionApp(App):
     def build(self):
-        self.title = 'RAKHI'
+        self.title = 'My Daily Companion'
         sm = ScreenManager()
         sm.add_widget(HomeScreen(name='home'))
         sm.add_widget(HistoricalDataScreen(name='historical_data'))

@@ -1,24 +1,14 @@
+# habit_tracker_screen.kv
 <HabitTrackerScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 10
-        spacing: 10
-        canvas.before:
-            Color:
-                rgba: 0.1, 0.1, 0.1, 1
-            Rectangle:
-                pos: self.pos
-                size: self.size
         Label:
             text: 'Habit Tracker'
-            font_size: 32
-            color: 1, 1, 1, 1
         BoxLayout:
             orientation: 'horizontal'
             TextInput:
                 id: habit_input
                 hint_text: 'Enter your habit'
-                multiline: False
             Button:
                 text: 'Submit'
                 on_release: app.root.get_screen('habit_tracker').submit_habit(habit_input.text)
