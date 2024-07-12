@@ -7,6 +7,9 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 import os
+import time
+from datetime import datetime
+from kivy.clock import Clock
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -17,7 +20,7 @@ Builder.load_file(os.path.join('app', 'templates', 'mood_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'habit_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'historical_data_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))
-Builder.load_file(os.path.join('app', 'templates', 'settings_screen.kv'))  # Ensure this line is added
+Builder.load_file(os.path.join('app', 'templates', 'settings_screen.kv'))
 
 
 class HomeScreen(Screen):
@@ -166,19 +169,22 @@ class HabitTrackerScreen(Screen):
     def save_habit(self, habit):
         try:
             with open('habits.txt', 'a') as f:
-                f.write(f"{habit}\n")
+                f.write(f"{habit},0\n")  # 0 means incomplete
         except Exception as e:
             logging.error(f"Error saving habit: {e}")
 
-    def delete_habit(self, habit):
+    def mark_habit_complete(self, habit):
         try:
             habits = self.read_file('habits.txt')
-            if habit in habits:
-                habits.remove(habit)
-                self.write_file('habits.txt', habits)
-                self.load_habits()
+            for i, item in enumerate(habits):
+                h, status = item.split(',')
+                if h == habit:
+                    habits[i] = f"{habit},1"  # 1 means complete
+                    break
+            self.write_file('habits.txt', habits)
+            self.load_habits()
         except Exception as e:
-            logging.error(f"Error deleting habit: {e}")
+            logging.error(f"Error marking habit complete: {e}")
 
     def read_file(self, filename):
         try:
@@ -216,10 +222,14 @@ class HabitTrackerScreen(Screen):
             if 'habits_list' in self.ids:
                 self.ids.habits_list.clear_widgets()
                 for habit in habits:
+                    h, status = habit.split(',')
                     box = BoxLayout(orientation='horizontal')
-                    box.add_widget(Label(text=habit))
-                    btn = Button(text='Delete', size_hint_x=0.2)
-                    btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
+                    box.add_widget(Label(text=h))
+                    if status == '0':
+                        btn = Button(text='Complete', size_hint_x=0.2)
+                        btn.bind(on_release=lambda btn, habit=h: self.mark_habit_complete(habit))
+                    else:
+                        btn = Button(text='Completed', size_hint_x=0.2, disabled=True)
                     box.add_widget(btn)
                     self.ids.habits_list.add_widget(box)
             else:
@@ -228,6 +238,7 @@ class HabitTrackerScreen(Screen):
             logging.error(f"KeyError in display_habits: {e}")
         except Exception as e:
             logging.error(f"Error in display_habits: {e}")
+
 
 class RewardsScreen(Screen):
     def on_pre_enter(self):
@@ -288,11 +299,43 @@ class MyScreenManager(ScreenManager):
 
 
 class SettingsScreen(Screen):
-    pass
+    def save_reminder(self, time_str):
+        try:
+            if ':' not in time_str:
+                logging.error("Invalid time format")
+                return
+            with open('reminder.txt', 'w') as f:
+                f.write(time_str)
+            logging.info(f"Reminder saved: {time_str}")
+            Clock.unschedule(self.check_reminder)
+            Clock.schedule_interval(self.check_reminder, 60)
+        except Exception as e:
+            logging.error(f"Error in save_reminder: {e}")
+
+    def check_reminder(self, dt):
+        try:
+            now = datetime.now().strftime('%H:%M')
+            with open('reminder.txt', 'r') as f:
+                reminder_time = f.read().strip()
+            if now == reminder_time:
+                self.show_reminder()
+        except Exception as e:
+            logging.error(f"Error in check_reminder: {e}")
+
+    def show_reminder(self):
+        logging.info("Reminder triggered!")
+        # Implement the logic to show reminder (e.g., pop-up notification)
 
 class MyDailyCompanionApp(App):
     def build(self):
-        sm = MyScreenManager()
+        self.title = 'RAKHI'
+        sm = ScreenManager()
+        sm.add_widget(HomeScreen(name='home'))
+        sm.add_widget(HistoricalDataScreen(name='historical_data'))
+        sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
+        sm.add_widget(HabitTrackerScreen(name='habit_tracker'))
+        sm.add_widget(RewardsScreen(name='rewards'))
+        sm.add_widget(SettingsScreen(name='settings'))
         return sm
 
     def on_kv_post_moods_list(self, instance):
@@ -304,4 +347,5 @@ class MyDailyCompanionApp(App):
 if __name__ == '__main__':
     logging.info("Starting My Daily Companion App")
     MyDailyCompanionApp().run()
+
 
