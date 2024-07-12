@@ -1,16 +1,17 @@
 <HabitTrackerScreen>:
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
+        spacing: 10
         Label:
             text: 'Habit Tracker'
-        BoxLayout:
-            orientation: 'horizontal'
-            TextInput:
-                id: habit_input
-                hint_text: 'Enter your habit'
-            Button:
-                text: 'Submit'
-                on_release: app.root.get_screen('habit_tracker').submit_habit(habit_input.text)
+            font_size: 24
+        TextInput:
+            id: habit_input
+            hint_text: 'Enter your habit'
+        Button:
+            text: 'Submit Habit'
+            on_release: app.root.get_screen('habit_tracker').submit_habit(habit_input.text)
         ScrollView:
             BoxLayout:
                 id: habits_list

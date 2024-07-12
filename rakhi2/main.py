@@ -1,4 +1,3 @@
-# main.py
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -10,6 +9,7 @@ import os
 import time
 from datetime import datetime
 from kivy.clock import Clock
+from kivy.uix.popup import Popup
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -21,7 +21,6 @@ Builder.load_file(os.path.join('app', 'templates', 'habit_tracker_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'historical_data_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'rewards_screen.kv'))
 Builder.load_file(os.path.join('app', 'templates', 'settings_screen.kv'))
-
 
 class HomeScreen(Screen):
     pass
@@ -79,15 +78,10 @@ class HistoricalDataScreen(Screen):
         except Exception as e:
             logging.error(f"Error in display_data: {e}")
 
-
 class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
         logging.info(f"Mood submitted: {mood}")
         try:
-            # Validate mood format
-            if mood.strip() == "":
-                logging.error("Invalid mood format: Mood is empty")
-                return
             self.save_mood(mood)
             self.ids.mood_input.text = ''
             self.load_moods()
@@ -160,15 +154,10 @@ class MoodTrackerScreen(Screen):
         except Exception as e:
             logging.error(f"Error in display_moods: {e}")
 
-
 class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
         logging.info(f"Habit submitted: {habit}")
         try:
-            # Validate habit format
-            if ',' in habit or habit.strip() == "":
-                logging.error(f"Invalid habit format: {habit}")
-                return
             self.save_habit(habit)
             self.ids.habit_input.text = ''
             self.load_habits()
@@ -178,7 +167,7 @@ class HabitTrackerScreen(Screen):
     def save_habit(self, habit):
         try:
             with open('habits.txt', 'a') as f:
-                f.write(f"{habit},0\n")  # Save habit with initial status of incomplete (0)
+                f.write(f"{habit}\n")
         except Exception as e:
             logging.error(f"Error saving habit: {e}")
 
@@ -223,47 +212,23 @@ class HabitTrackerScreen(Screen):
         except Exception as e:
             logging.error(f"Error in load_habits: {e}")
 
-    def toggle_habit_status(self, habit):
-        try:
-            habits = self.read_file('habits.txt')
-            for i in range(len(habits)):
-                h, status = habits[i].split(',')
-                if h == habit:
-                    habits[i] = f"{h},{1 if status == '0' else 0}"
-                    break
-            self.write_file('habits.txt', habits)
-            self.load_habits()
-        except Exception as e:
-            logging.error(f"Error toggling habit status: {e}")
-
     def display_habits(self, habits):
         try:
             if 'habits_list' in self.ids:
                 self.ids.habits_list.clear_widgets()
                 for habit in habits:
-                    parts = habit.split(',')
-                    if len(parts) == 2:
-                        h, status = parts
-                        box = BoxLayout(orientation='horizontal')
-                        box.add_widget(Label(text=f"{h} (Completed)" if status == '1' else h))
-                        toggle_btn = Button(text='Toggle', size_hint_x=0.2)
-                        toggle_btn.bind(on_release=lambda btn, habit=h: self.toggle_habit_status(habit))
-                        box.add_widget(toggle_btn)
-                        del_btn = Button(text='Delete', size_hint_x=0.2)
-                        del_btn.bind(on_release=lambda btn, habit=h: self.delete_habit(habit))
-                        box.add_widget(del_btn)
-                        self.ids.habits_list.add_widget(box)
-                    else:
-                        logging.error(f"Invalid habit format: {habit}")
+                    box = BoxLayout(orientation='horizontal')
+                    box.add_widget(Label(text=habit))
+                    btn = Button(text='Delete', size_hint_x=0.2)
+                    btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
+                    box.add_widget(btn)
+                    self.ids.habits_list.add_widget(box)
             else:
                 logging.error("habits_list ID not found")
         except KeyError as e:
             logging.error(f"KeyError in display_habits: {e}")
         except Exception as e:
             logging.error(f"Error in display_habits: {e}")
-
-
-
 
 class RewardsScreen(Screen):
     def on_pre_enter(self):
@@ -288,10 +253,10 @@ class RewardsScreen(Screen):
             habits = self.read_file('habits.txt')
 
             mood_count = len(moods)
-            habit_count = sum(1 for habit in habits if habit.endswith(',1'))
+            habit_count = len(habits)
 
             self.ids.mood_rewards.text = f"Total Moods Tracked: {mood_count}"
-            self.ids.habit_rewards.text = f"Total Habits Completed: {habit_count}"
+            self.ids.habit_rewards.text = f"Total Habits Tracked: {habit_count}"
 
             reward_message = self.calculate_rewards(mood_count, habit_count)
             self.ids.reward_message.text = reward_message
@@ -301,78 +266,62 @@ class RewardsScreen(Screen):
             logging.error(f"Error in display_rewards: {e}")
 
     def calculate_rewards(self, mood_count, habit_count):
-        if mood_count >= 10 and habit_count >= 10:
-            return "Congratulations! You've earned a gold star!"
-        elif mood_count >= 5 and habit_count >= 5:
-            return "Great job! You've earned a silver star!"
-        elif mood_count >= 1 and habit_count >= 1:
-            return "Good start! You've earned a bronze star!"
-        else:
-            return "Keep tracking to earn rewards!"
-
-
-
-class MyScreenManager(ScreenManager):
-    def __init__(self, **kwargs):
-        super(MyScreenManager, self).__init__(**kwargs)
-        logging.info("Initializing MyScreenManager")
-        self.add_widget(HomeScreen(name='home'))
-        self.add_widget(MoodTrackerScreen(name='mood_tracker'))
-        self.add_widget(HabitTrackerScreen(name='habit_tracker'))
-        self.add_widget(RewardsScreen(name='rewards'))
-        self.add_widget(HistoricalDataScreen(name='historical_data'))
-        self.add_widget(SettingsScreen(name='settings'))
-
+        try:
+            if mood_count >= 10 and habit_count >= 10:
+                return "Congratulations! You've earned a gold reward!"
+            elif mood_count >= 5 and habit_count >= 5:
+                return "Great job! You've earned a silver reward!"
+            elif mood_count >= 1 and habit_count >= 1:
+                return "Good start! You've earned a bronze reward!"
+            else:
+                return "Keep tracking your moods and habits to earn rewards!"
+        except Exception as e:
+            logging.error(f"Error in calculate_rewards: {e}")
+            return "Error in calculating rewards."
 
 class SettingsScreen(Screen):
-    def save_reminder(self, time_str):
+    def set_reminder(self):
+        reminder_time = self.ids.reminder_time_input.text
+        logging.info(f"Reminder set for {reminder_time}")
         try:
-            if ':' not in time_str or len(time_str.split(':')) != 2:
-                logging.error("Invalid time format")
-                return
-            with open('reminder.txt', 'w') as f:
-                f.write(time_str)
-            logging.info(f"Reminder saved: {time_str}")
-            Clock.unschedule(self.check_reminder)
-            Clock.schedule_interval(self.check_reminder, 60)
+            self.schedule_reminder(reminder_time)
         except Exception as e:
-            logging.error(f"Error in save_reminder: {e}")
+            logging.error(f"Error in set_reminder: {e}")
 
-    def check_reminder(self, dt):
+    def schedule_reminder(self, reminder_time):
         try:
-            now = datetime.now().strftime('%H:%M')
-            with open('reminder.txt', 'r') as f:
-                reminder_time = f.read().strip()
-            if now == reminder_time:
-                self.show_reminder()
+            current_time = datetime.now()
+            reminder_datetime = datetime.strptime(reminder_time, '%H:%M').replace(
+                year=current_time.year,
+                month=current_time.month,
+                day=current_time.day
+            )
+
+            if reminder_datetime < current_time:
+                reminder_datetime = reminder_datetime.replace(day=current_time.day + 1)
+
+            time_difference = (reminder_datetime - current_time).total_seconds()
+            logging.info(f"Reminder will trigger in {time_difference} seconds")
+            Clock.schedule_once(self.show_reminder_popup, time_difference)
+        except ValueError:
+            logging.error("Invalid time format. Please use HH:MM.")
         except Exception as e:
-            logging.error(f"Error in check_reminder: {e}")
+            logging.error(f"Error in schedule_reminder: {e}")
 
-    def show_reminder(self):
-        logging.info("Reminder triggered!")
-        # Implement the logic to show reminder (e.g., pop-up notification)
-
+    def show_reminder_popup(self, dt):
+        popup = Popup(title='Reminder', content=Label(text='This is your reminder!'), size_hint=(None, None), size=(400, 200))
+        popup.open()
 
 class MyDailyCompanionApp(App):
     def build(self):
-        self.title = 'My Daily Companion'
         sm = ScreenManager()
         sm.add_widget(HomeScreen(name='home'))
-        sm.add_widget(HistoricalDataScreen(name='historical_data'))
         sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
         sm.add_widget(HabitTrackerScreen(name='habit_tracker'))
+        sm.add_widget(HistoricalDataScreen(name='historical_data'))
         sm.add_widget(RewardsScreen(name='rewards'))
         sm.add_widget(SettingsScreen(name='settings'))
         return sm
 
-    def on_kv_post_moods_list(self, instance):
-        logging.info(f"moods_list ID set: {instance}")
-
-    def on_kv_post_habits_list(self, instance):
-        logging.info(f"habits_list ID set: {instance}")
-
 if __name__ == '__main__':
-    logging.info("Starting My Daily Companion App")
     MyDailyCompanionApp().run()
-
-

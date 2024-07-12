@@ -1,27 +1,27 @@
-# historical_data_screen.kv
 <HistoricalDataScreen>:
     BoxLayout:
         orientation: 'vertical'
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                text: 'Moods'
-            Label:
-                text: 'Habits'
-        BoxLayout:
-            orientation: 'horizontal'
-            ScrollView:
-                BoxLayout:
-                    id: moods_list
-                    orientation: 'vertical'
-                    on_kv_post: app.on_kv_post_moods_list(self)
-            ScrollView:
-                BoxLayout:
-                    id: habits_list
-                    orientation: 'vertical'
-                    on_kv_post: app.on_kv_post_habits_list(self)
+        padding: 10
+        spacing: 10
+        Label:
+            text: 'Historical Data'
+            font_size: 24
+        Label:
+            text: 'Moods:'
+        ScrollView:
+            BoxLayout:
+                id: moods_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+        Label:
+            text: 'Habits:'
+        ScrollView:
+            BoxLayout:
+                id: habits_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
         Button:
             text: 'Back to Home'
-            size_hint_y: None
-            height: '40dp'
             on_release: app.root.current = 'home'

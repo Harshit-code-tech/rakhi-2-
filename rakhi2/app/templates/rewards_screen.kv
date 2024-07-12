@@ -1,9 +1,10 @@
-# rewards_screen.kv
 <RewardsScreen>:
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
+        spacing: 10
         Label:
-            text: 'Rewards Screen'
+            text: 'Rewards'
             font_size: 24
         Label:
             id: mood_rewards
@@ -13,9 +14,7 @@
             text: 'Total Habits Tracked: 0'
         Label:
             id: reward_message
-            text: 'Keep tracking to earn rewards!'
-            font_size: 18
+            text: 'Keep tracking your moods and habits to earn rewards!'
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home'
-
