@@ -84,6 +84,10 @@ class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
         logging.info(f"Mood submitted: {mood}")
         try:
+            # Validate mood format
+            if mood.strip() == "":
+                logging.error("Invalid mood format: Mood is empty")
+                return
             self.save_mood(mood)
             self.ids.mood_input.text = ''
             self.load_moods()
@@ -156,10 +160,15 @@ class MoodTrackerScreen(Screen):
         except Exception as e:
             logging.error(f"Error in display_moods: {e}")
 
+
 class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
         logging.info(f"Habit submitted: {habit}")
         try:
+            # Validate habit format
+            if ',' in habit or habit.strip() == "":
+                logging.error(f"Invalid habit format: {habit}")
+                return
             self.save_habit(habit)
             self.ids.habit_input.text = ''
             self.load_habits()
@@ -169,7 +178,7 @@ class HabitTrackerScreen(Screen):
     def save_habit(self, habit):
         try:
             with open('habits.txt', 'a') as f:
-                f.write(f"{habit}\n")
+                f.write(f"{habit},0\n")  # Save habit with initial status of incomplete (0)
         except Exception as e:
             logging.error(f"Error saving habit: {e}")
 
@@ -214,23 +223,45 @@ class HabitTrackerScreen(Screen):
         except Exception as e:
             logging.error(f"Error in load_habits: {e}")
 
+    def toggle_habit_status(self, habit):
+        try:
+            habits = self.read_file('habits.txt')
+            for i in range(len(habits)):
+                h, status = habits[i].split(',')
+                if h == habit:
+                    habits[i] = f"{h},{1 if status == '0' else 0}"
+                    break
+            self.write_file('habits.txt', habits)
+            self.load_habits()
+        except Exception as e:
+            logging.error(f"Error toggling habit status: {e}")
+
     def display_habits(self, habits):
         try:
             if 'habits_list' in self.ids:
                 self.ids.habits_list.clear_widgets()
                 for habit in habits:
-                    box = BoxLayout(orientation='horizontal')
-                    box.add_widget(Label(text=habit))
-                    btn = Button(text='Delete', size_hint_x=0.2)
-                    btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
-                    box.add_widget(btn)
-                    self.ids.habits_list.add_widget(box)
+                    parts = habit.split(',')
+                    if len(parts) == 2:
+                        h, status = parts
+                        box = BoxLayout(orientation='horizontal')
+                        box.add_widget(Label(text=f"{h} (Completed)" if status == '1' else h))
+                        toggle_btn = Button(text='Toggle', size_hint_x=0.2)
+                        toggle_btn.bind(on_release=lambda btn, habit=h: self.toggle_habit_status(habit))
+                        box.add_widget(toggle_btn)
+                        del_btn = Button(text='Delete', size_hint_x=0.2)
+                        del_btn.bind(on_release=lambda btn, habit=h: self.delete_habit(habit))
+                        box.add_widget(del_btn)
+                        self.ids.habits_list.add_widget(box)
+                    else:
+                        logging.error(f"Invalid habit format: {habit}")
             else:
                 logging.error("habits_list ID not found")
         except KeyError as e:
             logging.error(f"KeyError in display_habits: {e}")
         except Exception as e:
             logging.error(f"Error in display_habits: {e}")
+
 
 
 
@@ -257,10 +288,10 @@ class RewardsScreen(Screen):
             habits = self.read_file('habits.txt')
 
             mood_count = len(moods)
-            habit_count = len(habits)
+            habit_count = sum(1 for habit in habits if habit.endswith(',1'))
 
             self.ids.mood_rewards.text = f"Total Moods Tracked: {mood_count}"
-            self.ids.habit_rewards.text = f"Total Habits Tracked: {habit_count}"
+            self.ids.habit_rewards.text = f"Total Habits Completed: {habit_count}"
 
             reward_message = self.calculate_rewards(mood_count, habit_count)
             self.ids.reward_message.text = reward_message
@@ -280,6 +311,7 @@ class RewardsScreen(Screen):
             return "Keep tracking to earn rewards!"
 
 
+
 class MyScreenManager(ScreenManager):
     def __init__(self, **kwargs):
         super(MyScreenManager, self).__init__(**kwargs)
@@ -295,7 +327,7 @@ class MyScreenManager(ScreenManager):
 class SettingsScreen(Screen):
     def save_reminder(self, time_str):
         try:
-            if ':' not in time_str:
+            if ':' not in time_str or len(time_str.split(':')) != 2:
                 logging.error("Invalid time format")
                 return
             with open('reminder.txt', 'w') as f:
@@ -319,6 +351,7 @@ class SettingsScreen(Screen):
     def show_reminder(self):
         logging.info("Reminder triggered!")
         # Implement the logic to show reminder (e.g., pop-up notification)
+
 
 class MyDailyCompanionApp(App):
     def build(self):
