@@ -3,28 +3,19 @@
         orientation: 'vertical'
         padding: 10
         spacing: 10
-        canvas.before:
-            Color:
-                rgba: 0.1, 0.1, 0.1, 1
-            Rectangle:
-                pos: self.pos
-                size: self.size
         Label:
             text: 'Settings'
-            font_size: 32
-            color: 1, 1, 1, 1
+            font_size: 24
         BoxLayout:
             orientation: 'horizontal'
             Label:
-                text: 'Set Daily Reminder:'
-                color: 1, 1, 1, 1
+                text: 'Set Reminder (HH:MM):'
             TextInput:
-                id: reminder_time
-                hint_text: 'HH:MM'
-                multiline: False
+                id: reminder_time_input
+                hint_text: 'e.g., 14:30'
         Button:
-            text: 'Save Reminder'
-            on_release: app.root.get_screen('settings').save_reminder(reminder_time.text)
+            text: 'Set Reminder'
+            on_release: app.root.get_screen('settings').set_reminder()
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home'

@@ -1,17 +1,17 @@
-# mood_tracker_screen.kv
 <MoodTrackerScreen>:
     BoxLayout:
         orientation: 'vertical'
+        padding: 10
+        spacing: 10
         Label:
             text: 'Mood Tracker'
-        BoxLayout:
-            orientation: 'horizontal'
-            TextInput:
-                id: mood_input
-                hint_text: 'Enter your mood'
-            Button:
-                text: 'Submit'
-                on_release: app.root.get_screen('mood_tracker').submit_mood(mood_input.text)
+            font_size: 24
+        TextInput:
+            id: mood_input
+            hint_text: 'Enter your mood'
+        Button:
+            text: 'Submit Mood'
+            on_release: app.root.get_screen('mood_tracker').submit_mood(mood_input.text)
         ScrollView:
             BoxLayout:
                 id: moods_list
