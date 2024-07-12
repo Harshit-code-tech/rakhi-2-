@@ -1,12 +1,5 @@
-eating , singling ,etc
-how are you
-what do to
-
-sad
-gvds
+exercise,0
+read book,0
+meditate,1
+dsad,0
 sfas,0
-sasd,0
-dsa,0
-fsafa,0
-sada,0
-dsa
