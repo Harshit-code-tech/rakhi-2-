@@ -312,6 +312,11 @@ class SettingsScreen(Screen):
         popup = Popup(title='Reminder', content=Label(text='This is your reminder!'), size_hint=(None, None), size=(400, 200))
         popup.open()
 
+
+class LoginScreen(Screen):
+    pass
+
+
 class MyDailyCompanionApp(App):
     def build(self):
         sm = ScreenManager()
@@ -322,6 +327,17 @@ class MyDailyCompanionApp(App):
         sm.add_widget(RewardsScreen(name='rewards'))
         sm.add_widget(SettingsScreen(name='settings'))
         return sm
+
+    def get_greeting(self):
+        hour = datetime.now().hour
+        if 5 <= hour < 12:
+            return "Good Morning!"
+        elif 12 <= hour < 18:
+            return "Good Afternoon!"
+        elif 18 <= hour < 22:
+            return "Good Evening!"
+        else:
+            return "Good Night!"
 
 if __name__ == '__main__':
     MyDailyCompanionApp().run()
