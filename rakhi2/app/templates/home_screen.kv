@@ -4,41 +4,26 @@
         padding: 10
         spacing: 10
         Label:
-            text: app.get_greeting()
+            text: 'Welcome to My Daily Companion App'
             font_size: 24
         Button:
             text: 'Mood Tracker'
             on_release: app.root.current = 'mood_tracker'
-            Image:
-                source: 'icons/mood.png'
         Button:
             text: 'Habit Tracker'
             on_release: app.root.current = 'habit_tracker'
-            Image:
-                source: 'icons/habit.png'
         Button:
             text: 'Historical Data'
             on_release: app.root.current = 'historical_data'
-            Image:
-                source: 'icons/history.png'
         Button:
             text: 'Rewards'
             on_release: app.root.current = 'rewards'
-            Image:
-                source: 'icons/rewards.png'
         Button:
             text: 'Settings'
             on_release: app.root.current = 'settings'
-            Image:
-                source: 'icons/settings.png'
         Button:
             text: 'Logout'
             on_release: app.root.current = 'login'
-            Image:
-                source: 'icons/logout.png'
         Button:
             text: 'Exit'
             on_release: app.stop()
-            Image:
-                source: 'icons/exit.png'
-

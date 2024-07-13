@@ -6,29 +6,15 @@
         Label:
             text: 'Rewards'
             font_size: 24
-        ProgressBar:
-            id: reward_progress
-            max: 100
-            value: 0
         Label:
-            id: reward_points
-            text: '0 Points'
-            font_size: 18
+            id: mood_rewards
+            text: 'Total Moods Tracked: 0'
+        Label:
+            id: habit_rewards
+            text: 'Total Habits Tracked: 0'
+        Label:
+            id: reward_message
+            text: 'Keep tracking your moods and habits to earn rewards!'
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home'
-        Button:
-            text: 'Claim Reward'
-            on_release: app.root.get_screen('rewards').claim_reward()
-        Button:
-            text: 'Reset Rewards'
-            on_release: app.root.get_screen('rewards').reset_rewards()
-        Button:
-            text: 'Add Reward'
-            on_release: app.root.get_screen('rewards').add_reward()
-        ScrollView:
-            BoxLayout:
-                id: rewards_list
-                orientation: 'vertical'
-                size_hint_y: None
-                height: self.minimum_height

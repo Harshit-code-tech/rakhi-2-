@@ -32,25 +32,13 @@ class HistoricalDataScreen(Screen):
         except Exception as e:
             logging.error(f"Error in on_pre_enter: {e}")
 
-    def load_historical_data(self):
-        moods = self.read_file('moods.txt')
-        habits = self.read_file('habits.txt')
-
-        mood_dates = [entry.split(' - ')[0] for entry in moods]
-        mood_values = [entry.split(' - ')[1] for entry in moods]
-
-        habit_dates = [entry.split(' - ')[0] for entry in habits]
-        habit_values = [entry.split(' - ')[1] for entry in habits]
-
-        fig, ax = plt.subplots()
-        ax.plot(mood_dates, mood_values, label='Moods')
-        ax.plot(habit_dates, habit_values, label='Habits')
-        ax.set_xlabel('Date')
-        ax.set_ylabel('Entries')
-        ax.legend()
-
-        self.ids.graph_layout.clear_widgets()
-        self.ids.graph_layout.add_widget(FigureCanvasKivyAgg(fig))
+    def load_data(self):
+        try:
+            moods = self.read_file('moods.txt')
+            habits = self.read_file('habits.txt')
+            self.display_data(moods, habits)
+        except Exception as e:
+            logging.error(f"Error in load_data: {e}")
 
     def read_file(self, filename):
         try:
@@ -92,11 +80,9 @@ class HistoricalDataScreen(Screen):
 
 class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
-        timestamp = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        mood_entry = f"{timestamp} - {mood}"
-        logging.info(f"Mood submitted: {mood_entry}")
+        logging.info(f"Mood submitted: {mood}")
         try:
-            self.save_mood(mood_entry)
+            self.save_mood(mood)
             self.ids.mood_input.text = ''
             self.load_moods()
         except Exception as e:
@@ -145,11 +131,8 @@ class MoodTrackerScreen(Screen):
 
     def load_moods(self):
         try:
-            with open('moods.txt', 'r') as file:
-                moods = file.readlines()
-            self.ids.moods_list.clear_widgets()
-            for mood in moods:
-                self.ids.moods_list.add_widget(Label(text=mood.strip()))
+            moods = self.read_file('moods.txt')
+            self.display_moods(moods)
         except Exception as e:
             logging.error(f"Error in load_moods: {e}")
 
@@ -173,21 +156,13 @@ class MoodTrackerScreen(Screen):
 
 class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
-        habit_entry = f"{habit} - Not Completed"
-        logging.info(f"Habit submitted: {habit_entry}")
+        logging.info(f"Habit submitted: {habit}")
         try:
-            self.save_habit(habit_entry)
+            self.save_habit(habit)
             self.ids.habit_input.text = ''
             self.load_habits()
         except Exception as e:
             logging.error(f"Error in submit_habit: {e}")
-
-    def toggle_habit_completion(self, habit_entry):
-        habits = self.read_file('habits.txt')
-        if habit_entry in habits:
-            index = habits.index(habit_entry)
-            if 'Not Completed' in habit_entry:
-                habits[index] = habit
 
     def save_habit(self, habit):
         try:
@@ -205,28 +180,6 @@ class HabitTrackerScreen(Screen):
                 self.load_habits()
         except Exception as e:
             logging.error(f"Error deleting habit: {e}")
-    def load_habits(self):
-        try:
-            with open('habits.txt', 'r') as file:
-                habits = file.readlines()
-            self.ids.habits_list.clear_widgets()
-            for habit in habits:
-                btn = Button(text=habit.strip(), on_release=self.toggle_habit_completion)
-                self.ids.habits_list.add_widget(btn)
-        except Exception as e:
-            logging.error(f"Error in load_habits: {e}")
-
-    def toggle_habit_completion(self, instance):
-        habit_entry = instance.text
-        habits = self.read_file('habits.txt')
-        if habit_entry in habits:
-            index = habits.index(habit_entry)
-            if 'Not Completed' in habit_entry:
-                habits[index] = habit_entry.replace('Not Completed', 'Completed')
-            else:
-                habits[index] = habit_entry.replace('Completed', 'Not Completed')
-            self.write_file('habits.txt', habits)
-            self.load_habits()
 
     def read_file(self, filename):
         try:
@@ -283,17 +236,6 @@ class RewardsScreen(Screen):
             self.display_rewards()
         except Exception as e:
             logging.error(f"Error in on_pre_enter: {e}")
-
-    def load_rewards(self):
-        points = self.read_file('rewards.txt')
-        total_points = sum(int(p.strip()) for p in points)
-        self.ids.reward_points.text = f'{total_points} Points'
-        self.ids.reward_progress.value = total_points % 100
-
-    def add_reward_points(self, points):
-        with open('rewards.txt', 'a') as file:
-            file.write(f'{points}\n')
-        self.load_rewards()
 
     def read_file(self, filename):
         try:
@@ -371,14 +313,13 @@ class SettingsScreen(Screen):
         popup.open()
 
 
-class LoginScreen:
+class LoginScreen(Screen):
     pass
 
 
-class MyApp(App):
+class MyDailyCompanionApp(App):
     def build(self):
         sm = ScreenManager()
-        sm.add_widget(LoginScreen(name='login'))
         sm.add_widget(HomeScreen(name='home'))
         sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
         sm.add_widget(HabitTrackerScreen(name='habit_tracker'))
@@ -398,3 +339,5 @@ class MyApp(App):
         else:
             return "Good Night!"
 
+if __name__ == '__main__':
+    MyDailyCompanionApp().run()
