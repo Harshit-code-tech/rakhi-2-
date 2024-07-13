@@ -6,16 +6,24 @@
         Label:
             text: 'Settings'
             font_size: 24
-        BoxLayout:
-            orientation: 'horizontal'
-            Label:
-                text: 'Set Reminder (HH:MM):'
-            TextInput:
-                id: reminder_time_input
-                hint_text: 'e.g., 14:30'
+        TextInput:
+            id: reminder_time
+            hint_text: 'Enter reminder time (HH:MM)'
         Button:
             text: 'Set Reminder'
-            on_release: app.root.get_screen('settings').set_reminder()
+            on_release: app.root.get_screen('settings').set_reminder(reminder_time.text)
+        CheckBox:
+            id: notifications
+            active: False
+        Label:
+            text: 'Enable Notifications'
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home'
+        Button:
+            text: 'Reset App'
+            on_release: app.root.get_screen('settings').reset_app()
+        Button:
+            text: 'Delete Account'
+            on_release: app.root.get_screen('settings').delete_account()
+        Button:
