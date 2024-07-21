@@ -13,6 +13,9 @@ from datetime import datetime
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 
+# Importing authentication functions from logging_script.py
+from logging_script import authenticate_user, register_user
+
 # Configure logging
 logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
