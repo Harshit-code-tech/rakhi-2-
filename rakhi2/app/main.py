@@ -36,15 +36,19 @@ cleanup_old_logs()
 
 # Load all KV files
 kv_path = os.path.join(os.path.dirname(__file__), 'templates')
-Builder.load_file(os.path.join(kv_path, 'home_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'mood_tracker_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'habit_tracker_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'historical_data_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'rewards_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'settings_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'audio_mood_tracker_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'chat_room_screen.kv'))
-Builder.load_file(os.path.join(kv_path, 'auth_screen.kv'))
+kv_files = [
+    'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
+    'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
+    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
+]
+for kv_file in kv_files:
+    try:
+        kv_file_path = os.path.join(kv_path, kv_file)
+        Builder.load_file(kv_file_path)
+        print(f"Loaded KV file: {kv_file_path}")
+    except Exception as e:
+        logging.error(f"Error loading KV file {kv_file}: {e}")
+
 
 # Utility functions
 def read_file(filename):
