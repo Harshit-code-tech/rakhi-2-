@@ -15,7 +15,7 @@
                 hint_text: 'e.g., 14:30'
         Button:
             text: 'Set Reminder'
-            on_release: app.root.get_screen('settings').set_reminder()
+            on_release: app.root.get_screen('settings_screen').set_reminder()
         Button:
             text: 'Back to Home'
-            on_release: app.root.current = 'home'
+            on_release: app.root.current = 'home_screen'
