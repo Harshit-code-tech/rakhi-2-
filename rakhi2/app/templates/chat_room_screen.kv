@@ -1,0 +1,20 @@
+<ChatRoomScreen>:
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 10
+        ScrollView:
+            Label:
+                id: chat_log
+                text: ''
+                size_hint_y: None
+                height: self.texture_size[1]
+        TextInput:
+            id: user_input
+            hint_text: 'Type a message...'
+        Button:
+            text: 'Send'
+            on_release: app.root.get_screen('chat_room').send_message()
+        Button:
+            text: 'Back to Home'
+            on_release: app.root.current = 'home'
