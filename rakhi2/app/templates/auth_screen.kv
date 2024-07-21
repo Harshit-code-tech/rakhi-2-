@@ -1,27 +1,34 @@
 <AuthScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: [50, 50, 50, 50]
+        padding: 10
         spacing: 10
 
         Label:
-            text: "Username"
+            text: "Login or Register"
+            font_size: '24sp'
+
         TextInput:
             id: username
+            hint_text: "Username"
             multiline: False
 
-        Label:
-            text: "Password"
         TextInput:
             id: password
+            hint_text: "Password"
             multiline: False
             password: True
 
-        BoxLayout:
-            spacing: 10
-            Button:
-                text: "Login"
-                on_press: root.authenticate_user()
-            Button:
-                text: "Register"
-                on_press: root.register_user()
+        Button:
+            text: "Login"
+            on_release: root.login()
+
+        Button:
+            text: "Register"
+            on_release: root.register()
+
+        Button:
+            text: "Clear Fields"
+            on_release:
+                username.text = ''
+                password.text = ''

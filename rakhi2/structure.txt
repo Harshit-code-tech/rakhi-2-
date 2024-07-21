@@ -1,0 +1,47 @@
+my_daily_companion/
+├── app/
+│   ├── __init__.py
+│   ├── main.py
+│   ├── logging_script.py
+│   ├── user_auth.py
+│   ├── models.py
+│   ├── views.py
+│   ├── controllers.py
+│   ├── templates/
+│   │   ├── home_screen.kv
+│   │   ├── mood_tracker_screen.kv
+│   │   ├── habit_tracker_screen.kv
+│   │   ├── historical_data_screen.kv
+│   │   ├── rewards_screen.kv
+│   │   ├── settings_screen.kv
+│   │   ├── audio_mood_tracker_screen.kv
+│   │   ├── chat_room_screen.kv
+│   │   ├── auth_screen.kv
+│   │   ├── test_screen.kv
+│   └── resources/
+│       ├── images/
+│       ├── quotes/
+├── assets/
+│   ├── images/
+│   ├── sounds/
+│   └── models/
+├── data/
+│   ├── logs/
+│   ├── users.txt
+│   └── db/
+│   ├── habits.txt
+│   ├── moods.txt
+├── static/
+│   ├── css/
+│   │   └── style.css
+│   ├── js/
+│   │   ├── script.js
+│   │   ├── app.js
+│   │   └── particles-config.json
+├── tests/
+│   └── test_app.py
+├── config.py
+├── requirements.txt
+├── README.md
+└── .gitignore
+
