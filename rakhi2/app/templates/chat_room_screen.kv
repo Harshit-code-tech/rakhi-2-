@@ -14,7 +14,7 @@
             hint_text: 'Type a message...'
         Button:
             text: 'Send'
-            on_release: app.root.get_screen('chat_room').send_message()
+            on_release: app.root.get_screen('chat_room_screen').send_message()
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home_screen'
