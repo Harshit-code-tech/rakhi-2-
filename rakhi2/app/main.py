@@ -1,3 +1,4 @@
+# main.py
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
