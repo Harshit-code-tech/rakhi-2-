@@ -1,4 +1,12 @@
 # main.py
+import time
+
+import kivy
+kivy.require('2.0.0')
+from kivy.config import Config
+Config.set('kivy', 'log_level', 'debug')
+Config.set('kivy', 'log_enable', 1)
+Config.set('kivy', 'log_name', 'kivylog.txt')
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -12,8 +20,31 @@ from kivy.uix.popup import Popup
 from datetime import datetime
 
 # Importing authentication functions from logging_script.py
-from logging_script import authenticate_user, register_user
+from logging_script import authenticate_user, register_user, read_file, write_file
 
+def cleanup_old_logs(log_dir, max_age_days):
+    """
+    Deletes log files older than max_age_days in the specified log directory.
+
+    :param log_dir: Directory where log files are stored.
+    :param max_age_days: Maximum age of log files to keep, in days.
+    """
+    current_time = time.time()
+    for filename in os.listdir(log_dir):
+        file_path = os.path.join(log_dir, filename)
+        file_stat = os.stat(file_path)
+        file_age_days = (current_time - file_stat.st_mtime) / 86400  # Convert seconds to days
+        if file_age_days > max_age_days:
+            try:
+                os.remove(file_path)
+                print(f"Deleted old log file: {filename}")
+            except Exception as e:
+                print(f"Error deleting file {filename}: {e}")
+
+# Example usage
+log_directory = "/home/hgidea/.kivy/logs"
+max_log_age_days = 7  # Adjust as needed
+cleanup_old_logs(log_directory, max_log_age_days)
 # Configure logging
 logging.basicConfig(level=logging.INFO, filename='data/log/app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
@@ -74,8 +105,9 @@ class HistoricalDataScreen(Screen):
 
     def load_data(self):
         try:
-            moods = read_file('data/db/moods.txt')
-            habits = read_file('data/db/habits.txt')
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            moods = read_file(f'data/db/{user_id}/moods.txt')
+            habits = read_file(f'data/db/{user_id}/habits.txt')
             self.display_data(moods, habits)
         except Exception as e:
             logging.error(f"Error in load_data: {e}")
@@ -93,11 +125,13 @@ class HistoricalDataScreen(Screen):
         except Exception as e:
             logging.error(f"Error in display_data: {e}")
 
+
 class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
         logging.info(f"Mood submitted: {mood}")
         try:
-            write_file('data/db/moods.txt', read_file('data/db/moods.txt') + [mood])
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            write_file(f'data/db/{user_id}/moods.txt', read_file(f'data/db/{user_id}/moods.txt') + [mood])
             self.ids.mood_input.text = ''
             self.load_moods()
         except Exception as e:
@@ -105,10 +139,11 @@ class MoodTrackerScreen(Screen):
 
     def delete_mood(self, mood):
         try:
-            moods = read_file('data/db/moods.txt')
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            moods = read_file(f'data/db/{user_id}/moods.txt')
             if mood in moods:
                 moods.remove(mood)
-                write_file('data/db/moods.txt', moods)
+                write_file(f'data/db/{user_id}/moods.txt', moods)
                 self.load_moods()
         except Exception as e:
             logging.error(f"Error deleting mood: {e}")
@@ -121,7 +156,8 @@ class MoodTrackerScreen(Screen):
 
     def load_moods(self):
         try:
-            moods = read_file('data/db/moods.txt')
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            moods = read_file(f'data/db/{user_id}/moods.txt')
             self.display_moods(moods)
         except Exception as e:
             logging.error(f"Error in load_moods: {e}")
@@ -140,6 +176,7 @@ class MoodTrackerScreen(Screen):
             logging.error(f"KeyError in display_moods: {e}")
         except Exception as e:
             logging.error(f"Error in display_moods: {e}")
+
 
 class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
@@ -279,27 +316,32 @@ class SettingsScreen(Screen):
         popup.open()
 
 class AuthScreen(Screen):
-    def authenticate_user(self):
-        username = self.ids.username.text
+    def __init__(self, **kwargs):
+        super(AuthScreen, self).__init__(**kwargs)
+        self.authenticated = False
+
+    def login(self):
+        user_id = self.ids.username.text
         password = self.ids.password.text
-        success = authenticate_user(username, password)
-        if success:
+
+        if authenticate_user(user_id, password):
+            self.authenticated = True
             self.manager.current = 'home_screen'
         else:
-            self.show_popup("Error", "Authentication failed. Please check your username and password.")
+            popup = Popup(title='Login Failed', content=Label(text='Invalid username or password'), size_hint=(0.6, 0.4))
+            popup.open()
 
-    def register_user(self):
-        username = self.ids.username.text
+    def register(self):
+        user_id = self.ids.username.text
         password = self.ids.password.text
-        success = register_user(username, password)
-        if success:
-            self.manager.current = 'home_screen'
-        else:
-            self.show_popup("Error", "Registration failed. Please try again.")
 
-    def show_popup(self, title, message):
-        popup = Popup(title=title, content=Label(text=message), size_hint=(0.8, 0.4))
-        popup.open()
+        if register_user(user_id, password):
+            popup = Popup(title='Registration Successful', content=Label(text='Registration successful! You can now log in.'), size_hint=(0.6, 0.4))
+            popup.open()
+        else:
+            popup = Popup(title='Registration Failed', content=Label(text='User ID already exists'), size_hint=(0.6, 0.4))
+            popup.open()
+
 
 class MyDailyCompanionApp(App):
     def build(self):
