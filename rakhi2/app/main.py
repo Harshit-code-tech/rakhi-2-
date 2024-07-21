@@ -1,3 +1,5 @@
+# main.py
+
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -12,15 +14,17 @@ from kivy.clock import Clock
 from kivy.uix.popup import Popup
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load Kivy files
-Builder.load_file(os.path.join('', 'templates', 'home_screen.kv'))
-Builder.load_file(os.path.join('', 'templates', 'mood_tracker_screen.kv'))
-Builder.load_file(os.path.join('', 'templates', 'habit_tracker_screen.kv'))
-Builder.load_file(os.path.join('', 'templates', 'historical_data_screen.kv'))
-Builder.load_file(os.path.join('', 'templates', 'rewards_screen.kv'))
-Builder.load_file(os.path.join('', 'templates', 'settings_screen.kv'))
+kv_path = os.path.join('app', 'templates')
+kv_files = [
+    'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
+    'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
+    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv'
+]
+for kv_file in kv_files:
+    Builder.load_file(os.path.join(kv_path, kv_file))
 
 # Utility functions
 def read_file(filename):
@@ -53,8 +57,8 @@ class HistoricalDataScreen(Screen):
 
     def load_data(self):
         try:
-            moods = read_file('../moods.txt')
-            habits = read_file('../habits.txt')
+            moods = read_file('data/db/moods.txt')
+            habits = read_file('data/db/habits.txt')
             self.display_data(moods, habits)
         except Exception as e:
             logging.error(f"Error in load_data: {e}")
@@ -76,7 +80,7 @@ class MoodTrackerScreen(Screen):
     def submit_mood(self, mood):
         logging.info(f"Mood submitted: {mood}")
         try:
-            write_file('../moods.txt', read_file('moods.txt') + [mood])
+            write_file('data/db/moods.txt', read_file('data/db/moods.txt') + [mood])
             self.ids.mood_input.text = ''
             self.load_moods()
         except Exception as e:
@@ -84,10 +88,10 @@ class MoodTrackerScreen(Screen):
 
     def delete_mood(self, mood):
         try:
-            moods = read_file('../moods.txt')
+            moods = read_file('data/db/moods.txt')
             if mood in moods:
                 moods.remove(mood)
-                write_file('../moods.txt', moods)
+                write_file('data/db/moods.txt', moods)
                 self.load_moods()
         except Exception as e:
             logging.error(f"Error deleting mood: {e}")
@@ -100,7 +104,7 @@ class MoodTrackerScreen(Screen):
 
     def load_moods(self):
         try:
-            moods = read_file('../moods.txt')
+            moods = read_file('data/db/moods.txt')
             self.display_moods(moods)
         except Exception as e:
             logging.error(f"Error in load_moods: {e}")
@@ -124,7 +128,7 @@ class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
         logging.info(f"Habit submitted: {habit}")
         try:
-            write_file('../habits.txt', read_file('habits.txt') + [habit])
+            write_file('data/db/habits.txt', read_file('data/db/habits.txt') + [habit])
             self.ids.habit_input.text = ''
             self.load_habits()
         except Exception as e:
@@ -132,10 +136,10 @@ class HabitTrackerScreen(Screen):
 
     def delete_habit(self, habit):
         try:
-            habits = read_file('../habits.txt')
+            habits = read_file('data/db/habits.txt')
             if habit in habits:
                 habits.remove(habit)
-                write_file('../habits.txt', habits)
+                write_file('data/db/habits.txt', habits)
                 self.load_habits()
         except Exception as e:
             logging.error(f"Error deleting habit: {e}")
@@ -148,7 +152,7 @@ class HabitTrackerScreen(Screen):
 
     def load_habits(self):
         try:
-            habits = read_file('../habits.txt')
+            habits = read_file('data/db/habits.txt')
             self.display_habits(habits)
         except Exception as e:
             logging.error(f"Error in load_habits: {e}")
@@ -177,8 +181,8 @@ class RewardsScreen(Screen):
 
     def display_rewards(self):
         try:
-            moods = read_file('../moods.txt')
-            habits = read_file('../habits.txt')
+            moods = read_file('data/db/moods.txt')
+            habits = read_file('data/db/habits.txt')
 
             mood_count = len(moods)
             habit_count = len(habits)
@@ -205,7 +209,35 @@ class RewardsScreen(Screen):
                 return "Keep tracking your moods and habits to earn rewards!"
         except Exception as e:
             logging.error(f"Error in calculate_rewards: {e}")
-            return "Error in calculating rewards."
+            return "Error calculating rewards."
+
+
+class AudioMoodTrackerScreen(Screen):
+    def on_pre_enter(self):
+        self.start_audio_processing()
+
+    def start_audio_processing(self):
+        # Code to start audio processing and mood detection
+        pass
+
+    def display_detected_mood(self, mood):
+        self.ids.detected_mood_label.text = f"Detected Mood: {mood}"
+
+
+class ChatRoomScreen(Screen):
+    def on_pre_enter(self):
+        self.ids.chat_log.text = ""
+
+    def send_message(self):
+        user_input = self.ids.user_input.text
+        response = self.get_gpt2_response(user_input)
+        self.ids.chat_log.text += f"User: {user_input}\nBot: {response}\n"
+        self.ids.user_input.text = ""
+
+    def get_gpt2_response(self, input_text):
+        # Code to get response from Hugging Face GPT-2 model
+        pass
+
 
 class SettingsScreen(Screen):
     def set_reminder(self):
@@ -242,20 +274,28 @@ class SettingsScreen(Screen):
 
 class MyDailyCompanionApp(App):
     def build(self):
-        try:
-            sm = ScreenManager()
-            sm.add_widget(HomeScreen(name='home'))
-            sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
-            sm.add_widget(HabitTrackerScreen(name='habit_tracker'))
-            sm.add_widget(HistoricalDataScreen(name='historical_data'))
-            sm.add_widget(RewardsScreen(name='rewards'))
-            sm.add_widget(SettingsScreen(name='settings'))
-            return sm
-        except Exception as e:
-            logging.error(f"Error in build: {e}")
+        self.icon = 'assets/images/icon.png'
+        sm = ScreenManager()
+        sm.add_widget(HomeScreen(name='home'))
+        sm.add_widget(HistoricalDataScreen(name='historical_data'))
+        sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
+        sm.add_widget(HabitTrackerScreen(name='habit_tracker'))
+        sm.add_widget(RewardsScreen(name='rewards'))
+        sm.add_widget(SettingsScreen(name='settings'))
+        sm.add_widget(AudioMoodTrackerScreen(name='audio_mood_tracker'))
+        sm.add_widget(ChatRoomScreen(name='chat_room'))
+        return sm
+
+    def get_greeting(self):
+        hour = datetime.now().hour
+        if 5 <= hour < 12:
+            return "Good Morning!"
+        elif 12 <= hour < 18:
+            return "Good Afternoon!"
+        elif 18 <= hour < 22:
+            return "Good Evening!"
+        else:
+            return "Good Night!"
 
 if __name__ == '__main__':
-    try:
-        MyDailyCompanionApp().run()
-    except Exception as e:
-        logging.error(f"Error running app: {e}")
+    MyDailyCompanionApp().run()
