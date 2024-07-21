@@ -11,7 +11,7 @@
             hint_text: 'Enter your habit'
         Button:
             text: 'Submit Habit'
-            on_release: app.root.get_screen('habit_tracker').submit_habit(habit_input.text)
+            on_release: app.root.get_screen('habit_tracker_screen').submit_habit(habit_input.text)
         ScrollView:
             BoxLayout:
                 id: habits_list
