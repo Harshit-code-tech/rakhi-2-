@@ -2,6 +2,8 @@ my_daily_companion/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py
+│   ├── logging_script.py
+│   ├── user_auth.py
 │   ├── models.py
 │   ├── views.py
 │   ├── controllers.py
@@ -14,6 +16,8 @@ my_daily_companion/
 │   │   ├── settings_screen.kv
 │   │   ├── audio_mood_tracker_screen.kv
 │   │   ├── chat_room_screen.kv
+│   │   ├── auth_screen.kv
+│   │   ├── test_screen.kv
 │   └── resources/
 │       ├── images/
 │       ├── quotes/
@@ -23,7 +27,10 @@ my_daily_companion/
 │   └── models/
 ├── data/
 │   ├── logs/
+│   ├── users.txt
 │   └── db/
+│   ├── habits.txt
+│   ├── moods.txt
 ├── static/
 │   ├── css/
 │   │   └── style.css
