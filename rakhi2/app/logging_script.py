@@ -90,3 +90,13 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         logging.critical(f"Unhandled exception: {e}")
+
+
+'''/*
+import logging
+
+def setup_logging():
+    logging.basicConfig(filename='app/data/logs/app.log', level=logging.DEBUG,
+                        format='%(asctime)s:%(levelname)s:%(message)s')
+
+*/'''

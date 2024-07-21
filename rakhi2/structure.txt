@@ -7,6 +7,18 @@ my_daily_companion/
 │   ├── models.py
 │   ├── views.py
 │   ├── controllers.py
+│   ├── screens/
+│   │   ├── __init__.py
+│   │   ├── home_screen.py
+│   │   ├── mood_tracker_screen.py
+│   │   ├── habit_tracker_screen.py
+│   │   ├── historical_data_screen.py
+│   │   ├── rewards_screen.py
+│   │   ├── settings_screen.py
+│   │   ├── audio_mood_tracker_screen.py
+│   │   ├── chat_room_screen.py
+│   │   ├── auth_screen.py
+│   │   ├── test_screen.py
 │   ├── templates/
 │   │   ├── home_screen.kv
 │   │   ├── mood_tracker_screen.kv
@@ -44,4 +56,3 @@ my_daily_companion/
 ├── requirements.txt
 ├── README.md
 └── .gitignore
-
