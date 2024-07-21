@@ -1,5 +1,3 @@
-# main.py
-
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -8,23 +6,22 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 import os
-import time
-from datetime import datetime
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
+from datetime import datetime
 
 # Importing authentication functions from logging_script.py
 from logging_script import authenticate_user, register_user
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, filename='data/log/app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load Kivy files
 kv_path = os.path.join('app', 'templates')
 kv_files = [
     'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
     'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
-    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv'
+    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
 ]
 for kv_file in kv_files:
     Builder.load_file(os.path.join(kv_path, kv_file))
@@ -214,7 +211,6 @@ class RewardsScreen(Screen):
             logging.error(f"Error in calculate_rewards: {e}")
             return "Error calculating rewards."
 
-
 class AudioMoodTrackerScreen(Screen):
     def on_pre_enter(self):
         self.start_audio_processing()
@@ -225,7 +221,6 @@ class AudioMoodTrackerScreen(Screen):
 
     def display_detected_mood(self, mood):
         self.ids.detected_mood_label.text = f"Detected Mood: {mood}"
-
 
 class ChatRoomScreen(Screen):
     def on_pre_enter(self):
@@ -240,7 +235,6 @@ class ChatRoomScreen(Screen):
     def get_gpt2_response(self, input_text):
         # Code to get response from Hugging Face GPT-2 model
         pass
-
 
 class SettingsScreen(Screen):
     def set_reminder(self):
@@ -275,10 +269,24 @@ class SettingsScreen(Screen):
         except Exception as e:
             logging.error(f"Error in show_reminder: {e}")
 
+class UserAuth(Screen):
+    def login(self, username, password):
+        if authenticate_user(username, password):
+            self.manager.current = 'home'
+        else:
+            self.ids.error_label.text = "Invalid login credentials."
+
+    def register(self, username, password):
+        if register_user(username, password):
+            self.ids.error_label.text = "Registration successful! You can now log in."
+        else:
+            self.ids.error_label.text = "Registration failed. Please try again."
+
 class MyDailyCompanionApp(App):
     def build(self):
         self.icon = 'assets/images/icon.png'
         sm = ScreenManager()
+        sm.add_widget(UserAuth(name='auth'))
         sm.add_widget(HomeScreen(name='home'))
         sm.add_widget(HistoricalDataScreen(name='historical_data'))
         sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
