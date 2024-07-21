@@ -29,8 +29,8 @@ my_daily_companion/
 │   ├── logs/
 │   ├── users.txt
 │   └── db/
-│   ├── habits.txt
-│   ├── moods.txt
+│       ├── habits.txt
+│       ├── moods.txt
 ├── static/
 │   ├── css/
 │   │   └── style.css
