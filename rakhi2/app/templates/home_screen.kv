@@ -1,35 +1,49 @@
 <HomeScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 10
-        spacing: 10
+        padding: [50, 50, 50, 50]
+        spacing: 20
+
         Label:
-            text: 'Welcome to My Daily Companion App'
-            font_size: 24
+            id: username_label
+            text: "Welcome, User!"
+            font_size: '24sp'
+            size_hint_y: None
+            height: self.texture_size[1]
+
         Button:
-            text: 'Mood Tracker'
-            on_release: app.root.current = 'mood_tracker'
+            text: "Mood Tracker"
+            on_press: root.manager.current = 'mood_tracker_screen'
+
         Button:
-            text: 'Habit Tracker'
-            on_release: app.root.current = 'habit_tracker'
+            text: "Habit Tracker"
+            on_press: root.manager.current = 'habit_tracker_screen'
+
         Button:
-            text: 'Historical Data'
-            on_release: app.root.current = 'historical_data'
+            text: "Historical Data"
+            on_press: root.manager.current = 'historical_data_screen'
+
         Button:
-            text: 'Rewards'
-            on_release: app.root.current = 'rewards'
+            text: "Rewards"
+            on_press: root.manager.current = 'rewards_screen'
+
         Button:
-            text: 'Settings'
-            on_release: app.root.current = 'settings'
+            text: "Audio Mood Tracker"
+            on_press: root.manager.current = 'audio_mood_tracker_screen'
+
         Button:
-            text: 'Audio Mood Tracker'
-            on_release: app.root.current = 'audio_mood_tracker'
+            text: "Chat Room"
+            on_press: root.manager.current = 'chat_room_screen'
+
         Button:
-            text: 'Chat Room'
-            on_release: app.root.current = 'chat_room'
+            text: "Settings"
+            on_press: root.manager.current = 'settings_screen'
+
         Button:
-            text: 'Logout'
-            on_release: app.root.current = 'login'
+            text: "Logout"
+            on_press: root.logout()
         Button:
-            text: 'Exit'
-            on_release: app.stop()
+            text: "Exit"
+            on_press: app.stop()
+
+

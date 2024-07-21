@@ -1,5 +1,3 @@
-# main.py
-
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -8,26 +6,30 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 import os
-import time
-from datetime import datetime
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
+from datetime import datetime
 
 # Importing authentication functions from logging_script.py
 from logging_script import authenticate_user, register_user
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, filename='app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
+logging.basicConfig(level=logging.INFO, filename='data/log/app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Load Kivy files
 kv_path = os.path.join('app', 'templates')
 kv_files = [
     'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
     'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
-    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv'
+    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
 ]
 for kv_file in kv_files:
-    Builder.load_file(os.path.join(kv_path, kv_file))
+    try:
+        kv_file_path = os.path.join(kv_path, kv_file)
+        Builder.load_file(kv_file_path)
+        print(f"Loaded KV file: {kv_file_path}")
+    except Exception as e:
+        logging.error(f"Error loading KV file {kv_file}: {e}")
 
 # Utility functions
 def read_file(filename):
@@ -49,7 +51,18 @@ def write_file(filename, data):
         logging.error(f"Error writing file {filename}: {e}")
 
 class HomeScreen(Screen):
-    pass
+    def on_pre_enter(self, *args):
+        # Check if the auth_screen exists
+        auth_screen = self.manager.get_screen('auth_screen')
+        if auth_screen:
+            self.ids.username_label.text = f"Welcome, {auth_screen.ids.username.text}!"
+        else:
+            print("Error: auth_screen not found")
+
+
+    def logout(self):
+        self.manager.current = 'auth_screen'
+
 
 class HistoricalDataScreen(Screen):
     def on_pre_enter(self):
@@ -214,7 +227,6 @@ class RewardsScreen(Screen):
             logging.error(f"Error in calculate_rewards: {e}")
             return "Error calculating rewards."
 
-
 class AudioMoodTrackerScreen(Screen):
     def on_pre_enter(self):
         self.start_audio_processing()
@@ -225,7 +237,6 @@ class AudioMoodTrackerScreen(Screen):
 
     def display_detected_mood(self, mood):
         self.ids.detected_mood_label.text = f"Detected Mood: {mood}"
-
 
 class ChatRoomScreen(Screen):
     def on_pre_enter(self):
@@ -241,64 +252,68 @@ class ChatRoomScreen(Screen):
         # Code to get response from Hugging Face GPT-2 model
         pass
 
-
 class SettingsScreen(Screen):
     def set_reminder(self):
         reminder_time = self.ids.reminder_time_input.text
         logging.info(f"Reminder set for {reminder_time}")
         try:
+            reminder_time = datetime.strptime(reminder_time, "%H:%M")
             self.schedule_reminder(reminder_time)
-            self.ids.reminder_message.text = f"Reminder set for {reminder_time}"
-        except Exception as e:
-            logging.error(f"Error in set_reminder: {e}")
-            self.ids.reminder_message.text = "Error setting reminder"
+        except ValueError:
+            logging.error("Invalid time format. Please use HH:MM format.")
+            self.show_popup("Error", "Invalid time format. Please use HH:MM format.")
 
     def schedule_reminder(self, reminder_time):
-        try:
-            now = datetime.now()
-            reminder_dt = datetime.strptime(reminder_time, '%H:%M').replace(year=now.year, month=now.month, day=now.day)
+        now = datetime.now()
+        reminder_time_today = reminder_time.replace(year=now.year, month=now.month, day=now.day)
 
-            if reminder_dt < now:
-                reminder_dt = reminder_dt.replace(day=now.day + 1)
+        if reminder_time_today < now:
+            reminder_time_today = reminder_time_today.replace(day=now.day + 1)
 
-            delay = (reminder_dt - now).total_seconds()
-            Clock.schedule_once(self.show_reminder, delay)
-        except ValueError as e:
-            logging.error(f"ValueError in schedule_reminder: {e}")
-        except Exception as e:
-            logging.error(f"Error in schedule_reminder: {e}")
+        time_to_reminder = (reminder_time_today - now).total_seconds()
+        Clock.schedule_once(lambda dt: self.show_popup("Reminder", "It's time for your reminder!"), time_to_reminder)
 
-    def show_reminder(self, dt):
-        try:
-            popup = Popup(title='Reminder', content=Label(text='Time to check your moods and habits!'), size_hint=(0.6, 0.4))
-            popup.open()
-        except Exception as e:
-            logging.error(f"Error in show_reminder: {e}")
+    def show_popup(self, title, message):
+        popup = Popup(title=title, content=Label(text=message), size_hint=(0.8, 0.4))
+        popup.open()
+
+class AuthScreen(Screen):
+    def authenticate_user(self):
+        username = self.ids.username.text
+        password = self.ids.password.text
+        success = authenticate_user(username, password)
+        if success:
+            self.manager.current = 'home_screen'
+        else:
+            self.show_popup("Error", "Authentication failed. Please check your username and password.")
+
+    def register_user(self):
+        username = self.ids.username.text
+        password = self.ids.password.text
+        success = register_user(username, password)
+        if success:
+            self.manager.current = 'home_screen'
+        else:
+            self.show_popup("Error", "Registration failed. Please try again.")
+
+    def show_popup(self, title, message):
+        popup = Popup(title=title, content=Label(text=message), size_hint=(0.8, 0.4))
+        popup.open()
 
 class MyDailyCompanionApp(App):
     def build(self):
-        self.icon = 'assets/images/icon.png'
         sm = ScreenManager()
-        sm.add_widget(HomeScreen(name='home'))
-        sm.add_widget(HistoricalDataScreen(name='historical_data'))
-        sm.add_widget(MoodTrackerScreen(name='mood_tracker'))
-        sm.add_widget(HabitTrackerScreen(name='habit_tracker'))
-        sm.add_widget(RewardsScreen(name='rewards'))
-        sm.add_widget(SettingsScreen(name='settings'))
-        sm.add_widget(AudioMoodTrackerScreen(name='audio_mood_tracker'))
-        sm.add_widget(ChatRoomScreen(name='chat_room'))
-        return sm
+        sm.add_widget(AuthScreen(name='auth_screen'))
+        sm.add_widget(HomeScreen(name='home_screen'))
+        sm.add_widget(HistoricalDataScreen(name='historical_data_screen'))
+        sm.add_widget(MoodTrackerScreen(name='mood_tracker_screen'))
+        sm.add_widget(HabitTrackerScreen(name='habit_tracker_screen'))
+        sm.add_widget(RewardsScreen(name='rewards_screen'))
+        sm.add_widget(AudioMoodTrackerScreen(name='audio_mood_tracker_screen'))
+        sm.add_widget(ChatRoomScreen(name='chat_room_screen'))
+        sm.add_widget(SettingsScreen(name='settings_screen'))
 
-    def get_greeting(self):
-        hour = datetime.now().hour
-        if 5 <= hour < 12:
-            return "Good Morning!"
-        elif 12 <= hour < 18:
-            return "Good Afternoon!"
-        elif 18 <= hour < 22:
-            return "Good Evening!"
-        else:
-            return "Good Night!"
+        return sm
 
 if __name__ == '__main__':
     MyDailyCompanionApp().run()

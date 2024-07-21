@@ -1,33 +1,27 @@
 <AuthScreen>:
     BoxLayout:
         orientation: 'vertical'
-        padding: 20
+        padding: [50, 50, 50, 50]
         spacing: 10
 
         Label:
-            text: "Welcome to My Daily Companion App"
-            font_size: 24
-
+            text: "Username"
         TextInput:
-            id: username_input
-            hint_text: "Username"
+            id: username
             multiline: False
-
-        TextInput:
-            id: password_input
-            hint_text: "Password"
-            password: True
-            multiline: False
-
-        Button:
-            text: "Login"
-            on_release: root.try_login()
-
-        Button:
-            text: "Register"
-            on_release: root.try_register()
 
         Label:
-            id: login_message
-            text: ""
-            color: 1, 0, 0, 1
+            text: "Password"
+        TextInput:
+            id: password
+            multiline: False
+            password: True
+
+        BoxLayout:
+            spacing: 10
+            Button:
+                text: "Login"
+                on_press: root.authenticate_user()
+            Button:
+                text: "Register"
+                on_press: root.register_user()
