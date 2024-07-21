@@ -1,12 +1,7 @@
 # main.py
-import time
-
 import kivy
 kivy.require('2.0.0')
 from kivy.config import Config
-Config.set('kivy', 'log_level', 'debug')
-Config.set('kivy', 'log_enable', 1)
-Config.set('kivy', 'log_name', 'kivylog.txt')
 import logging
 from kivy.app import App
 from kivy.uix.label import Label
@@ -15,6 +10,7 @@ from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, Screen
 from kivy.lang import Builder
 import os
+import time
 from kivy.clock import Clock
 from kivy.uix.popup import Popup
 from datetime import datetime
@@ -22,46 +18,33 @@ from datetime import datetime
 # Importing authentication functions from logging_script.py
 from logging_script import authenticate_user, register_user, read_file, write_file
 
-def cleanup_old_logs(log_dir, max_age_days):
-    """
-    Deletes log files older than max_age_days in the specified log directory.
-
-    :param log_dir: Directory where log files are stored.
-    :param max_age_days: Maximum age of log files to keep, in days.
-    """
-    current_time = time.time()
-    for filename in os.listdir(log_dir):
-        file_path = os.path.join(log_dir, filename)
-        file_stat = os.stat(file_path)
-        file_age_days = (current_time - file_stat.st_mtime) / 86400  # Convert seconds to days
-        if file_age_days > max_age_days:
-            try:
-                os.remove(file_path)
-                print(f"Deleted old log file: {filename}")
-            except Exception as e:
-                print(f"Error deleting file {filename}: {e}")
-
-# Example usage
-log_directory = "/home/hgidea/.kivy/logs"
-max_log_age_days = 7  # Adjust as needed
-cleanup_old_logs(log_directory, max_log_age_days)
 # Configure logging
 logging.basicConfig(level=logging.INFO, filename='data/log/app.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
-# Load Kivy files
-kv_path = os.path.join('app', 'templates')
-kv_files = [
-    'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
-    'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
-    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
-]
-for kv_file in kv_files:
+# Function to clean up old logs
+def cleanup_old_logs():
     try:
-        kv_file_path = os.path.join(kv_path, kv_file)
-        Builder.load_file(kv_file_path)
-        print(f"Loaded KV file: {kv_file_path}")
+        log_dir = os.path.expanduser('~/.kivy/logs')
+        log_files = sorted([f for f in os.listdir(log_dir) if f.startswith('kivy_')], reverse=True)
+        for log_file in log_files[10:]:
+            os.remove(os.path.join(log_dir, log_file))
+            print(f"Deleted old log file: {log_file}")
     except Exception as e:
-        logging.error(f"Error loading KV file {kv_file}: {e}")
+        logging.error(f"Error in cleanup_old_logs: {e}")
+
+cleanup_old_logs()
+
+# Load all KV files
+kv_path = os.path.join(os.path.dirname(__file__), 'templates')
+Builder.load_file(os.path.join(kv_path, 'home_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'mood_tracker_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'habit_tracker_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'historical_data_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'rewards_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'settings_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'audio_mood_tracker_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'chat_room_screen.kv'))
+Builder.load_file(os.path.join(kv_path, 'auth_screen.kv'))
 
 # Utility functions
 def read_file(filename):
