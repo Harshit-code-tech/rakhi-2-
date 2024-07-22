@@ -61,6 +61,10 @@ def register_user(user_id, password):
         logging.error(f"Error in register_user: {e}")
         return False
 
+def setup_logging():
+    logging.basicConfig(filename='app/data/logs/app.log', level=logging.DEBUG,
+                        format='%(asctime)s:%(levelname)s:%(message)s')
+
 def main():
     logging.info("Starting authentication script")
 
