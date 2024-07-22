@@ -1,10 +1,13 @@
-# logging_script.py
 import os
 import logging
 import hashlib
 
 # Configure logging
-logging.basicConfig(level=logging.INFO, filename='auth.log', filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
+log_directory = 'data/logs'
+if not os.path.exists(log_directory):
+    os.makedirs(log_directory)
+
+logging.basicConfig(level=logging.INFO, filename=os.path.join(log_directory, 'auth.log'), filemode='a', format='%(asctime)s - %(levelname)s - %(message)s')
 
 # Utility functions
 def read_file(filename):
@@ -62,7 +65,7 @@ def register_user(user_id, password):
         return False
 
 def setup_logging():
-    logging.basicConfig(filename='app/data/logs/app.log', level=logging.DEBUG,
+    logging.basicConfig(filename='data/logs/app.log', level=logging.DEBUG,
                         format='%(asctime)s:%(levelname)s:%(message)s')
 
 def main():
@@ -94,13 +97,3 @@ if __name__ == '__main__':
         main()
     except Exception as e:
         logging.critical(f"Unhandled exception: {e}")
-
-
-'''/*
-import logging
-
-def setup_logging():
-    logging.basicConfig(filename='app/data/logs/app.log', level=logging.DEBUG,
-                        format='%(asctime)s:%(levelname)s:%(message)s')
-
-*/'''
