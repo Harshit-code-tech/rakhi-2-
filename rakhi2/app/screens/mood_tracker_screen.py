@@ -1,5 +1,7 @@
 # mood_tracker_screen.py
 import logging
+import os
+
 from kivy.uix.label import Label
 from kivy.uix.button import Button
 from kivy.uix.boxlayout import BoxLayout
@@ -9,10 +11,21 @@ from kivy.uix.screenmanager import Screen
 from kivy.properties import ObjectProperty
 
 from rakhi2.app.logging_script import read_file, write_file
+# Configure logging
+logging.basicConfig(level=logging.INFO)
+def read_file(file_path):
+    if not os.path.exists(file_path):
+        return []
+    with open(file_path, 'r') as file:
+        return file.read().splitlines()
 
+def write_file(file_path, data):
+    with open(file_path, 'w') as file:
+        file.write('\n'.join(data))
 class MoodTrackerScreen(Screen):
     mood_spinner = ObjectProperty(None)
     custom_mood_input = ObjectProperty(None)
+    mood_input = ObjectProperty(None)
     moods_list = ObjectProperty(None)
 
     def on_spinner_select(self, spinner, text):
@@ -37,6 +50,8 @@ class MoodTrackerScreen(Screen):
         except Exception as e:
             logging.error(f"Error in submit_mood: {e}")
 
+    # Rest of the class implementation remains unchanged
+
     def delete_mood(self, mood):
         logging.info(f"Deleting mood: {mood}")
         try:
@@ -57,10 +72,14 @@ class MoodTrackerScreen(Screen):
             logging.error(f"Error in on_pre_enter: {e}")
 
     def load_moods(self):
+        logging.info("Loading moods")
         try:
             user_id = self.manager.get_screen('auth_screen').ids.username.text
             moods = read_file(f'data/db/{user_id}/moods.txt')
             self.display_moods(moods)
+            for mood in moods:
+                mood_label = Label(text=mood)
+                self.moods_list.add_widget(mood_label)
         except Exception as e:
             logging.error(f"Error in load_moods: {e}")
 
