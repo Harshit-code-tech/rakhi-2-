@@ -3,6 +3,8 @@ import os
 from kivy.uix.label import Label
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
+from kivy.lang import Builder
+
 from rakhi2.app.screens.home_screen import HomeScreen
 from rakhi2.app.screens.mood_tracker_screen import MoodTrackerScreen
 from rakhi2.app.screens.habit_tracker_screen import HabitTrackerScreen
@@ -12,10 +14,10 @@ from rakhi2.app.screens.settings_screen import SettingsScreen
 from rakhi2.app.screens.audio_mood_tracker_screen import AudioMoodTrackerScreen
 from rakhi2.app.screens.chat_room_screen import ChatRoomScreen
 from rakhi2.app.screens.auth_screen import AuthScreen
-from rakhi2.app.screens.test_screen import TestScreen
 from rakhi2.app.logging_script import setup_logging
-from kivy.lang import Builder
+
 setup_logging()
+
 # Load all KV files
 kv_path = os.path.join(os.path.dirname(__file__), 'templates')
 kv_files = [
@@ -23,6 +25,7 @@ kv_files = [
     'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
     'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
 ]
+
 for kv_file in kv_files:
     try:
         kv_file_path = os.path.join(kv_path, kv_file)
@@ -30,7 +33,6 @@ for kv_file in kv_files:
         print(f"Loaded KV file: {kv_file_path}")
     except Exception as e:
         logging.error(f"Error loading KV file {kv_file}: {e}")
-
 
 # Utility functions
 def read_file(filename):
@@ -42,6 +44,15 @@ def read_file(filename):
     except Exception as e:
         logging.error(f"Error reading file {filename}: {e}")
         return []
+
+def write_file(filename, data):
+    try:
+        with open(filename, 'w') as f:
+            for item in data:
+                f.write(f"{item}\n")
+    except Exception as e:
+        logging.error(f"Error writing file {filename}: {e}")
+
 def cleanup_old_logs():
     try:
         log_dir = os.path.expanduser('~/.kivy/logs')
@@ -53,13 +64,7 @@ def cleanup_old_logs():
         logging.error(f"Error in cleanup_old_logs: {e}")
 
 cleanup_old_logs()
-def write_file(filename, data):
-    try:
-        with open(filename, 'w') as f:
-            for item in data:
-                f.write(f"{item}\n")
-    except Exception as e:
-        logging.error(f"Error writing file {filename}: {e}")
+
 class MyScreenManager2(ScreenManager):
     pass
 
@@ -79,7 +84,6 @@ class MyDailyCompanionApp2(App):
             return sm
         except Exception as e:
             logging.error(f"Error setting up the screen manager: {e}")
-            # Optionally, return a basic widget or screen to indicate failure
             return Label(text='An error occurred, please check the logs.')
 
 if __name__ == '__main__':
