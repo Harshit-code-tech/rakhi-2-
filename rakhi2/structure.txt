@@ -9,7 +9,6 @@ my_daily_companion/
 │   │       ├── {username}[i]/
 │   │       │   ├── habits.txt
 │   │       │   ├── moods.txt
-│   │       ├── habits.txt
 │   ├── main.py
 │   ├── logging_script.py
 │   ├── user_auth.py
