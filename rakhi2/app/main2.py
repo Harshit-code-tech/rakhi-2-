@@ -1,4 +1,4 @@
-# main2.py
+# main.py
 import logging
 import os
 from kivy.uix.label import Label
@@ -12,6 +12,7 @@ from rakhi2.app.screens.habit_tracker_screen import HabitTrackerScreen
 from rakhi2.app.screens.historical_data_screen import HistoricalDataScreen
 from rakhi2.app.screens.rewards_screen import RewardsScreen
 from rakhi2.app.screens.reminder_screen import ReminderScreen
+from rakhi2.app.screens.settings_screen import SettingsScreen
 from rakhi2.app.screens.audio_mood_tracker_screen import AudioMoodTrackerScreen
 from rakhi2.app.screens.chat_room_screen import ChatRoomScreen
 from rakhi2.app.screens.auth_screen import AuthScreen
@@ -24,14 +25,14 @@ kv_path = os.path.join(os.path.dirname(__file__), 'templates')
 kv_files = [
     'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
     'historical_data_screen.kv', 'rewards_screen.kv', 'reminder_screen.kv',
-    'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
+    'settings_screen.kv', 'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
 ]
 
 for kv_file in kv_files:
     try:
         kv_file_path = os.path.join(kv_path, kv_file)
         Builder.load_file(kv_file_path)
-        logging.info(f"Loaded KV file: {kv_file_path}")
+        print(f"Loaded KV file: {kv_file_path}")
     except Exception as e:
         logging.error(f"Error loading KV file {kv_file}: {e}")
 
@@ -57,11 +58,10 @@ def write_file(filename, data):
 def cleanup_old_logs():
     try:
         log_dir = os.path.expanduser('~/.kivy/logs')
-        if os.path.exists(log_dir):
-            log_files = sorted([f for f in os.listdir(log_dir) if f.startswith('kivy_')], reverse=True)
-            for log_file in log_files[10:]:
-                os.remove(os.path.join(log_dir, log_file))
-                logging.info(f"Deleted old log file: {log_file}")
+        log_files = sorted([f for f in os.listdir(log_dir) if f.startswith('kivy_')], reverse=True)
+        for log_file in log_files[10:]:
+            os.remove(os.path.join(log_dir, log_file))
+            print(f"Deleted old log file: {log_file}")
     except Exception as e:
         logging.error(f"Error in cleanup_old_logs: {e}")
 
@@ -83,6 +83,7 @@ class MyDailyCompanionApp2(App):
             sm.add_widget(AudioMoodTrackerScreen(name='audio_mood_tracker_screen'))
             sm.add_widget(ChatRoomScreen(name='chat_room_screen'))
             sm.add_widget(ReminderScreen(name='reminder_screen'))
+            sm.add_widget(SettingsScreen(name='settings_screen'))
             return sm
         except Exception as e:
             logging.error(f"Error setting up the screen manager: {e}")
