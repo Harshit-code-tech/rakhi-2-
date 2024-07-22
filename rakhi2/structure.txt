@@ -1,6 +1,15 @@
 my_daily_companion/
 ├── app/
 │   ├── __init__.py
+│   ├── data/
+│   │   ├── logs/
+│   │   │   ├── auth.log
+│   │   ├── users.txt
+│   │   └── db/
+│   │       ├── {username}[i]/
+│   │       │   ├── habits.txt
+│   │       │   ├── moods.txt
+│   │       ├── habits.txt
 │   ├── main.py
 │   ├── logging_script.py
 │   ├── user_auth.py
@@ -37,12 +46,6 @@ my_daily_companion/
 │   ├── images/
 │   ├── sounds/
 │   └── models/
-├── data/
-│   ├── logs/
-│   ├── users.txt
-│   └── db/
-│       ├── habits.txt
-│       ├── moods.txt
 ├── static/
 │   ├── css/
 │   │   └── style.css

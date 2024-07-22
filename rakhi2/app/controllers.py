@@ -1,4 +1,4 @@
-from app.models import session, User, MoodEntry, DailyGoal
+from rakhi2.app.models import session, User, MoodEntry, DailyGoal
 from datetime import date
 
 class AppController:

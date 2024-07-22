@@ -1,3 +1,4 @@
+# auth_screen.py
 from kivy.uix.screenmanager import Screen
 from kivy.uix.popup import Popup
 from rakhi2.app.logging_script import authenticate_user, register_user
