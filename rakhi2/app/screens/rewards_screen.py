@@ -15,8 +15,9 @@ class RewardsScreen(Screen):
 
     def display_rewards(self):
         try:
-            moods = read_file('data/db/moods.txt')
-            habits = read_file('data/db/habits.txt')
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            moods = read_file(f'data/db/{user_id}/moods.txt')
+            habits = read_file(f'data/db/{user_id}/habits.txt')
 
             mood_count = len(moods)
             habit_count = len(habits)

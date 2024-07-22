@@ -1,24 +1,38 @@
 <MoodTrackerScreen>:
+    mood_input: mood_input
+    moods_list: moods_list
 
     BoxLayout:
         orientation: 'vertical'
         padding: 10
-        spacing: 10
+        spacing: 15
+
         Label:
             text: 'Mood Tracker'
             font_size: 24
+
         TextInput:
             id: mood_input
             hint_text: 'Enter your mood'
+            size_hint_y: None
+            height: 50
+
         Button:
             text: 'Submit Mood'
-            on_release: app.root.get_screen('mood_tracker_screen').submit_mood(mood_input.text)
+            size_hint_y: None
+            height: 50
+            on_release: root.submit_mood(mood_input.text)
+
         ScrollView:
+            size_hint: (1, 0.6)
             BoxLayout:
                 id: moods_list
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
+
         Button:
             text: 'Back to Home'
+            size_hint_y: None
+            height: 50
             on_release: app.root.current = 'home_screen'
