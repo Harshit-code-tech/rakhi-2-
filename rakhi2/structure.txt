@@ -1,6 +1,15 @@
 my_daily_companion/
 ├── app/
 │   ├── __init__.py
+|   ├── data/
+│   │   ├── logs/
+│   │   ├── users.txt
+│   │   └── db/
+│       │   ├── user1/
+│       │   │   ├── habits.txt
+│       │   │   ├── moods.txt
+│       ├── habits.txt
+│       ├── moods.txt
 │   ├── main.py
 │   ├── logging_script.py
 │   ├── user_auth.py
