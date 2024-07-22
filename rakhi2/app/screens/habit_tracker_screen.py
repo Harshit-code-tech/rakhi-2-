@@ -66,13 +66,13 @@ class HabitTrackerScreen(Screen):
 
     def display_habits(self, habits):
         try:
-            self.habits_list.clear_widgets()
+            self.ids.habits_list.clear_widgets()
             for habit in habits:
                 box = BoxLayout(orientation='horizontal', size_hint_y=None, height=40)
                 box.add_widget(Label(text=habit, size_hint_x=0.8))
                 btn = Button(text='Delete', size_hint_x=0.2)
                 btn.bind(on_release=lambda btn, habit=habit: self.delete_habit(habit))
                 box.add_widget(btn)
-                self.habits_list.add_widget(box)
+                self.ids.habits_list.add_widget(box)
         except Exception as e:
             logging.error(f"Error in display_habits: {e}")
