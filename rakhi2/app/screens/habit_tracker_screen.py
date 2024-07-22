@@ -50,7 +50,10 @@ class HabitTrackerScreen(Screen):
             logging.error(f"Error in delete_habit: {e}")
 
     def on_pre_enter(self):
-        self.load_habits()
+        try:
+            self.load_habits()
+        except Exception as e:
+            logging.error(f"Error in on_pre_enter: {e}")
 
     def load_habits(self):
         try:
