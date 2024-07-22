@@ -66,8 +66,14 @@ def register_user(user_id, password):
         return False
 
 def setup_logging():
-    logging.basicConfig(filename='data/logs/app.log', level=logging.DEBUG,
-                        format='%(asctime)s:%(levelname)s:%(message)s')
+    log_dir = os.path.expanduser('~/.kivy/logs')
+    if not os.path.exists(log_dir):
+        os.makedirs(log_dir)
+    logging.basicConfig(
+        filename=os.path.join(log_dir, 'app.log'),
+        level=logging.DEBUG,
+        format='%(asctime)s %(levelname)s %(message)s'
+    )
 
 def main():
     logging.info("Starting authentication script")
