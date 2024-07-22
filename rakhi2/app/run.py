@@ -1,16 +1,16 @@
 from kivy.app import App
 from kivy.uix.screenmanager import ScreenManager
-from app.screens.home_screen import HomeScreen
-from app.screens.mood_tracker_screen import MoodTrackerScreen
-from app.screens.habit_tracker_screen import HabitTrackerScreen
-from app.screens.historical_data_screen import HistoricalDataScreen
-from app.screens.rewards_screen import RewardsScreen
-from app.screens.settings_screen import SettingsScreen
-from app.screens.audio_mood_tracker_screen import AudioMoodTrackerScreen
-from app.screens.chat_room_screen import ChatRoomScreen
-from app.screens.auth_screen import AuthScreen
-from app.screens.test_screen import TestScreen
-from app.logging_script import setup_logging
+from rakhi2.app.screens.home_screen import HomeScreen
+from rakhi2.app.screens.mood_tracker_screen import MoodTrackerScreen
+from rakhi2.app.screens.habit_tracker_screen import HabitTrackerScreen
+from rakhi2.app.screens.historical_data_screen import HistoricalDataScreen
+from rakhi2.app.screens.rewards_screen import RewardsScreen
+from rakhi2.app.screens.settings_screen import SettingsScreen
+from rakhi2.app.screens.audio_mood_tracker_screen import AudioMoodTrackerScreen
+from rakhi2.app.screens.chat_room_screen import ChatRoomScreen
+from rakhi2.app.screens.auth_screen import AuthScreen
+from rakhi2.app.screens.test_screen import TestScreen
+from rakhi2.app.logging_script import setup_logging
 
 setup_logging()
 
