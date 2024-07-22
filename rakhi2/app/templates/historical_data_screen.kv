@@ -1,11 +1,16 @@
 <HistoricalDataScreen>:
+    moods_list: moods_list
+    habits_list: habits_list
+
     BoxLayout:
         orientation: 'vertical'
         padding: 10
         spacing: 10
+
         Label:
             text: 'Historical Data'
             font_size: 24
+
         Label:
             text: 'Moods:'
         ScrollView:
@@ -14,6 +19,7 @@
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
+
         Label:
             text: 'Habits:'
         ScrollView:
@@ -22,6 +28,15 @@
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
+
+        Label:
+            text: 'Mood and Habit Trends:'
+        Image:
+            id: plot_image
+            source: ''
+            size_hint_y: None
+            height: 300
+
         Button:
             text: 'Back to Home'
             on_release: app.root.current = 'home_screen'
