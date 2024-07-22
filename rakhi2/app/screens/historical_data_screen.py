@@ -1,6 +1,9 @@
 import logging
 
 from kivy.uix.screenmanager import Screen
+from kivy.uix.label import Label
+from rakhi2.app.logging_script import read_file
+
 
 class HistoricalDataScreen(Screen):
     def on_pre_enter(self):
