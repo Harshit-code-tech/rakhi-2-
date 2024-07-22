@@ -1,6 +1,6 @@
 import logging
 from kivy.uix.screenmanager import ScreenManager, Screen
-
+# views.py
 class HomeScreen(Screen):
     def on_pre_enter(self):
         logging.info("Entering Home Screen")

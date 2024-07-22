@@ -8,3 +8,66 @@ make the habit tracer side.. purely functional...
 5) ...
 # models.py
 any improvement in this???
+
+
+To-Do List for Rakhi App Development
+Review and Verify Current Code:
+
+Ensure all current functionalities are working as expected.
+Verify the integration of new features and bug fixes.
+Settings and Reminders:
+
+Rename the current "settings" script to "reminder".
+Create a new script for actual settings functionalities.
+Historical Data Representation:
+
+Improve the graph representation on the historical data screen.
+Enhance the readability of x and y axes and data points.
+Habit Tracker:
+
+Define the purpose of habit tracking and its significance in historical data.
+Make the habit tracker functional and clearly represent its data in historical tracking.
+Error Handling:
+
+Add try-except blocks for proper error handling in both MoodTrackerScreen and HabitTrackerScreen.
+Data Storage Improvement:
+
+Ensure each user's habits and moods are stored in separate files similar to moods.
+Delete Button Visibility:
+
+Adjust the button size and position within the layout to ensure visibility.
+User-Specific Data Tracking:
+
+Adjust HabitTrackerScreen to handle data per user, similar to MoodTrackerScreen.
+Mood and Habit Data Entry:
+
+Provide options for predefined moods and habits with a custom input option.
+General Improvements:
+
+Suggestions for further improvements will be provided after addressing the above issues.
+Models.py Improvements:
+
+Add proper relationships between tables.
+Consider indexing commonly queried fields.
+Implement validation and constraints on data fields.
+Document the models and their relationships.
+Testing and Validation:
+
+Write unit tests to validate functionalities.
+Perform thorough testing to ensure the app is bug-free.
+Migration to Web:
+
+Plan the migration of functionalities to a website.
+Use MongoDB for the web version.
+Ensure the website retains the same functionalities as the Kivy app, excluding studies.
+Upcoming Tasks
+Review Sent Code:
+
+Go through the entire codebase to ensure everything is up-to-date and functioning.
+Implement To-Do List Items:
+
+Start working on the tasks outlined above.
+Prepare for Web Migration:
+
+Plan the architecture for the web version.
+Begin setting up the backend with MongoDB.
