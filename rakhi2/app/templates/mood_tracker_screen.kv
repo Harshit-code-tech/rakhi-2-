@@ -1,25 +1,43 @@
 <MoodTrackerScreen>:
-
     BoxLayout:
         orientation: 'vertical'
         padding: 10
-        spacing: 10
+        spacing: 15  # Increased spacing between elements
+
         Label:
             text: 'Mood Tracker'
             font_size: 24
+
         TextInput:
             id: mood_input
             hint_text: 'Enter your mood'
+            size_hint_y: None
+            height: 50
+
         Button:
             text: 'Submit Mood'
+            size_hint_y: None
+            height: 50
             on_release: app.root.get_screen('mood_tracker_screen').submit_mood(mood_input.text)
+
         ScrollView:
+            size_hint: (1, 0.6)  # Adjust the size hint to allocate more space for the list
+            size_hint_min_y: 300  # Ensure a minimum height for better layout
             BoxLayout:
                 id: moods_list
                 orientation: 'vertical'
                 size_hint_y: None
                 height: self.minimum_height
 
+                Button:
+                    text: 'Delete Mood'
+                    size_hint_y: None
+                    height: 60  # Increased height for better visibility and clickability
+                    padding: (10, 10)  # Added padding around the button
+                    on_release: app.root.get_screen('mood_tracker_screen').delete_mood('Delete Mood')
+
         Button:
             text: 'Back to Home'
+            size_hint_y: None
+            height: 50
             on_release: app.root.current = 'home_screen'
