@@ -12,7 +12,8 @@ class HabitTrackerScreen(Screen):
     def submit_habit(self, habit):
         logging.info(f"Habit submitted: {habit}")
         try:
-            write_file('data/db/habits.txt', read_file('data/db/habits.txt') + [habit])
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            write_file(f'data/db/{user_id}/habits.txt', read_file(f'data/db/{user_id}/habits.txt') + [habit])
             self.ids.habit_input.text = ''
             self.load_habits()
         except Exception as e:
@@ -20,10 +21,11 @@ class HabitTrackerScreen(Screen):
 
     def delete_habit(self, habit):
         try:
-            habits = read_file('data/db/habits.txt')
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            habits = read_file(f'data/db/{user_id}/habits.txt')
             if habit in habits:
                 habits.remove(habit)
-                write_file('data/db/habits.txt', habits)
+                write_file(f'data/db/{user_id}/habits.txt', habits)
                 self.load_habits()
         except Exception as e:
             logging.error(f"Error deleting habit: {e}")
@@ -36,7 +38,8 @@ class HabitTrackerScreen(Screen):
 
     def load_habits(self):
         try:
-            habits = read_file('data/db/habits.txt')
+            user_id = self.manager.get_screen('auth_screen').ids.username.text
+            habits = read_file(f'data/db/{user_id}/habits.txt')
             self.display_habits(habits)
         except Exception as e:
             logging.error(f"Error in load_habits: {e}")
