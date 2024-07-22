@@ -38,7 +38,7 @@ cleanup_old_logs()
 kv_path = os.path.join(os.path.dirname(__file__), 'templates')
 kv_files = [
     'home_screen.kv', 'mood_tracker_screen.kv', 'habit_tracker_screen.kv',
-    'historical_data_screen.kv', 'rewards_screen.kv', 'settings_screen.kv',
+    'historical_data_screen.kv', 'rewards_screen.kv', 'reminder_screen.kv',
     'audio_mood_tracker_screen.kv', 'chat_room_screen.kv', 'auth_screen.kv'
 ]
 for kv_file in kv_files:

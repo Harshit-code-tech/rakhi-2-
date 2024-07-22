@@ -1,5 +1,5 @@
 import unittest
-from app.models import session, MoodEntry, DailyGoal
+from rakhi2.app.models import session, MoodEntry, DailyGoal
 
 class TestMyDailyCompanionApp(unittest.TestCase):
     def test_save_mood(self):

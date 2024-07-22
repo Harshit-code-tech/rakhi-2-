@@ -1,37 +1,10 @@
-2) Make the proper routing of all the screens.
-3) Make the proper UI of all the screens.
-4) Make the proper Functionality of all the screens.
-6) Error Handling in Mood and Habit Tracking
-7) Data Storage Improvement
-8) Fixing the Delete Button Visibility
-9) Tracking Mood and Habit Data Per User
-10) Improving Historical Data Representation
-11) Separate Reminder Button and Real Functions in Settings
-12) General Improvements
+1)re-call the plan .. original plan of rakhi app development... what we had covered and what we need to
+2) as in settings that is reminder.. how about rename it to reminder and make another script of settings with really a functions worth name settings..
+3)in historic data_screen .. it uses a graph.. which is okay.. but.. the way of representation is not good.. improve it...
+maybe.. improve those points and x and y axis..
+4) in habit tracker.. what is it's purporse... why even track it.. in historic data.. 
+make the habit tracer side.. purely functional... 
 
-
-Let's add try-except blocks to handle errors properly in both MoodTrackerScreen and HabitTrackerScreen.
-
-Data Storage Improvement:
-
-Ensure each user's habits are stored in a separate file similar to moods.
-
-Fixing the Delete Button Visibility:
-
-Adjust the button size and position within the layout to ensure it is visible.
-
-Tracking Mood and Habit Data Per User:
-
-Adjust the HabitTrackerScreen to handle data per user, similar to MoodTrackerScreen.
-
-Improving Historical Data Representation:
-
-Provide options for predefined moods and habits, and add a custom input option. Use a chart to represent historical data.
-
-Separate Reminder Button and Real Functions in Settings:
-
-Create a dedicated button for setting reminders and implement additional settings functionalities.
-
-General Improvements:
-
-Suggestions for further improvements will be provided after addressing the above issues.
+5) ...
+# models.py
+any improvement in this???

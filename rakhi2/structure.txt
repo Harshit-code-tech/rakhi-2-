@@ -9,7 +9,6 @@ my_daily_companion/
 │   │       ├── {username}[i]/
 │   │       │   ├── habits.txt
 │   │       │   ├── moods.txt
-│   │       ├── habits.txt
 │   ├── main.py
 │   ├── logging_script.py
 │   ├── user_auth.py
@@ -23,7 +22,7 @@ my_daily_companion/
 │   │   ├── habit_tracker_screen.py
 │   │   ├── historical_data_screen.py
 │   │   ├── rewards_screen.py
-│   │   ├── settings_screen.py
+│   │   ├── reminder_screen.py
 │   │   ├── audio_mood_tracker_screen.py
 │   │   ├── chat_room_screen.py
 │   │   ├── auth_screen.py
@@ -34,7 +33,7 @@ my_daily_companion/
 │   │   ├── habit_tracker_screen.kv
 │   │   ├── historical_data_screen.kv
 │   │   ├── rewards_screen.kv
-│   │   ├── settings_screen.kv
+│   │   ├── reminder_screen.kv
 │   │   ├── audio_mood_tracker_screen.kv
 │   │   ├── chat_room_screen.kv
 │   │   ├── auth_screen.kv
