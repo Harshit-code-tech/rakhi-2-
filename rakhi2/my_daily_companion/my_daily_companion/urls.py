@@ -1,9 +1,12 @@
-from django.contrib import admin
-from django.urls import path, include
-from app import d_views  # Import views
+from django.urls import path
+from app import d_views as views
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('app/', include('app.urls')),
-    path('', d_views.home, name='home'),  # Add this line for the home view
+    path('', views.home, name='home'),
+    path('habit_tracker/', views.habit_tracker, name='habit_tracker'),
+    path('mood_tracker/', views.mood_tracker, name='mood_tracker'),
+    path('historical_data/', views.historical_data, name='historical_data'),
+    path('rewards/', views.rewards, name='rewards'),
+    path('settings/', views.settings, name='settings'),
+    path('reminder/', views.reminder, name='reminder'),
 ]
