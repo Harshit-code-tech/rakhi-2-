@@ -1,5 +1,21 @@
 # d_models.py
+import logging
 from django.db import models
+
+
+# Get the logger for this module
+logger = logging.getLogger('myapp')
+
+class MyModel(models.Model):
+    name = models.CharField(max_length=100)
+
+    def save(self, *args, **kwargs):
+        logger.debug(f'Saving MyModel instance: {self}')
+        super().save(*args, **kwargs)
+
+    def delete(self, *args, **kwargs):
+        logger.info(f'Deleting MyModel instance: {self}')
+        super().delete(*args, **kwargs)
 
 class UserProfile(models.Model):
     name = models.CharField(max_length=100)

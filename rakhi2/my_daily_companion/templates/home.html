@@ -4,21 +4,23 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Home - My Daily Companion</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
-    <script src="{{ url_for('static', filename='js/app.js') }}" defer></script>
+    <!-- Load static files -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <script src="{% static 'js/app.js' %}" defer></script>
 </head>
 <body>
     <header>
         <h1>Welcome to My Daily Companion!</h1>
         <nav>
             <ul>
-                <li><a href="{{ url_for('home') }}">Home</a></li>
-                <li><a href="{{ url_for('mood_tracker') }}">Mood Tracker</a></li>
-                <li><a href="{{ url_for('habit_tracker') }}">Habit Tracker</a></li>
-                <li><a href="{{ url_for('historical_data') }}">Historical Data</a></li>
-                <li><a href="{{ url_for('rewards') }}">Rewards</a></li>
-                <li><a href="{{ url_for('reminder') }}">Reminder</a></li>
-                <li><a href="{{ url_for('auth') }}">Auth</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'mood_tracker' %}">Mood Tracker</a></li>
+                <li><a href="{% url 'habit_tracker' %}">Habit Tracker</a></li>
+                <li><a href="{% url 'historical_data' %}">Historical Data</a></li>
+                <li><a href="{% url 'rewards' %}">Rewards</a></li>
+                <li><a href="{% url 'reminder' %}">Reminder</a></li>
+                <li><a href="{% url 'auth' %}">Auth</a></li>
             </ul>
         </nav>
     </header>
