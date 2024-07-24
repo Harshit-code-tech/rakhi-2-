@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+    <h1>Welcome to My Daily Companion</h1>
+    <nav>
+        <ul>
+            <li><a href="{% url 'mood_entries' %}">Mood Entries</a></li>
+            <li><a href="{% url 'daily_goals' %}">Daily Goals</a></li>
+        </ul>
+    </nav>
+</body>
+</html>
