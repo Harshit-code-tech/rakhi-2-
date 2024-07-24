@@ -1,0 +1,15 @@
+<!-- app/templates/habit_list.html -->
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Habit List</title>
+</head>
+<body>
+    <h1>Habit List</h1>
+    <ul>
+        {% for habit in habits %}
+            <li>{{ habit.name }}: {{ habit.description }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
