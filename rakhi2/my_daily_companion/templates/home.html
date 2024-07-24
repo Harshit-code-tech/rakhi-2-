@@ -14,13 +14,14 @@
         <h1>Welcome to My Daily Companion!</h1>
         <nav>
             <ul>
+                <li><a href="{% url 'auth' %}">Auth</a></li>
                 <li><a href="{% url 'home' %}">Home</a></li>
                 <li><a href="{% url 'mood_tracker' %}">Mood Tracker</a></li>
                 <li><a href="{% url 'habit_tracker' %}">Habit Tracker</a></li>
                 <li><a href="{% url 'historical_data' %}">Historical Data</a></li>
                 <li><a href="{% url 'rewards' %}">Rewards</a></li>
                 <li><a href="{% url 'reminder' %}">Reminder</a></li>
-                <li><a href="{% url 'auth' %}">Auth</a></li>
+
             </ul>
         </nav>
     </header>

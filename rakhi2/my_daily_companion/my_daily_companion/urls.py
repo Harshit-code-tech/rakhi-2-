@@ -6,6 +6,7 @@ from app import d_views
 
 urlpatterns = [
     path('app/', include('app.urls')),
+    path('auth/', d_views.auth_view, name='auth'),
     path('', d_views.home, name='home'),
     path('habit_tracker/', d_views.habit_tracker, name='habit_tracker'),
     path('mood_tracker/', d_views.mood_tracker, name='mood_tracker'),

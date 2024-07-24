@@ -26,6 +26,9 @@ def upload_file(request):
     return render(request, 'upload.html')
 
 
+def auth_view(request):
+    # Your logic here
+    return render(request, 'auth.html')
 def home(request):
     return render(request, 'home.html')
 
