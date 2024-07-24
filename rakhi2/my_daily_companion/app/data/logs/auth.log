@@ -1,0 +1,5 @@
+2024-07-22 12:39:51,086 - INFO - Starting authentication script
+2024-07-22 12:39:55,511 - INFO - Registering user: 12
+2024-07-22 12:39:55,512 - INFO - User registered successfully: 12
+2024-07-22 12:39:59,239 - INFO - Authenticating user: 12
+2024-07-22 12:39:59,240 - INFO - Authentication successful for user: 12
