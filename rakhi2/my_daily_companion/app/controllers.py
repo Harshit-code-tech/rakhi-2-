@@ -1,5 +1,5 @@
 # controller.py: This file contains the controller class for the application. It contains methods to save mood and goal data to the database.
-from rakhi2.my_daily_companion.app.models import session, User, MoodEntry, DailyGoal
+from rakhi2.my_daily_companion.app.kivy_models import session, User, MoodEntry, DailyGoal
 from datetime import date
 
 class AppController:
