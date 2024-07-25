@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home - My Daily Companion</title>
+    <!-- Load static files -->
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'css/animations.css' %}">
+    <script src="{% static 'js/app.js' %}" defer></script>
+    <script src="{% static 'js/animations.js' %}" defer></script>
+</head>
+<body>
+    <header class="animated fadeInDown">
+        <h1 class="logo">My Daily Companion</h1>
+        <nav>
+            <ul class="nav-menu">
+                <li><a href="{% url 'auth' %}">Auth</a></li>
+                <li><a href="{% url 'home' %}">Home</a></li>
+                <li><a href="{% url 'mood_tracker' %}">Mood Tracker</a></li>
+                <li><a href="{% url 'habit_tracker' %}">Habit Tracker</a></li>
+                <li><a href="{% url 'historical_data' %}">Historical Data</a></li>
+                <li><a href="{% url 'rewards' %}">Rewards</a></li>
+                <li><a href="{% url 'reminder' %}">Reminder</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main>
+        <section class="overview animated fadeInUp">
+            <h2>Overview</h2>
+            <p>Welcome to the app! Use the menu to navigate.</p>
+        </section>
+    </main>
+    <footer class="animated fadeInUp">
+        <p>&copy; 2024 My Daily Companion</p>
+    </footer>
+</body>
+</html>
