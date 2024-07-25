@@ -1,0 +1,38 @@
+<HabitTrackerScreen>:
+    habit_input: habit_input
+    habits_list: habits_list
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 15
+
+        Label:
+            text: 'Habit Tracker'
+            font_size: 24
+
+        TextInput:
+            id: habit_input
+            hint_text: 'Enter your habit'
+            size_hint_y: None
+            height: 50
+
+        Button:
+            text: 'Submit Habit'
+            size_hint_y: None
+            height: 50
+            on_release: root.submit_habit(habit_input.text)
+
+        ScrollView:
+            size_hint: (1, 0.6)
+            BoxLayout:
+                id: habits_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+
+        Button:
+            text: 'Back to Home'
+            size_hint_y: None
+            height: 50
+            on_release: app.root.current = 'home_screen'
