@@ -1,34 +1,24 @@
-import logging
-from kivy.uix.screenmanager import ScreenManager, Screen
-# views.py
-class HomeScreen(Screen):
-    def on_pre_enter(self):
-        logging.info("Entering Home Screen")
-
-class MoodTrackerScreen(Screen):
-    def on_pre_enter(self):
-        logging.info("Entering Mood Tracker Screen")
-
-class HabitTrackerScreen(Screen):
-    def on_pre_enter(self):
-        logging.info("Entering Habit Tracker Screen")
-
-class RewardScreen(Screen):
-    def on_pre_enter(self):
-        logging.info("Entering Reward Screen")
-
-class MyScreenManager(ScreenManager):
-    def __init__(self, **kwargs):
-        super(MyScreenManager, self).__init__(**kwargs)
-        logging.info("Initializing MyScreenManager")
-        self.add_widget(HomeScreen(name='home'))
-        self.add_widget(MoodTrackerScreen(name='mood_tracker'))
-        self.add_widget(HabitTrackerScreen(name='habit_tracker'))
-        self.add_widget(RewardScreen(name='reward'))
-
-    def on_current(self, *args):
-        logging.info(f"Screen changed to: {self.current}")
+from django.shortcuts import render
 from django.http import HttpResponse
+from .models import Mood, Habit, Reward
 
-def index(request):
-    return HttpResponse("Hello, world. You're at the app index.")
+def home(request):
+    return render(request, 'home.html')
+
+def mood_tracker(request):
+    if request.method == 'POST':
+        mood = request.POST.get('mood')
+        Mood.objects.create(user=request.user, mood=mood)
+    return render(request, 'mood_tracker.html')
+
+def habit_tracker(request):
+    if request.method == 'POST':
+        habit = request.POST.get('habit')
+        Habit.objects.create(user=request.user, name=habit)
+    return render(request, 'habit_tracker.html')
+
+def reward(request):
+    if request.method == 'POST':
+        image = request.FILES.get('image')
+        Reward.objects.create(user=request.user, image=image)
+    return render(request, 'reward.html')
