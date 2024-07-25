@@ -1,30 +1,27 @@
-# models.py
-from sqlalchemy import create_engine, Column, Integer, String, Date
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
+from django.db import models
+from django.contrib.auth.models import User
 
-engine = create_engine('sqlite:///my_daily_companion.db')
-Session = sessionmaker(bind=engine)
-session = Session()
-Base = declarative_base()
+class Mood(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    mood = models.CharField(max_length=255)
+    date = models.DateField(auto_now_add=True)
 
-class User(Base):
-    __tablename__ = 'users'
-    id = Column(Integer, primary_key=True)
-    name = Column(String)
+    def __str__(self):
+        return f"{self.user.username} - {self.mood} on {self.date}"
 
-class MoodEntry(Base):
-    __tablename__ = 'mood_entries'
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer)
-    mood = Column(String)
-    date = Column(Date)
+class Habit(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    name = models.CharField(max_length=255)
+    completed = models.BooleanField(default=False)
+    date = models.DateField(auto_now_add=True)
 
-class DailyGoal(Base):
-    __tablename__ = 'daily_goals'
-    id = Column(Integer, primary_key=True)
-    user_id = Column(Integer)
-    goal = Column(String)
-    status = Column(String)
+    def __str__(self):
+        return f"{self.user.username} - {self.name} on {self.date}"
 
-Base.metadata.create_all(engine)
+class Reward(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='rewards/')
+    date = models.DateField(auto_now_add=True)
+
+    def __str__(self):
+        return f"{self.user.username} - Reward on {self.date}"
