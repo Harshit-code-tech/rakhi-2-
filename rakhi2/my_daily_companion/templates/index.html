@@ -1,10 +1,7 @@
-<!-- templates/index.html -->
-<!DOCTYPE html>
-<html>
-<head>
-    <title>My Daily Companion</title>
-</head>
-<body>
-    <h1>Welcome to My Daily Companion!</h1>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Index - My Daily Companion{% endblock %}
+
+{% block content %}
+<h1 class="animated fadeInUp">Welcome to My Daily Companion!</h1>
+{% endblock %}

@@ -1,0 +1,39 @@
+<MoodTrackerScreen>:
+    mood_spinner: mood_spinner
+    custom_mood_input: custom_mood_input
+    moods_list: moods_list
+
+    BoxLayout:
+        orientation: 'vertical'
+        padding: 10
+        spacing: 15
+        Label:
+            text: 'Mood Tracker'
+            font_size: 24
+        Spinner:
+            id: mood_spinner
+            text: 'Select Mood'
+            values: ['Happy', 'Sad', 'Angry', 'Excited', 'Other']
+            on_text: root.on_spinner_select(mood_spinner, self.text)
+        TextInput:
+            id: custom_mood_input
+            hint_text: 'Enter custom mood'
+            disabled: True
+            opacity: 0
+        Button:
+            text: 'Submit Mood'
+            size_hint_y: None
+            height: 50
+            on_release: root.submit_mood()
+        ScrollView:
+            size_hint: (1, 0.6)
+            BoxLayout:
+                id: moods_list
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height
+        Button:
+            text: 'Back to Home'
+            size_hint_y: None
+            height: 50
+            on_release: app.root.current = 'home_screen'
