@@ -1,1 +1,5 @@
- python manage.py startapp auth
+1) make login proper
+2) make aesthetics of the website better /ui polishing
+3) make all tabs responsive...
+4) make the website more premium
+
