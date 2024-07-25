@@ -35,28 +35,33 @@ LOG_DIR = os.path.join(BASE_DIR, 'logs')
 # Ensure the log directory exists
 if not os.path.exists(LOG_DIR):
     os.makedirs(LOG_DIR)
+
 # Logging configuration
 LOGGING = {
     'version': 1,
     'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+    },
     'handlers': {
-        'file': {
-            'level': 'DEBUG',
-            'class': 'logging.FileHandler',
-            'filename': os.path.join(LOG_DIR, 'app.log'),
+        'console': {
+            'level': 'INFO',  # Set the level to INFO or WARNING
+            'class': 'logging.StreamHandler',
+            'formatter': 'simple',
         },
     },
     'loggers': {
         'django': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
+            'handlers': ['console'],
+            'level': 'INFO',  # Set the level to INFO or WARNING
             'propagate': True,
-        },
-        # You can add custom loggers for different parts of your app
-        'myapp': {
-            'handlers': ['file'],
-            'level': 'DEBUG',
-            'propagate': False,
         },
     },
 }

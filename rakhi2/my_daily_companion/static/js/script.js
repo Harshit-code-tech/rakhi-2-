@@ -1,4 +1,13 @@
 document.addEventListener('DOMContentLoaded', function() {
+
+    // Home functionality
+    const animatedBox = document.querySelector('.animated-box');
+    animatedBox.addEventListener('mouseenter', () => {
+        animatedBox.style.animation = 'bounce 1s ease-in-out';
+    });
+    animatedBox.addEventListener('animationend', () => {
+        animatedBox.style.animation = '';
+    });
     // Habit Tracker functionality
     const habitTracker = document.getElementById('habit-tracker');
     if (habitTracker) {
