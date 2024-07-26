@@ -1,13 +1,20 @@
 {% extends 'base.html' %}
-
-{% block title %}Rewards - My Daily Companion{% endblock %}
-
 {% block content %}
-<h1>Rewards</h1>
-<div id="rewards">
-    <!-- Add rewards elements here -->
-    <div class="reward-list">
-        <!-- Existing rewards will be listed here -->
-    </div>
+<div class="container mt-5">
+    <h2>Reward</h2>
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="image">Upload Reward Image</label>
+            <input type="file" class="form-control" id="image" name="image" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Upload</button>
+    </form>
+    <h3 class="mt-4">Your Rewards</h3>
+    <ul>
+        {% for reward in rewards %}
+            <li>{{ reward.date }}: <img src="{{ reward.image.url }}" alt="Reward Image" width="100"></li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
