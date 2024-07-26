@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
-
-{% block title %}Habit Tracker - My Daily Companion{% endblock %}
-
 {% block content %}
-<h1>Habit Tracker</h1>
-<div id="habit-tracker">
-    <!-- Add habit tracking elements here -->
-    <button id="add-habit-button">Add Habit</button>
-    <div class="habit-list">
-        <!-- Existing habits will be listed here -->
-    </div>
+<div class="container mt-5">
+    <h2>Habit Tracker</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="habit">New Habit</label>
+            <input type="text" class="form-control" id="habit" name="habit" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Add Habit</button>
+    </form>
+    <h3 class="mt-4">Your Habits</h3>
+    <ul>
+        {% for habit in habits %}
+            <li>{{ habit.date }}: {{ habit.name }} - {% if habit.completed %}Completed{% else %}Not Completed{% endif %}</li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}

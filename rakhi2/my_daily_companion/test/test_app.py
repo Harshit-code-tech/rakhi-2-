@@ -1,5 +1,7 @@
 import unittest
+
 from rakhi2.app.models import session, MoodEntry, DailyGoal
+
 
 class TestMyDailyCompanionApp(unittest.TestCase):
     def test_save_mood(self):
@@ -19,6 +21,7 @@ class TestMyDailyCompanionApp(unittest.TestCase):
         session.commit()
         final_count = session.query(DailyGoal).count()
         self.assertEqual(final_count, initial_count + 1)
+
 
 if __name__ == '__main__':
     unittest.main()

@@ -1,14 +1,20 @@
 {% extends 'base.html' %}
-
-{% block title %}Mood Tracker - My Daily Companion{% endblock %}
-
 {% block content %}
-<h1>Mood Tracker</h1>
-<div id="mood-tracker">
-    <!-- Add mood tracking elements here -->
-    <button id="add-mood-button">Add Mood</button>
-    <div class="mood-list">
-        <!-- Existing mood entries will be listed here -->
-    </div>
+<div class="container mt-5">
+    <h2>Mood Tracker</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="mood">How are you feeling today?</label>
+            <input type="text" class="form-control" id="mood" name="mood" required>
+        </div>
+        <button type="submit" class="btn btn-primary">Submit</button>
+    </form>
+    <h3 class="mt-4">Your Moods</h3>
+    <ul>
+        {% for mood in moods %}
+            <li>{{ mood.date }}: {{ mood.mood }}</li>
+        {% endfor %}
+    </ul>
 </div>
 {% endblock %}
