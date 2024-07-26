@@ -1,4 +1,4 @@
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
 
     // Home functionality
     const animatedBox = document.querySelector('.animated-box');
@@ -14,7 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const addHabitButton = document.getElementById('add-habit-button');
         const habitList = document.querySelector('.habit-list');
         if (addHabitButton) {
-            addHabitButton.addEventListener('click', function() {
+            addHabitButton.addEventListener('click', function () {
                 const newHabit = document.createElement('div');
                 newHabit.className = 'habit';
                 newHabit.innerText = 'New Habit';
@@ -29,7 +29,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const addMoodButton = document.getElementById('add-mood-button');
         const moodList = document.querySelector('.mood-list');
         if (addMoodButton) {
-            addMoodButton.addEventListener('click', function() {
+            addMoodButton.addEventListener('click', function () {
                 const newMood = document.createElement('div');
                 newMood.className = 'mood';
                 newMood.innerText = 'New Mood';
@@ -84,7 +84,7 @@ document.addEventListener('DOMContentLoaded', function() {
         const addReminderButton = document.getElementById('add-reminder-button');
         const reminderList = document.querySelector('.reminder-list');
         if (addReminderButton) {
-            addReminderButton.addEventListener('click', function() {
+            addReminderButton.addEventListener('click', function () {
                 const newReminder = document.createElement('div');
                 newReminder.className = 'reminder';
                 newReminder.innerText = 'New Reminder';
