@@ -6,12 +6,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>Mood Entries</h1>
-    <ul>
-        {% for entry in entries %}
-            <li>{{ entry.date }}: {{ entry.mood }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'home' %}">Back to Home</a>
+<h1>Mood Entries</h1>
+<ul>
+    {% for entry in entries %}
+        <li>{{ entry.date }}: {{ entry.mood }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'home' %}">Back to Home</a>
 </body>
 </html>
