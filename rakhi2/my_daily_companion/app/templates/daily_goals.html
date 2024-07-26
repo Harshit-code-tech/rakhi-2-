@@ -6,12 +6,12 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
 </head>
 <body>
-    <h1>Daily Goals</h1>
-    <ul>
-        {% for goal in goals %}
-            <li>{{ goal.goal }}: {{ goal.status }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'home' %}">Back to Home</a>
+<h1>Daily Goals</h1>
+<ul>
+    {% for goal in goals %}
+        <li>{{ goal.goal }}: {{ goal.status }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'home' %}">Back to Home</a>
 </body>
 </html>
