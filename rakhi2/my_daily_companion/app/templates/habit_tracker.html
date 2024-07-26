@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2>Habit Tracker</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="habit">New Habit</label>
-            <input type="text" class="form-control" id="habit" name="habit" required>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Habit Tracker</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="habit">Enter your habit:</label>
+                        <input type="text" id="habit" name="habit" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Add Habit</button>
+                </form>
+                <h3 class="mt-4">Habit History</h3>
+                <ul class="list-group">
+                    {% for habit in habits %}
+                        <li class="list-group-item">{{ habit.name }} - {{ habit.date }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Add Habit</button>
-    </form>
-    <h3 class="mt-4">Your Habits</h3>
-    <ul>
-        {% for habit in habits %}
-            <li>{{ habit.date }}: {{ habit.name }} - {% if habit.completed %}Completed{% else %}Not Completed{% endif %}</li>
-        {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
