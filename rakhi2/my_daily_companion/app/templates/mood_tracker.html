@@ -1,20 +1,30 @@
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
-<div class="container mt-5">
-    <h2>Mood Tracker</h2>
-    <form method="post">
-        {% csrf_token %}
-        <div class="form-group">
-            <label for="mood">How are you feeling today?</label>
-            <input type="text" class="form-control" id="mood" name="mood" required>
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Mood Tracker</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="mood">Enter your mood:</label>
+                        <input type="text" id="mood" name="mood" class="form-control">
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Submit</button>
+                </form>
+                <h3 class="mt-4">Mood History</h3>
+                <ul class="list-group">
+                    {% for mood in moods %}
+                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Submit</button>
-    </form>
-    <h3 class="mt-4">Your Moods</h3>
-    <ul>
-        {% for mood in moods %}
-            <li>{{ mood.date }}: {{ mood.mood }}</li>
-        {% endfor %}
-    </ul>
+    </div>
 </div>
 {% endblock %}
