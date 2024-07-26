@@ -23,7 +23,6 @@ def register(request):
         form = UserCreationForm()
         profile_form = UserProfileForm()
     return render(request, 'users/register.html', {'form': form, 'profile_form': profile_form})
-
 def login_view(request):
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
