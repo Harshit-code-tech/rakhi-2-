@@ -1,6 +1,6 @@
 body {
     background-color: #f8f9fa;
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Arial', sans-serif;
 }
 
 .navbar-brand {
@@ -16,6 +16,7 @@ body {
     border: none;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    background-color: white;
 }
 
 .card-header {
