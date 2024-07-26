@@ -12,21 +12,24 @@ def mood_tracker(request):
     if request.method == 'POST':
         mood = request.POST.get('mood')
         Mood.objects.create(user=request.user, mood=mood)
-    return render(request, 'mood_tracker.html')
+    moods = Mood.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'mood_tracker.html', {'moods': moods})
 
 @login_required
 def habit_tracker(request):
     if request.method == 'POST':
         habit = request.POST.get('habit')
         Habit.objects.create(user=request.user, name=habit)
-    return render(request, 'habit_tracker.html')
+    habits = Habit.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'habit_tracker.html', {'habits': habits})
 
 @login_required
 def reward(request):
     if request.method == 'POST':
         image = request.FILES.get('image')
         Reward.objects.create(user=request.user, image=image)
-    return render(request, 'reward.html')
+    rewards = Reward.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'reward.html', {'rewards': rewards})
 
 @login_required
 def mood_history(request):
@@ -40,4 +43,3 @@ def chatbot_room(request):
 @login_required
 def emotion_detection_room(request):
     return render(request, 'emotion_detection_room.html')
-
