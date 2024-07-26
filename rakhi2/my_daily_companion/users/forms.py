@@ -13,4 +13,4 @@ class UserRegisterForm(UserCreationForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ['bio']  # Add other fields as needed
+        fields = ['birth_date']  # Add other fields as needed
