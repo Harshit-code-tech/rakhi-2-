@@ -3,12 +3,12 @@ from django.db import models
 
 class Mood(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    mood = models.CharField(max_length=255)
+    date = models.DateField()
     level = models.IntegerField()
-    date = models.DateField(auto_now_add=True)
+    mood = models.CharField(max_length=255)
 
     def __str__(self):
-        return f"{self.user.username} - {self.mood} on {self.date}"
+        return f"{self.date} - {self.mood} - {self.level}"
 
 class Note(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
