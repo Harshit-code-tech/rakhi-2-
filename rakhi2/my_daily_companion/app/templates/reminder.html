@@ -1,14 +1,31 @@
 {% extends 'base.html' %}
-
-{% block title %}Reminder - My Daily Companion{% endblock %}
+{% load static %}
 
 {% block content %}
-    <h1>Reminder</h1>
-    <div id="reminder">
-        <!-- Add reminder elements here -->
-        <button id="add-reminder-button">Add Reminder</button>
-        <div class="reminder-list">
-            <!-- Existing reminders will be listed here -->
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Reminders</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Add Reminder</button>
+                </form>
+                <h3 class="mt-4">Your Reminders</h3>
+                <ul class="list-group">
+                    {% for reminder in reminders %}
+                        <li class="list-group-item">
+                            <h5>{{ reminder.title }}</h5>
+                            <p>{{ reminder.description }}</p>
+                            <small>Set for {{ reminder.date }}</small>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
         </div>
     </div>
+</div>
 {% endblock %}
