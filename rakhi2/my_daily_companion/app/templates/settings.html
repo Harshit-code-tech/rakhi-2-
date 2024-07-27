@@ -1,13 +1,21 @@
 {% extends 'base.html' %}
-
-{% block title %}Settings - My Daily Companion{% endblock %}
+{% load static %}
 
 {% block content %}
-    <h1>Settings</h1>
-    <div id="settings">
-        <!-- Add settings elements here -->
-        <form id="settings-form">
-            <!-- Settings form elements go here -->
-        </form>
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center">
+                <h2>Settings</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Save Settings</button>
+                </form>
+            </div>
+        </div>
     </div>
+</div>
 {% endblock %}
