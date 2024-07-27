@@ -22,7 +22,7 @@ def historical_data():
 
 @app.route('/rewards')
 def rewards():
-    return render_template('rewards.html')
+    return render_template('reward.html')
 
 
 @app.route('/reminder')
