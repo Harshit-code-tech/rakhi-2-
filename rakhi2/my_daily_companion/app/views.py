@@ -61,13 +61,13 @@ def reward(request):
 def mood_history(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
 
-    dates = [mood.date.strftime("%Y-%m-%d") for mood in moods]
+    dates = [mood.date for mood in moods]
     mood_levels = [mood.level for mood in moods]
 
     plt.figure(figsize=(10, 5))
     plt.plot(dates, mood_levels, marker='o')
     plt.xlabel('Date')
-    plt.ylabel('Mood Level')
+    plt.ylabel('Mood Level (0: Very Sad, 5: Neutral, 10: Very Happy)')
     plt.title('Mood History')
     plt.xticks(rotation=45)
     plt.tight_layout()
