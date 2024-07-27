@@ -1,15 +1,15 @@
 from django import forms
-from .models import Mood, Habit, Reward
+from .models import Mood, Note, Reward
 
 class MoodForm(forms.ModelForm):
     class Meta:
         model = Mood
-        fields = ['mood']
+        fields = ['mood', 'level']
 
-class HabitForm(forms.ModelForm):
+class NoteForm(forms.ModelForm):
     class Meta:
-        model = Habit
-        fields = ['name', 'completed']
+        model = Note
+        fields = ['title', 'content']
 
 class RewardForm(forms.ModelForm):
     class Meta:
