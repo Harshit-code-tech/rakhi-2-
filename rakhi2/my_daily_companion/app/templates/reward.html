@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Reward</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        <label for="image">Upload your reward image:</label>
+                        <input type="file" id="image" name="image" class="form-control-file" aria-label="Upload reward image">
+                        {% if form.image.errors %}
+                            <div class="alert alert-danger mt-2">
+                                {% for error in form.image.errors %}
+                                    <p>{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block">Upload Reward</button>
+                </form>
+                <h3 class="mt-4">Rewards</h3>
+                <div class="row">
+                    {% for reward in rewards %}
+                        <div class="col-md-4">
+                            <div class="card mb-4">
+                                <img src="{{ reward.image.url }}" class="card-img-top" alt="Reward Image" onerror="this.onerror=null;this.src='{% static 'img/fallback.png' %}';">
+                                <div class="card-body">
+                                    <p class="card-text">Uploaded on {{ reward.date }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
