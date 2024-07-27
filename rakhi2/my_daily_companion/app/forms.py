@@ -1,5 +1,7 @@
+# app/forms.py
 from django import forms
-from .models import Mood, Note, Reward
+
+from .models import Mood, Note, Reward, Reminder
 class MoodForm(forms.ModelForm):
     OTHER_MOOD_VALUE = 'other'
 
@@ -40,3 +42,13 @@ class RewardForm(forms.ModelForm):
     class Meta:
         model = Reward
         fields = ['image']
+
+
+class ReminderForm(forms.ModelForm):
+    class Meta:
+        model = Reminder
+        fields = ['title', 'date', 'time']
+        widgets = {
+            'date': forms.DateInput(attrs={'type': 'date'}),
+            'time': forms.TimeInput(attrs={'type': 'time'}),
+        }
