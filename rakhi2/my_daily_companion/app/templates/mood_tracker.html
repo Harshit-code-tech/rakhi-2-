@@ -3,46 +3,25 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header text-center">
                 <h2>Mood Tracker</h2>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <div id="custom_mood_container" style="display: none;">
-                        <label for="id_custom_mood">Specify your mood:</label>
-                        <input type="text" name="custom_mood" id="id_custom_mood" class="form-control">
-                    </div>
-                    <label for="id_level" class="form-label mt-2">
-                        Mood Level (0: Very Sad, 5: Neutral, 10: Very Happy)
-                    </label>
                     <button type="submit" class="btn btn-primary btn-block mt-2">Submit</button>
                 </form>
-                <h3 class="mt-4">Mood History</h3>
+                <h3 class="mt-4 text-center">Mood History</h3>
                 <ul class="list-group">
                     {% for mood in moods %}
-                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}: Level {{ mood.level }}</li>
+                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}</li>
                     {% endfor %}
                 </ul>
-                <h3 class="mt-4">Chatbot</h3>
-                <p>Chatbot feature coming soon...</p>
-                <h3 class="mt-4">Emotion Detection</h3>
-                <p>Emotion Detection feature coming soon...</p>
             </div>
         </div>
     </div>
 </div>
-<script>
-    document.getElementById('id_mood').addEventListener('change', function() {
-        var customMoodContainer = document.getElementById('custom_mood_container');
-        if (this.value === 'other') {
-            customMoodContainer.style.display = 'block';
-        } else {
-            customMoodContainer.style.display = 'none';
-        }
-    });
-</script>
 {% endblock %}
