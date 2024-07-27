@@ -3,7 +3,7 @@
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-6">
+    <div class="col-md-8">
         <div class="card">
             <div class="card-header text-center">
                 <h2>Rewards</h2>
@@ -11,17 +11,7 @@
             <div class="card-body">
                 <form method="post" enctype="multipart/form-data">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="image">Upload your reward image:</label>
-                        <input type="file" id="image" name="image" class="form-control-file" aria-label="Upload reward image">
-                        {% if form.image.errors %}
-                            <div class="alert alert-danger mt-2">
-                                {% for error in form.image.errors %}
-                                    <p>{{ error }}</p>
-                                {% endfor %}
-                            </div>
-                        {% endif %}
-                    </div>
+                    {{ form.as_p }}
                     <button type="submit" class="btn btn-primary btn-block mt-2">Upload Reward</button>
                 </form>
                 <h3 class="mt-4 text-center">Your Rewards</h3>
@@ -29,8 +19,9 @@
                     {% for reward in rewards %}
                         <div class="col-md-4">
                             <div class="card mb-4">
-                                <img src="{{ reward.image.url }}" class="card-img-top" alt="Reward Image" onerror="this.onerror=null;this.src='{% static 'img/fallback.png' %}';">
+                                <img src="{{ reward.image.url }}" class="card-img-top" alt="Reward Image">
                                 <div class="card-body">
+                                    <h5 class="card-title">{{ reward.title }}</h5>
                                     <p class="card-text">Uploaded on {{ reward.date }}</p>
                                 </div>
                             </div>
@@ -38,11 +29,10 @@
                     {% endfor %}
                 </div>
                 <h3 class="mt-4 text-center">Badges</h3>
-                <p class="text-center">Badges are awarded based on your activity and contributions. For example, you can earn badges for consistent activity or reaching milestones.</p>
-                <div class="badge-section text-center">
-                    <!-- Example badges, replace with dynamic badge generation -->
+                <p class="text-center">Earn badges based on your activity and contributions.</p>
+                <div class="text-center">
+                    <!-- Example badge, replace with dynamic badge generation -->
                     <span class="badge badge-success">Active Contributor</span>
-                    <span class="badge badge-info">Milestone Achiever</span>
                 </div>
             </div>
         </div>
