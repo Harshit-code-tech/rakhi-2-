@@ -13,9 +13,6 @@ def mood_tracker():
     return render_template('mood_tracker.html')
 
 
-@app.route('/habit_tracker')
-def habit_tracker():
-    return render_template('habit_tracker.html')
 
 
 @app.route('/historical_data')
