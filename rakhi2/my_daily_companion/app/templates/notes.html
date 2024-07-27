@@ -5,22 +5,19 @@
 <div class="row justify-content-center">
     <div class="col-md-6">
         <div class="card">
-            <div class="card-header">
+            <div class="card-header text-center">
                 <h2>Notes</h2>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary btn-block">Add Note</button>
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Submit</button>
                 </form>
-                <h3 class="mt-4">Your Notes</h3>
+                <h3 class="mt-4 text-center">Your Notes</h3>
                 <ul class="list-group">
                     {% for note in notes %}
-                        <li class="list-group-item">
-                            <h5>{{ note.title }}</h5>
-                            <p>{{ note.content }}</p>
-                        </li>
+                        <li class="list-group-item">{{ note.title }}: {{ note.content }}</li>
                     {% endfor %}
                 </ul>
             </div>
