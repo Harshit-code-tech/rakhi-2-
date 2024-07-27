@@ -11,10 +11,7 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    <div class="form-group">
-                        <label for="mood">Enter your mood:</label>
-                        <input type="text" id="mood" name="mood" class="form-control">
-                    </div>
+                    {{ form.as_p }}
                     <button type="submit" class="btn btn-primary btn-block">Submit</button>
                 </form>
                 <h3 class="mt-4">Mood History</h3>
