@@ -1,3 +1,6 @@
+import matplotlib
+matplotlib.use('Agg')  # Use a non-GUI backend
+
 import base64
 import urllib
 from io import BytesIO
@@ -38,6 +41,7 @@ def notes(request):
         form = NoteForm()
     notes = Note.objects.filter(user=request.user)
     return render(request, 'notes.html', {'form': form, 'notes': notes})
+
 @login_required
 def reward(request):
     if request.method == 'POST':
@@ -51,6 +55,7 @@ def reward(request):
         form = RewardForm()
     rewards = Reward.objects.filter(user=request.user)
     return render(request, 'reward.html', {'form': form, 'rewards': rewards})
+
 @login_required
 def mood_history(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
@@ -79,16 +84,3 @@ def chatbot_room(request):
 @login_required
 def emotion_detection_room(request):
     return render(request, 'emotion_detection_room.html')
-@login_required
-def mood_tracker(request):
-    if request.method == 'POST':
-        form = MoodForm(request.POST)
-        if form.is_valid():
-            mood = form.save(commit=False)
-            mood.user = request.user
-            mood.save()
-            return redirect('mood_tracker')
-    else:
-        form = MoodForm()
-    moods = Mood.objects.filter(user=request.user)
-    return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
