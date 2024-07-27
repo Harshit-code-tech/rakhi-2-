@@ -1,7 +1,11 @@
+import base64
+import urllib
+from io import BytesIO
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Mood, Habit, Reward
-from .forms import MoodForm, HabitForm, RewardForm
+from matplotlib import pyplot as plt
+from .models import Mood, Note, Reward
+from .forms import MoodForm, NoteForm, RewardForm
 
 @login_required
 def home(request):
@@ -22,18 +26,18 @@ def mood_tracker(request):
     return render(request, 'app/mood_tracker.html', {'form': form, 'moods': moods})
 
 @login_required
-def habit_tracker(request):
+def notes(request):
     if request.method == 'POST':
-        form = HabitForm(request.POST)
+        form = NoteForm(request.POST)
         if form.is_valid():
-            habit = form.save(commit=False)
-            habit.user = request.user
-            habit.save()
-            return redirect('habit_tracker')
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+            return redirect('notes')
     else:
-        form = HabitForm()
-    habits = Habit.objects.filter(user=request.user)
-    return render(request, 'app/habit_tracker.html', {'form': form, 'habits': habits})
+        form = NoteForm()
+    notes = Note.objects.filter(user=request.user)
+    return render(request, 'app/notes.html', {'form': form, 'notes': notes})
 
 @login_required
 def reward(request):
@@ -51,8 +55,24 @@ def reward(request):
 
 @login_required
 def mood_history(request):
-    moods = Mood.objects.filter(user=request.user)
-    return render(request, 'app/mood_history.html', {'moods': moods})
+    moods = Mood.objects.filter(user=request.user).order_by('date')
+
+    dates = [mood.date for mood in moods]
+    mood_levels = [mood.level for mood in moods]
+
+    plt.figure(figsize=(10, 5))
+    plt.plot(dates, mood_levels, marker='o')
+    plt.xlabel('Date')
+    plt.ylabel('Mood Level')
+    plt.title('Mood History')
+
+    buf = BytesIO()
+    plt.savefig(buf, format='png')
+    buf.seek(0)
+    string = base64.b64encode(buf.read())
+    uri = 'data:image/png;base64,' + urllib.parse.quote(string)
+
+    return render(request, 'app/mood_history.html', {'graph': uri})
 
 @login_required
 def chatbot_room(request):
