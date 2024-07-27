@@ -6,21 +6,22 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header text-center">
-                <h2>Reminders</h2>
+                <h2>Friends</h2>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary btn-block mt-2">Add Reminder</button>
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Add Friend</button>
                 </form>
-                <h3 class="mt-4">Your Reminders</h3>
+                <h3 class="mt-4">Your Friends</h3>
                 <ul class="list-group">
-                    {% for reminder in reminders %}
+                    {% for friend in friends %}
                         <li class="list-group-item">
-                            <h5>{{ reminder.title }}</h5>
-                            <p>{{ reminder.description }}</p>
-                            <small>Set for {{ reminder.date }}</small>
+                            <h5>{{ friend.name }}</h5>
+                            <p>{{ friend.status }}</p>
+                            <a href="{% url 'friend_progress' friend.id %}" class="btn btn-info btn-sm">View Progress</a>
+                            <a href="{% url 'chat_with_friend' friend.id %}" class="btn btn-secondary btn-sm">Chat</a>
                         </li>
                     {% endfor %}
                 </ul>

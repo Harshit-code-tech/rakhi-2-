@@ -1,7 +1,17 @@
+# app/views.py
+import io
+
+import matplotlib
+matplotlib.use('Agg')  # Use a non-GUI backend
+import plotly.graph_objects as go
+import pandas as pd
+import base64
+import urllib
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Mood, Habit, Reward
-from .forms import MoodForm, HabitForm, RewardForm
+from matplotlib import pyplot as plt
+from .models import Mood, Note, Reward, Reminder
+from .forms import MoodForm, NoteForm, RewardForm, ReminderForm
 
 @login_required
 def home(request):
@@ -19,21 +29,21 @@ def mood_tracker(request):
     else:
         form = MoodForm()
     moods = Mood.objects.filter(user=request.user)
-    return render(request, 'app/mood_tracker.html', {'form': form, 'moods': moods})
+    return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
 
 @login_required
-def habit_tracker(request):
+def notes(request):
     if request.method == 'POST':
-        form = HabitForm(request.POST)
+        form = NoteForm(request.POST)
         if form.is_valid():
-            habit = form.save(commit=False)
-            habit.user = request.user
-            habit.save()
-            return redirect('habit_tracker')
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+            return redirect('notes')
     else:
-        form = HabitForm()
-    habits = Habit.objects.filter(user=request.user)
-    return render(request, 'app/habit_tracker.html', {'form': form, 'habits': habits})
+        form = NoteForm()
+    notes = Note.objects.filter(user=request.user)
+    return render(request, 'notes.html', {'form': form, 'notes': notes})
 
 @login_required
 def reward(request):
@@ -47,17 +57,51 @@ def reward(request):
     else:
         form = RewardForm()
     rewards = Reward.objects.filter(user=request.user)
-    return render(request, 'app/reward.html', {'form': form, 'rewards': rewards})
+    return render(request, 'reward.html', {'form': form, 'rewards': rewards})
+
 
 @login_required
 def mood_history(request):
-    moods = Mood.objects.filter(user=request.user)
-    return render(request, 'app/mood_history.html', {'moods': moods})
+    moods = Mood.objects.filter(user=request.user).order_by('date')
+    data = pd.DataFrame(list(moods.values('date', 'level', 'mood')), columns=['date', 'level', 'mood'])
+
+    fig = go.Figure()
+
+    for mood_type in data['mood'].unique():
+        mood_data = data[data['mood'] == mood_type]
+        fig.add_trace(go.Scatter(x=mood_data['date'], y=mood_data['level'], mode='lines+markers', name=mood_type))
+
+    fig.update_layout(title='Mood History',
+                      xaxis_title='Date',
+                      yaxis_title='Mood Level',
+                      legend_title='Mood Type',
+                      xaxis=dict(tickformat='%Y-%m-%d'))
+
+    graph_html = fig.to_html(full_html=False)
+    return render(request, 'mood_history.html', {'graph': graph_html})
+
+@login_required
+def reminder(request):
+    if request.method == 'POST':
+        form = ReminderForm(request.POST)
+        if form.is_valid():
+            reminder = form.save(commit=False)
+            reminder.user = request.user
+            reminder.save()
+            return redirect('reminder')
+    else:
+        form = ReminderForm()
+    reminders = Reminder.objects.filter(user=request.user)
+    return render(request, 'reminder.html', {'form': form, 'reminders': reminders})
 
 @login_required
 def chatbot_room(request):
-    return render(request, 'app/chatbot_room.html')
+    return render(request, 'chatbot_room.html')
 
 @login_required
 def emotion_detection_room(request):
-    return render(request, 'app/emotion_detection_room.html')
+    return render(request, 'emotion_detection_room.html')
+
+@login_required
+def settings(request):
+    return render(request, 'settings.html')
