@@ -23,7 +23,7 @@ def mood_tracker(request):
     else:
         form = MoodForm()
     moods = Mood.objects.filter(user=request.user)
-    return render(request, 'app/mood_tracker.html', {'form': form, 'moods': moods})
+    return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
 
 @login_required
 def notes(request):
@@ -37,8 +37,7 @@ def notes(request):
     else:
         form = NoteForm()
     notes = Note.objects.filter(user=request.user)
-    return render(request, 'app/notes.html', {'form': form, 'notes': notes})
-
+    return render(request, 'notes.html', {'form': form, 'notes': notes})
 @login_required
 def reward(request):
     if request.method == 'POST':
@@ -51,8 +50,7 @@ def reward(request):
     else:
         form = RewardForm()
     rewards = Reward.objects.filter(user=request.user)
-    return render(request, 'app/reward.html', {'form': form, 'rewards': rewards})
-
+    return render(request, 'reward.html', {'form': form, 'rewards': rewards})
 @login_required
 def mood_history(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
@@ -72,12 +70,25 @@ def mood_history(request):
     string = base64.b64encode(buf.read())
     uri = 'data:image/png;base64,' + urllib.parse.quote(string)
 
-    return render(request, 'app/mood_history.html', {'graph': uri})
+    return render(request, 'mood_history.html', {'graph': uri})
 
 @login_required
 def chatbot_room(request):
-    return render(request, 'app/chatbot_room.html')
+    return render(request, 'chatbot_room.html')
 
 @login_required
 def emotion_detection_room(request):
-    return render(request, 'app/emotion_detection_room.html')
+    return render(request, 'emotion_detection_room.html')
+@login_required
+def mood_tracker(request):
+    if request.method == 'POST':
+        form = MoodForm(request.POST)
+        if form.is_valid():
+            mood = form.save(commit=False)
+            mood.user = request.user
+            mood.save()
+            return redirect('mood_tracker')
+    else:
+        form = MoodForm()
+    moods = Mood.objects.filter(user=request.user)
+    return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
