@@ -4,7 +4,11 @@ from .models import Mood, Note, Reward
 class MoodForm(forms.ModelForm):
     class Meta:
         model = Mood
-        fields = ['mood', 'level']
+        fields = ['date', 'level', 'mood']
+        widgets = {
+            'level': forms.NumberInput(attrs={'min': 0, 'max': 10}),
+            'date': forms.DateInput(attrs={'type': 'date'}),
+        }
 
 class NoteForm(forms.ModelForm):
     class Meta:
