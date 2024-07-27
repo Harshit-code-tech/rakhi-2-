@@ -8,12 +8,8 @@
             <div class="card-header">
                 <h2>Mood History</h2>
             </div>
-            <div class="card-body">
-                <ul class="list-group">
-                    {% for mood in moods %}
-                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}</li>
-                    {% endfor %}
-                </ul>
+            <div class="card-body text-center">
+                <img src="{{ graph }}" alt="Mood History Graph" class="img-fluid">
             </div>
         </div>
     </div>
