@@ -1,9 +1,10 @@
+import io
+
 import matplotlib
 matplotlib.use('Agg')  # Use a non-GUI backend
 
 import base64
 import urllib
-from io import BytesIO
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
@@ -60,7 +61,7 @@ def reward(request):
 def mood_history(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
 
-    dates = [mood.date for mood in moods]
+    dates = [mood.date.strftime("%Y-%m-%d") for mood in moods]
     mood_levels = [mood.level for mood in moods]
 
     plt.figure(figsize=(10, 5))
@@ -68,8 +69,10 @@ def mood_history(request):
     plt.xlabel('Date')
     plt.ylabel('Mood Level')
     plt.title('Mood History')
+    plt.xticks(rotation=45)
+    plt.tight_layout()
 
-    buf = BytesIO()
+    buf = io.BytesIO()
     plt.savefig(buf, format='png')
     buf.seek(0)
     string = base64.b64encode(buf.read())
