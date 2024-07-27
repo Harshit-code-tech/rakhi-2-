@@ -1,7 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-
 from .models import Mood, Habit, Reward
+from .forms import MoodForm, HabitForm, RewardForm
 
 @login_required
 def home(request):
@@ -10,36 +10,54 @@ def home(request):
 @login_required
 def mood_tracker(request):
     if request.method == 'POST':
-        mood = request.POST.get('mood')
-        Mood.objects.create(user=request.user, mood=mood)
-    moods = Mood.objects.filter(user=request.user).order_by('-date')
-    return render(request, 'mood_tracker.html', {'moods': moods})
+        form = MoodForm(request.POST)
+        if form.is_valid():
+            mood = form.save(commit=False)
+            mood.user = request.user
+            mood.save()
+            return redirect('mood_tracker')
+    else:
+        form = MoodForm()
+    moods = Mood.objects.filter(user=request.user)
+    return render(request, 'app/mood_tracker.html', {'form': form, 'moods': moods})
 
 @login_required
 def habit_tracker(request):
     if request.method == 'POST':
-        habit = request.POST.get('habit')
-        Habit.objects.create(user=request.user, name=habit)
-    habits = Habit.objects.filter(user=request.user).order_by('-date')
-    return render(request, 'habit_tracker.html', {'habits': habits})
+        form = HabitForm(request.POST)
+        if form.is_valid():
+            habit = form.save(commit=False)
+            habit.user = request.user
+            habit.save()
+            return redirect('habit_tracker')
+    else:
+        form = HabitForm()
+    habits = Habit.objects.filter(user=request.user)
+    return render(request, 'app/habit_tracker.html', {'form': form, 'habits': habits})
 
 @login_required
 def reward(request):
     if request.method == 'POST':
-        image = request.FILES.get('image')
-        Reward.objects.create(user=request.user, image=image)
-    rewards = Reward.objects.filter(user=request.user).order_by('-date')
-    return render(request, 'reward.html', {'rewards': rewards})
+        form = RewardForm(request.POST, request.FILES)
+        if form.is_valid():
+            reward = form.save(commit=False)
+            reward.user = request.user
+            reward.save()
+            return redirect('reward')
+    else:
+        form = RewardForm()
+    rewards = Reward.objects.filter(user=request.user)
+    return render(request, 'app/reward.html', {'form': form, 'rewards': rewards})
 
 @login_required
 def mood_history(request):
-    moods = Mood.objects.filter(user=request.user).order_by('-date')
-    return render(request, 'mood_history.html', {'moods': moods})
+    moods = Mood.objects.filter(user=request.user)
+    return render(request, 'app/mood_history.html', {'moods': moods})
 
 @login_required
 def chatbot_room(request):
-    return render(request, 'chatbot_room.html')
+    return render(request, 'app/chatbot_room.html')
 
 @login_required
 def emotion_detection_room(request):
-    return render(request, 'emotion_detection_room.html')
+    return render(request, 'app/emotion_detection_room.html')

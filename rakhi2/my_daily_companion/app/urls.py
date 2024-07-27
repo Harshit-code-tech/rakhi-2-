@@ -9,6 +9,4 @@ urlpatterns = [
     path('mood_history/', views.mood_history, name='mood_history'),
     path('chatbot_room/', views.chatbot_room, name='chatbot_room'),
     path('emotion_detection_room/', views.emotion_detection_room, name='emotion_detection_room'),
-    # Add other URL patterns here
-
 ]

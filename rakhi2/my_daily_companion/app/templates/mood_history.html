@@ -1,8 +1,9 @@
 {% extends 'base.html' %}
+{% load static %}
 
 {% block content %}
 <div class="row justify-content-center">
-    <div class="col-md-8">
+    <div class="col-md-6">
         <div class="card">
             <div class="card-header">
                 <h2>Mood History</h2>
@@ -10,9 +11,7 @@
             <div class="card-body">
                 <ul class="list-group">
                     {% for mood in moods %}
-                        <li class="list-group-item">
-                            {{ mood.date }} - {{ mood.mood }}
-                        </li>
+                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}</li>
                     {% endfor %}
                 </ul>
             </div>
