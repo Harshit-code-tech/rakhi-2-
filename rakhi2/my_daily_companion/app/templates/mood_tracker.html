@@ -12,16 +12,31 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
+                    <div id="custom_mood_container" style="display: none;">
+                        <label for="id_custom_mood">Specify your mood:</label>
+                        <input type="text" name="custom_mood" id="id_custom_mood" class="form-control">
+                    </div>
+                    <p class="mt-2"><strong>Level:</strong> Please enter a mood level between 0 (very sad) and 10 (very happy).</p>
                     <button type="submit" class="btn btn-primary btn-block">Submit</button>
                 </form>
                 <h3 class="mt-4">Mood History</h3>
                 <ul class="list-group">
                     {% for mood in moods %}
-                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}</li>
+                        <li class="list-group-item">{{ mood.mood }} on {{ mood.date }}: Level {{ mood.level }}</li>
                     {% endfor %}
                 </ul>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.getElementById('id_mood').addEventListener('change', function() {
+        var customMoodContainer = document.getElementById('custom_mood_container');
+        if (this.value === 'other') {
+            customMoodContainer.style.display = 'block';
+        } else {
+            customMoodContainer.style.display = 'none';
+        }
+    });
+</script>
 {% endblock %}
