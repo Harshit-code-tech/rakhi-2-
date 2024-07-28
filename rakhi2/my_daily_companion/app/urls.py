@@ -14,7 +14,8 @@ urlpatterns = [
     path('chatbot_room/', views.chatbot_room, name='chatbot_room'),
     path('delete_reward/<int:reward_id>/', views.delete_reward, name='delete_reward'),
     path('delete_reminder/<int:reminder_id>/', views.delete_reminder, name='delete_reminder'),
-    path('delete_note/<int:note_id>/', views.delete_note, name='delete_note'),
+    #path('delete_note/<int:note_id>/', views.delete_note, name='delete_note'),
     path('delete_mood/<int:mood_id>/', views.delete_mood, name='delete_mood'),
+    path('delete_journal/<int:journal_id>/', views.delete_journal, name='delete_journal'),
     path('emotion_detection_room/', views.emotion_detection_room, name='emotion_detection_room'),
 ]
