@@ -23,6 +23,7 @@
                                 <div class="card-body">
                                     <h5 class="card-title">{{ journal.title }}</h5>
                                     <p class="card-text">{{ journal.content }}</p>
+                                    <a href="{% url 'delete_journal' journal.id %}" class="btn btn-danger">Delete</a>
                                 </div>
                             </div>
                         </div>
