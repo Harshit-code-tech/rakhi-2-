@@ -6,11 +6,11 @@ import plotly.graph_objects as go
 import pandas as pd
 import base64
 import urllib
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
-from .models import Mood, Note, Reward, Reminder
-from .forms import MoodForm, NoteForm, RewardForm, ReminderForm
+from .models import Mood, Reward, Reminder, Journal
+from .forms import MoodForm, JournalForm, RewardForm, ReminderForm
 
 @login_required
 def home(request):
@@ -31,18 +31,18 @@ def mood_tracker(request):
     return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
 
 @login_required
-def notes(request):
+def journal(request):
     if request.method == 'POST':
-        form = NoteForm(request.POST)
+        form = JournalForm(request.POST)
         if form.is_valid():
-            note = form.save(commit=False)
-            note.user = request.user
-            note.save()
-            return redirect('notes')
+            journal = form.save(commit=False)
+            journal.user = request.user
+            journal.save()
+            return redirect('journal')
     else:
-        form = NoteForm()
-    notes = Note.objects.filter(user=request.user)
-    return render(request, 'notes.html', {'form': form, 'notes': notes})
+        form = JournalForm()
+    journals = Journal.objects.filter(user=request.user)
+    return render(request, 'journal.html', {'form': form, 'journals': journals})
 
 @login_required
 def reward(request):
@@ -102,11 +102,11 @@ def delete_mood(request, mood_id):
     mood.delete()
     return redirect('mood_tracker')
 
-@login_required
-def delete_note(request, note_id):
-    note = Note.objects.get(id=note_id, user=request.user)
-    note.delete()
-    return redirect('notes')
+# @login_required
+# def delete_note(request, note_id):
+#     note = Note.objects.get(id=note_id, user=request.user)
+#     note.delete()
+#     return redirect('notes')
 
 @login_required
 def chatbot_room(request):
@@ -127,3 +127,10 @@ def delete_reminder(request, reminder_id):
     reminder = Reminder.objects.get(id=reminder_id, user=request.user)
     reminder.delete()
     return redirect('reminder')
+
+
+@login_required
+def delete_journal(request, journal_id):
+    journal = Journal.objects.get(id=journal_id, user=request.user)
+    journal.delete()
+    return redirect('journal')

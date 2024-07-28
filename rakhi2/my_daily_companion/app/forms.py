@@ -1,7 +1,7 @@
 # app/forms.py
 from django import forms
 
-from .models import Mood, Note, Reward, Reminder
+from .models import Mood, Journal, Reward, Reminder
 class MoodForm(forms.ModelForm):
     OTHER_MOOD_VALUE = 'other'
 
@@ -33,9 +33,9 @@ class MoodForm(forms.ModelForm):
 
         return cleaned_data
 
-class NoteForm(forms.ModelForm):
+class JournalForm(forms.ModelForm):
     class Meta:
-        model = Note
+        model = Journal
         fields = ['title', 'content']
 
 class RewardForm(forms.ModelForm):
