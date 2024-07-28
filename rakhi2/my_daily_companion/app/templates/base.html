@@ -20,7 +20,7 @@
             <ul class="navbar-nav mr-auto">
                 {% if user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{% url 'mood_tracker' %}">Mood Tracker</a></li>
-                    <li class="nav-item"><a class="nav-link" href="{% url 'notes' %}">Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'journal' %}">Journal</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'reward' %}">Rewards</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'mood_history' %}">Mood History</a></li>
                     <li class="nav-item"><a class="nav-link" href="{% url 'chatbot_room' %}">Chatbot</a></li>
