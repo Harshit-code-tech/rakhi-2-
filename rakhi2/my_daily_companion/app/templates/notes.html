@@ -21,6 +21,7 @@
                             <h5>{{ note.title }}</h5>
                             <p>{{ note.content }}</p>
                             <small>Created on {{ note.date }}</small>
+                            <a href="{% url 'delete_note' note.id %}" class="btn btn-danger btn-sm float-right">Delete</a>
                         </div>
                     {% endfor %}
                 </div>
