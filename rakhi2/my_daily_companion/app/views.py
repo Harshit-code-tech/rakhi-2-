@@ -9,8 +9,8 @@ import urllib
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
-from .models import Mood, Note, Reward, Reminder
-from .forms import MoodForm, NoteForm, RewardForm, ReminderForm
+from .models import Mood, Reward, Reminder, Journal
+from .forms import MoodForm, JournalForm, RewardForm, ReminderForm
 
 @login_required
 def home(request):
@@ -31,18 +31,18 @@ def mood_tracker(request):
     return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
 
 @login_required
-def notes(request):
+def journal(request):
     if request.method == 'POST':
-        form = NoteForm(request.POST)
+        form = JournalForm(request.POST)
         if form.is_valid():
-            note = form.save(commit=False)
-            note.user = request.user
-            note.save()
-            return redirect('notes')
+            journal = form.save(commit=False)
+            journal.user = request.user
+            journal.save()
+            return redirect('journal')
     else:
-        form = NoteForm()
-    notes = Note.objects.filter(user=request.user)
-    return render(request, 'notes.html', {'form': form, 'notes': notes})
+        form = JournalForm()
+    journals = Journal.objects.filter(user=request.user)
+    return render(request, 'journal.html', {'form': form, 'journals': journals})
 
 @login_required
 def reward(request):
