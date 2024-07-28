@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import base64
 import urllib
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
 from .models import Mood, Reward, Reminder, Journal
@@ -102,11 +102,11 @@ def delete_mood(request, mood_id):
     mood.delete()
     return redirect('mood_tracker')
 
-@login_required
-def delete_note(request, note_id):
-    note = Note.objects.get(id=note_id, user=request.user)
-    note.delete()
-    return redirect('notes')
+# @login_required
+# def delete_note(request, note_id):
+#     note = Note.objects.get(id=note_id, user=request.user)
+#     note.delete()
+#     return redirect('notes')
 
 @login_required
 def chatbot_room(request):
@@ -127,3 +127,10 @@ def delete_reminder(request, reminder_id):
     reminder = Reminder.objects.get(id=reminder_id, user=request.user)
     reminder.delete()
     return redirect('reminder')
+
+
+@login_required
+def delete_journal(request, journal_id):
+    journal = Journal.objects.get(id=journal_id, user=request.user)
+    journal.delete()
+    return redirect('journal')
