@@ -1,6 +1,6 @@
 from django.contrib import admin
-from .models import Mood, Note, Reward
+from .models import Mood, Reward, Journal
 
 admin.site.register(Mood)
-admin.site.register(Note)
+admin.site.register(Journal)
 admin.site.register(Reward)
