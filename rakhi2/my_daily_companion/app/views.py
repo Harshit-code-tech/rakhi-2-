@@ -1,6 +1,5 @@
 # app/views.py
 import io
-
 import matplotlib
 matplotlib.use('Agg')  # Use a non-GUI backend
 import plotly.graph_objects as go
@@ -59,7 +58,6 @@ def reward(request):
     rewards = Reward.objects.filter(user=request.user)
     return render(request, 'reward.html', {'form': form, 'rewards': rewards})
 
-
 @login_required
 def mood_history(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
@@ -95,6 +93,22 @@ def reminder(request):
     return render(request, 'reminder.html', {'form': form, 'reminders': reminders})
 
 @login_required
+def settings(request):
+    return render(request, 'settings.html')
+
+@login_required
+def delete_mood(request, mood_id):
+    mood = Mood.objects.get(id=mood_id, user=request.user)
+    mood.delete()
+    return redirect('mood_tracker')
+
+@login_required
+def delete_note(request, note_id):
+    note = Note.objects.get(id=note_id, user=request.user)
+    note.delete()
+    return redirect('notes')
+
+@login_required
 def chatbot_room(request):
     return render(request, 'chatbot_room.html')
 
@@ -103,5 +117,13 @@ def emotion_detection_room(request):
     return render(request, 'emotion_detection_room.html')
 
 @login_required
-def settings(request):
-    return render(request, 'settings.html')
+def delete_reward(request, reward_id):
+    reward = Reward.objects.get(id=reward_id, user=request.user)
+    reward.delete()
+    return redirect('reward')
+
+@login_required
+def delete_reminder(request, reminder_id):
+    reminder = Reminder.objects.get(id=reminder_id, user=request.user)
+    reminder.delete()
+    return redirect('reminder')

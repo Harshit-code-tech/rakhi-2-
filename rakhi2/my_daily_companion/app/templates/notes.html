@@ -6,7 +6,7 @@
     <div class="col-md-8">
         <div class="card">
             <div class="card-header text-center">
-                <h2>Journal</h2>
+                <h2 class = "choubey">Journal</h2>
             </div>
             <div class="card-body">
                 <form method="post">
@@ -21,6 +21,7 @@
                             <h5>{{ note.title }}</h5>
                             <p>{{ note.content }}</p>
                             <small>Created on {{ note.date }}</small>
+                            <a href="{% url 'delete_note' note.id %}" class="btn btn-danger btn-sm float-right">Delete</a>
                         </div>
                     {% endfor %}
                 </div>
