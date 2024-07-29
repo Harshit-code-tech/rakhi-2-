@@ -13,7 +13,7 @@
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary btn-block mt-2">Add Mood</button>
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Track Mood</button>
                 </form>
                 <h3 class="mt-4 text-center box-heading">Your Moods</h3>
                 <div class="row">
@@ -21,9 +21,9 @@
                         <div class="col-md-4 mb-4">
                             <div class="card">
                                 <div class="card-body">
+                                    <p class="card-text">Mood Level: {{ mood.level }}</p>
+                                    <p class="card-text">Description: {{ mood.description }}</p>
                                     <p class="card-text">Date: {{ mood.date }}</p>
-                                    <p class="card-text">Mood: {{ mood.mood }}</p>
-                                    <p class="card-text">Level: {{ mood.level }}</p>
                                     <form method="post" action="{% url 'delete_mood' mood.id %}">
                                         {% csrf_token %}
                                         <button type="submit" class="btn btn-danger">Delete</button>
@@ -32,11 +32,17 @@
                             </div>
                         </div>
                     {% empty %}
-                        <p class="text-center">No moods available.</p>
+                        <p class="text-center">No moods tracked yet.</p>
                     {% endfor %}
                 </div>
-                <h3 class="mt-4 text-center box-heading">Mood Levels</h3>
-                <p class="text-center">1: Very Bad, 2: Bad, 3: Neutral, 4: Good, 5: Very Good</p>
+                <div class="mt-4">
+                    <h4>Mood Levels:</h4>
+                    <ul>
+                        <li>0: Worse</li>
+                        <li>5: Neutral</li>
+                        <li>10: Best</li>
+                    </ul>
+                </div>
             </div>
         </div>
     </div>

@@ -1,9 +1,13 @@
 # app/views.py
 import io
+import threading
+from datetime import datetime,  timedelta
+
 import matplotlib
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-
+from django.utils import timezone
+from django.utils.timezone import make_aware
 matplotlib.use('Agg')  # Use a non-GUI backend
 import plotly.graph_objects as go
 import pandas as pd
@@ -81,7 +85,7 @@ def mood_statistics(request):
     graph_html = fig.to_html(full_html=False)
     return render(request, 'mood_statistics.html', {'graph': graph_html})
 
-# app/views.py
+
 @login_required
 def reminder(request):
     user_reminders = Reminder.objects.filter(user=request.user)
@@ -91,10 +95,24 @@ def reminder(request):
             reminder = form.save(commit=False)
             reminder.user = request.user
             reminder.save()
+            schedule_notification(reminder)
             return redirect('reminder')
     else:
         form = ReminderForm()
     return render(request, 'reminder.html', {'reminders': user_reminders, 'form': form})
+
+def schedule_notification(reminder):
+    reminder_time = datetime.combine(reminder.date, reminder.time)
+    reminder_time = timezone.make_aware(reminder_time)  # Make reminder_time timezone-aware
+    delay = (reminder_time - timezone.now()).total_seconds()
+    if delay > 0:
+        threading.Timer(delay, send_notification, [reminder]).start()
+
+def send_notification(reminder):
+    # Logic to send notification (e.g., using a push notification service)
+    print(f"Reminder: {reminder.title} - {reminder.description}")
+
+
 @login_required
 def settings(request):
     if request.method == 'POST':
