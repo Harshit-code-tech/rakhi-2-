@@ -21,7 +21,7 @@ class Journal(models.Model):
 
 class Reward(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='rewards/')
+    image = models.ImageField(upload_to='rewards/', default='img/fallback.png')
     date = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
