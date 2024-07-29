@@ -1,26 +1,42 @@
+<!-- templates/mood_tracker.html -->
 {% extends 'base.html' %}
+{% load static %}
+
 {% block content %}
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header text-center">
+            <div class="card-header text-center box-heading">
                 <h2>Mood Tracker</h2>
             </div>
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
                     {{ form.as_p }}
-                    <button type="submit" class="btn btn-primary btn-block mt-2">Submit</button>
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Add Mood</button>
                 </form>
-                <h3 class="mt-4 text-center">Mood History</h3>
-                <ul class="list-group">
+                <h3 class="mt-4 text-center box-heading">Your Moods</h3>
+                <div class="row">
                     {% for mood in moods %}
-                        <li class="list-group-item">
-                            {{ mood.mood }} on {{ mood.date }}
-                            <a href="{% url 'delete_mood' mood.id %}" class="btn btn-danger btn-sm float-right">Delete</a>
-                        </li>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text">Date: {{ mood.date }}</p>
+                                    <p class="card-text">Mood: {{ mood.mood }}</p>
+                                    <p class="card-text">Level: {{ mood.level }}</p>
+                                    <form method="post" action="{% url 'delete_mood' mood.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-center">No moods available.</p>
                     {% endfor %}
-                </ul>
+                </div>
+                <h3 class="mt-4 text-center box-heading">Mood Levels</h3>
+                <p class="text-center">1: Very Bad, 2: Bad, 3: Neutral, 4: Good, 5: Very Good</p>
             </div>
         </div>
     </div>
