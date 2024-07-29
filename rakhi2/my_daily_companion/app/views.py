@@ -1,6 +1,9 @@
 # app/views.py
 import io
 import matplotlib
+from django.contrib.auth import update_session_auth_hash
+from django.contrib.auth.forms import PasswordChangeForm
+
 matplotlib.use('Agg')  # Use a non-GUI backend
 import plotly.graph_objects as go
 import pandas as pd
@@ -9,8 +12,9 @@ import urllib
 from django.shortcuts import render, redirect,  get_object_or_404
 from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
-from .models import Mood, Reward, Reminder, Journal
-from .forms import MoodForm, JournalForm, RewardForm, ReminderForm
+from .models import Mood, Reward, Reminder, Journal, Note
+from .forms import MoodForm, JournalForm, RewardForm, ReminderForm, NoteForm
+
 
 @login_required
 def home(request):
@@ -80,6 +84,7 @@ def mood_history(request):
 
 @login_required
 def reminder(request):
+    user_reminder = Reminder.objects.filter(user=request.user)
     if request.method == 'POST':
         form = ReminderForm(request.POST)
         if form.is_valid():
@@ -89,12 +94,19 @@ def reminder(request):
             return redirect('reminder')
     else:
         form = ReminderForm()
-    reminders = Reminder.objects.filter(user=request.user)
-    return render(request, 'reminder.html', {'form': form, 'reminders': reminders})
+    return render(request, 'reminder.html', {'reminders': user_reminder, 'form': form})
 
 @login_required
 def settings(request):
-    return render(request, 'settings.html')
+    if request.method == 'POST':
+        password_form = PasswordChangeForm(user=request.user, data=request.POST)
+        if password_form.is_valid():
+            user = password_form.save()
+            update_session_auth_hash(request, user)
+            return redirect('settings')
+    else:
+        password_form = PasswordChangeForm(user=request.user)
+    return render(request, 'settings.html', {'password_form': password_form})
 
 @login_required
 def delete_mood(request, mood_id):
@@ -134,3 +146,25 @@ def delete_journal(request, journal_id):
     journal = Journal.objects.get(id=journal_id, user=request.user)
     journal.delete()
     return redirect('journal')
+
+@login_required
+def notes(request):
+    user_notes = Note.objects.filter(user=request.user).order_by('-date')
+    if request.method == 'POST':
+        form = NoteForm(request.POST)
+        if form.is_valid():
+            note = form.save(commit=False)
+            note.user = request.user
+            note.save()
+            return redirect('notes')
+    else:
+        form = NoteForm()
+    return render(request, 'notes.html', {'notes': user_notes, 'form': form})
+
+@login_required
+def delete_note(request, id):
+    note = get_object_or_404(Note, id=id, user=request.user)
+    if request.method == 'POST':
+        note.delete()
+        return redirect('notes')
+    return render(request, 'confirm_delete.html', {'object': note})
