@@ -77,3 +77,24 @@ body {
         padding: 10px;
     }
 }
+
+/* Add this to your custom.css file */
+.mood-levels {
+    display: flex;
+    flex-direction: column;
+}
+
+.mood-level {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.level {
+    font-weight: bold;
+    margin-right: 5px;
+}
+
+.description {
+    font-style: italic;
+}
