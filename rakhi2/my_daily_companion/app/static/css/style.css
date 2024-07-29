@@ -63,12 +63,12 @@ body {
     background-color: #575757;
     color: #000; /* Changed hover text color to black */
 }
-.choubey {
-    background-color: #f10e0e;
-    color: #2b12ba;
-    padding: 10px 0;
-    text-align: center;
+.fa-info-circle {
+    cursor: pointer;
+    margin-left: 5px;
+    color: #17a2b8; /* Adjust the color to match your theme */
 }
+
 
 @media (max-width: 768px) {
     .container {
