@@ -1,16 +1,15 @@
-# app/urls.py
 from django.urls import path
 from . import views
-
+from django.conf import settings
+from django.conf.urls.static import static
 urlpatterns = [
     path('', views.home, name='home'),
     path('mood_tracker/', views.mood_tracker, name='mood_tracker'),
     path('journal/', views.journal, name='journal'),
     path('reward/', views.reward, name='reward'),
-    path('mood_history/', views.mood_history, name='mood_history'),
+    path('mood_statistics/', views.mood_statistics, name='mood_statistics'),  # Update to mood_statistics
     path('settings/', views.settings, name='settings'),
     path('reminder/', views.reminder, name='reminder'),
-
     path('notes/', views.notes, name='notes'),
     path('chatbot_room/', views.chatbot_room, name='chatbot_room'),
     path('delete_reward/<int:reward_id>/', views.delete_reward, name='delete_reward'),
@@ -19,4 +18,4 @@ urlpatterns = [
     path('delete_mood/<int:mood_id>/', views.delete_mood, name='delete_mood'),
     path('delete_journal/<int:journal_id>/', views.delete_journal, name='delete_journal'),
     path('emotion_detection_room/', views.emotion_detection_room, name='emotion_detection_room'),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
