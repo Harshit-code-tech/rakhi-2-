@@ -16,5 +16,6 @@ urlpatterns = [
     path('delete_note/<int:id>/', views.delete_note, name='delete_note'),
     path('delete_mood/<int:mood_id>/', views.delete_mood, name='delete_mood'),
     path('delete_journal/<int:journal_id>/', views.delete_journal, name='delete_journal'),
+    path('delete_reward/<int:reward_id>/', views.delete_reward, name='delete_reward'),
     path('emotion_detection_room/', views.emotion_detection_room, name='emotion_detection_room'),
 ]
