@@ -81,6 +81,7 @@ def mood_statistics(request):
     graph_html = fig.to_html(full_html=False)
     return render(request, 'mood_statistics.html', {'graph': graph_html})
 
+# app/views.py
 @login_required
 def reminder(request):
     user_reminders = Reminder.objects.filter(user=request.user)
@@ -94,7 +95,6 @@ def reminder(request):
     else:
         form = ReminderForm()
     return render(request, 'reminder.html', {'reminders': user_reminders, 'form': form})
-
 @login_required
 def settings(request):
     if request.method == 'POST':
