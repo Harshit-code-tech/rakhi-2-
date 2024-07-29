@@ -45,11 +45,21 @@ class RewardForm(forms.ModelForm):
 class ReminderForm(forms.ModelForm):
     class Meta:
         model = Reminder
-        fields = ['title', 'date', 'time']
+        fields = ['title', 'description', 'date', 'time']
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
+            'description': forms.Textarea(attrs={
+                'placeholder': 'No description provided',
+                'rows': 3,
+            }),
         }
+
+    def clean_description(self):
+        description = self.cleaned_data.get('description')
+        if description == 'No description provided':
+            return ''
+        return description
 
 class NoteForm(forms.ModelForm):
     class Meta:
