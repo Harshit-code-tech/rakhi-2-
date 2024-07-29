@@ -1,7 +1,6 @@
 from django.urls import path
 from . import views
-from django.conf import settings
-from django.conf.urls.static import static
+
 urlpatterns = [
     path('', views.home, name='home'),
     path('mood_tracker/', views.mood_tracker, name='mood_tracker'),
@@ -18,4 +17,4 @@ urlpatterns = [
     path('delete_mood/<int:mood_id>/', views.delete_mood, name='delete_mood'),
     path('delete_journal/<int:journal_id>/', views.delete_journal, name='delete_journal'),
     path('emotion_detection_room/', views.emotion_detection_room, name='emotion_detection_room'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+]
