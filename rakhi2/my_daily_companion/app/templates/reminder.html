@@ -1,3 +1,4 @@
+<!-- templates/reminder.html -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -15,25 +16,54 @@
                     <button type="submit" class="btn btn-primary btn-block mt-2">Add Reminder</button>
                 </form>
                 <h3 class="mt-4 text-center box-heading">Your Reminders</h3>
-                <ul class="list-group">
+                <div class="row">
                     {% for reminder in reminders %}
-                        <li class="list-group-item d-flex justify-content-between align-items-center">
-                            <div>
-                                <h5>{{ reminder.title }}</h5>
-                                <p>{{ reminder.description }}</p>
-                                <small>Set for {{ reminder.date }} at {{ reminder.time }}</small>
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
+                                <div class="card-body">
+                                    <p class="card-text">Title: {{ reminder.title }}</p>
+                                    <p class="card-text">Description: {{ reminder.description }}</p>
+                                    <p class="card-text">Date: {{ reminder.date }}</p>
+                                    <p class="card-text">Time: {{ reminder.time }}</p>
+                                    <form method="post" action="{% url 'delete_reminder' reminder.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                </div>
                             </div>
-                            <form action="{% url 'delete_reminder' reminder.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
-                            </form>
-                        </li>
+                        </div>
                     {% empty %}
-                        <li class="list-group-item text-center">No reminders available.</li>
+                        <p class="text-center">No reminders available.</p>
                     {% endfor %}
-                </ul>
+                </div>
             </div>
         </div>
     </div>
 </div>
 {% endblock %}
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const descriptionField = document.querySelector('textarea[name="description"]');
+    if (descriptionField) {
+        descriptionField.addEventListener('focus', function() {
+            if (this.value === 'No description provided') {
+                this.value = '';
+                this.style.color = 'black';
+            }
+        });
+
+        descriptionField.addEventListener('blur', function() {
+            if (this.value === '') {
+                this.value = 'No description provided';
+                this.style.color = 'gray';
+            }
+        });
+
+        if (descriptionField.value === '' || descriptionField.value === 'No description provided') {
+            descriptionField.value = 'No description provided';
+            descriptionField.style.color = 'gray';
+        }
+    }
+});
+</script>
