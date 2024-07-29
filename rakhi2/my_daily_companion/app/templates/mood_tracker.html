@@ -1,4 +1,3 @@
-<!-- templates/mood_tracker.html -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -12,7 +11,23 @@
             <div class="card-body">
                 <form method="post">
                     {% csrf_token %}
-                    {{ form.as_p }}
+                    <div class="form-group">
+                        {{ form.date.label_tag }}
+                        {{ form.date }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.level.label_tag }}
+                        {{ form.level }}
+                        <i class="fa fa-info-circle" data-toggle="tooltip" data-placement="right" title="0 : Worse, 5 : Neutral, 10 : Best"></i>
+                    </div>
+                    <div class="form-group">
+                        {{ form.mood.label_tag }}
+                        {{ form.mood }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.custom_mood.label_tag }}
+                        {{ form.custom_mood }}
+                    </div>
                     <button type="submit" class="btn btn-primary btn-block mt-2">Track Mood</button>
                 </form>
                 <h3 class="mt-4 text-center box-heading">Your Moods</h3>
@@ -22,7 +37,7 @@
                             <div class="card">
                                 <div class="card-body">
                                     <p class="card-text">Mood Level: {{ mood.level }}</p>
-                                    <p class="card-text">Description: {{ mood.description }}</p>
+                                    <p class="card-text">Description: {{ mood.mood }}</p>
                                     <p class="card-text">Date: {{ mood.date }}</p>
                                     <form method="post" action="{% url 'delete_mood' mood.id %}">
                                         {% csrf_token %}
@@ -34,14 +49,6 @@
                     {% empty %}
                         <p class="text-center">No moods tracked yet.</p>
                     {% endfor %}
-                </div>
-                <div class="mt-4">
-                    <h4>Mood Levels:</h4>
-                    <ul>
-                        <li>0: Worse</li>
-                        <li>5: Neutral</li>
-                        <li>10: Best</li>
-                    </ul>
                 </div>
             </div>
         </div>
