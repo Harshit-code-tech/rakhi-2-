@@ -1,21 +1,23 @@
+/* static/css/custom.css */
 /* Enhance aesthetics and ensure text visibility */
 body {
     background-color: #f8f9fa; /* Light grey background */
     color: #292127; /* Dark text color */
+    font-family: 'Arial', sans-serif;
 }
 
 .navbar {
     background-color: #007bff; /* Blue background color for the navbar */
-    color: #000; /* Changed text color to black */
+    color: #fff; /* White text color for the navbar */
 }
 
 .navbar .nav-link {
-    color: #000; /* Changed navbar links color to black */
+    color: #fff; /* Ensure navbar links are white */
 }
 
 .navbar .nav-link:hover, .navbar .nav-link.active {
     background-color: #0056b3; /* Darker blue for active and hover states */
-    color: #000; /* Changed hover color to black */
+    color: #fff; /* Keep hover color white */
 }
 
 .page-heading {
@@ -26,13 +28,20 @@ body {
 }
 
 .card {
-    background-color: red; /* White background for cards */
+    background-color: #ffffff; /* White background for cards */
     color: #212529; /* Dark text color for cards */
+    border: 1px solid #007bff; /* Border color for cards */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background-color: #007bff;
+    color: #fff;
 }
 
 .tab-content .box-heading {
     color: #007bff; /* Blue color for box headings */
-    background-color: blue; /* White background for box headings */
+    background-color: #ffffff; /* White background for box headings */
     padding: 10px; /* Add some padding for better readability */
     border-bottom: 2px solid #007bff; /* Add a bottom border for emphasis */
 }
@@ -40,12 +49,13 @@ body {
 .btn-primary {
     background-color: #007bff;
     border-color: #007bff;
-    color: #000; /* Changed text color to black */
+    color: #fff; /* White text color for buttons */
 }
 
 .jumbotron {
     background-color: #e9ecef; /* Light grey background for jumbotron */
     color: #212529; /* Dark text color for jumbotron */
+    border-radius: 10px; /* Rounded corners for jumbotron */
 }
 
 .text-center {
@@ -55,4 +65,15 @@ body {
 .list-group-item {
     background-color: #ffffff; /* White background for list items */
     color: #212529; /* Dark text color for list items */
+}
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+
+    .navbar .nav-link {
+        display: block;
+        padding: 10px;
+    }
 }
