@@ -1,3 +1,4 @@
+<!-- templates/reward.html -->
 {% extends 'base.html' %}
 {% load static %}
 
@@ -17,15 +18,20 @@
                 <h3 class="mt-4 text-center box-heading">Your Rewards</h3>
                 <div class="row">
                     {% for reward in rewards %}
-                        <div class="col-md-4">
-                            <div class="card mb-4">
+                        <div class="col-md-4 mb-4">
+                            <div class="card">
                                 <img src="{{ reward.image.url }}" class="card-img-top" alt="Reward Image">
                                 <div class="card-body">
-                                    <h5 class="card-title">{{ reward.title }}</h5>
                                     <p class="card-text">Uploaded on {{ reward.date }}</p>
+                                    <form method="post" action="{% url 'delete_reward' reward.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
+                    {% empty %}
+                        <p class="text-center">No rewards available.</p>
                     {% endfor %}
                 </div>
                 <h3 class="mt-4 text-center box-heading">Badges</h3>
