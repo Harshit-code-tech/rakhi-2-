@@ -1,3 +1,4 @@
+# app/views.py
 import io
 import matplotlib
 from django.contrib.auth import update_session_auth_hash
@@ -59,6 +60,7 @@ def reward(request):
         form = RewardForm()
     rewards = Reward.objects.filter(user=request.user)
     return render(request, 'reward.html', {'form': form, 'rewards': rewards})
+
 @login_required
 def mood_statistics(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
