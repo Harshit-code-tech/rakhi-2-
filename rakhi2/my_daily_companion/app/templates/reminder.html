@@ -5,7 +5,7 @@
 <div class="row justify-content-center">
     <div class="col-md-8">
         <div class="card">
-            <div class="card-header text-center">
+            <div class="card-header text-center box-heading">
                 <h2>Reminders</h2>
             </div>
             <div class="card-body">
@@ -14,14 +14,22 @@
                     {{ form.as_p }}
                     <button type="submit" class="btn btn-primary btn-block mt-2">Add Reminder</button>
                 </form>
-                <h3 class="mt-4">Your Reminders</h3>
+                <h3 class="mt-4 text-center box-heading">Your Reminders</h3>
                 <ul class="list-group">
                     {% for reminder in reminders %}
-                        <li class="list-group-item">
-                            <h5>{{ reminder.title }}</h5>
-                            <p>{{ reminder.description }}</p>
-                            <small>Set for {{ reminder.date }} at {{ reminder.time }}</small>
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            <div>
+                                <h5>{{ reminder.title }}</h5>
+                                <p>{{ reminder.description }}</p>
+                                <small>Set for {{ reminder.date }} at {{ reminder.time }}</small>
+                            </div>
+                            <form action="{% url 'delete_reminder' reminder.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                            </form>
                         </li>
+                    {% empty %}
+                        <li class="list-group-item text-center">No reminders available.</li>
                     {% endfor %}
                 </ul>
             </div>
