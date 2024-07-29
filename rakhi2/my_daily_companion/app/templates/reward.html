@@ -23,6 +23,10 @@
                                 <img src="{{ reward.image.url }}" class="card-img-top" alt="Reward Image">
                                 <div class="card-body">
                                     <p class="card-text">Uploaded on {{ reward.date }}</p>
+                                    <form method="post" action="{% url 'delete_reward' reward.id %}">
+                                        {% csrf_token %}
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
                                 </div>
                             </div>
                         </div>
