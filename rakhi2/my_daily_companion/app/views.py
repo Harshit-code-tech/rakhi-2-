@@ -153,11 +153,18 @@ def delete_reward(request, reward_id):
     reward.delete()
     return redirect('reward')
 
+# @login_required
+# def delete_reminder(request, reminder_id):
+#     reminder = Reminder.objects.get(id=reminder_id, user=request.user)
+#     reminder.delete()
+#     return redirect('reminder')
 @login_required
-def delete_reminder(request, reminder_id):
-    reminder = Reminder.objects.get(id=reminder_id, user=request.user)
-    reminder.delete()
-    return redirect('reminder')
+def delete_reminder(request, pk):
+    reminder = get_object_or_404(Reminder, pk=pk)
+    if request.method == "POST":
+        reminder.delete()
+        return redirect('reminders')
+    return render(request, 'confirm_delete.html', {'object': reminder})
 
 @login_required
 def delete_journal(request, journal_id):
