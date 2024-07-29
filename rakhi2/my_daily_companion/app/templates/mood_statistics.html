@@ -6,10 +6,12 @@
     <div class="col-md-6">
         <div class="card">
             <div class="card-header">
-                <h2>Mood History</h2>
+                <h2>Mood Statistics</h2>
             </div>
             <div class="card-body text-center">
-                <img src="{{ graph }}" alt="Mood Statics Graph" class="img-fluid">
+
+                {{ graph|safe }}
+
             </div>
         </div>
     </div>
