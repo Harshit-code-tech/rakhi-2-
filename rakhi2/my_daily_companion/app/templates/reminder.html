@@ -17,24 +17,26 @@
                 </form>
                 <h3 class="mt-4 text-center box-heading">Your Reminders</h3>
                 <div class="row">
-                    {% for reminder in reminders %}
-                        <div class="col-md-4 mb-4">
-                            <div class="card">
-                                <div class="card-body">
-                                    <p class="card-text">Title: {{ reminder.title }}</p>
-                                    <p class="card-text">Description: {{ reminder.description }}</p>
-                                    <p class="card-text">Date: {{ reminder.date }}</p>
-                                    <p class="card-text">Time: {{ reminder.time }}</p>
-                                    <form method="post" action="{% url 'delete_reminder' reminder.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit" class="btn btn-danger">Delete</button>
-                                    </form>
+                    {% if reminders %}
+                        {% for reminder in reminders %}
+                            <div class="col-md-4 mb-4">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <p class="card-text">Title: {{ reminder.title }}</p>
+                                        <p class="card-text">Description: {{ reminder.description }}</p>
+                                        <p class="card-text">Date: {{ reminder.date }}</p>
+                                        <p class="card-text">Time: {{ reminder.time }}</p>
+                                        <form method="post" action="{% url 'delete_reminder' reminder.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" class="btn btn-danger">Delete</button>
+                                        </form>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    {% empty %}
+                        {% endfor %}
+                    {% else %}
                         <p class="text-center">No reminders available.</p>
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -44,26 +46,29 @@
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
-    const descriptionField = document.querySelector('textarea[name="description"]');
-    if (descriptionField) {
-        descriptionField.addEventListener('focus', function() {
-            if (this.value === 'No description provided') {
-                this.value = '';
-                this.style.color = 'black';
-            }
-        });
+    // Request notification permission
+    if (Notification.permission !== 'granted') {
+        Notification.requestPermission();
+    }
 
-        descriptionField.addEventListener('blur', function() {
-            if (this.value === '') {
-                this.value = 'No description provided';
-                this.style.color = 'gray';
-            }
-        });
-
-        if (descriptionField.value === '' || descriptionField.value === 'No description provided') {
-            descriptionField.value = 'No description provided';
-            descriptionField.style.color = 'gray';
+    // Function to show notification
+    function showNotification(title, body) {
+        if (Notification.permission === 'granted') {
+            new Notification(title, { body: body });
         }
     }
+
+    // Schedule notifications for each reminder
+    {% for reminder in reminders %}
+        const reminderTime = new Date('{{ reminder.date }}T{{ reminder.time }}');
+        const now = new Date();
+        const delay = reminderTime - now;
+
+        if (delay > 0) {
+            setTimeout(function() {
+                showNotification('Reminder', '{{ reminder.title }}: {{ reminder.description }}');
+            }, delay);
+        }
+    {% endfor %}
 });
 </script>
