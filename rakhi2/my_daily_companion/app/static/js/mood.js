@@ -1,11 +1,20 @@
-// static/js/mood.js
 document.addEventListener('DOMContentLoaded', function() {
-    const hintButton = document.getElementById('hint-button');
-    const hintText = document.getElementById('hint-text');
+    console.log('DOM fully loaded and parsed');
+    const hintIcon = document.querySelector('.hint-icon');
+    const hintText = document.querySelector('.hint-text');
 
-    if (hintButton && hintText) {
-        hintButton.addEventListener('click', function() {
-            hintText.textContent = "Rate your day from 1 to 10. 0: Worse, 5: Neutral, 10: Best";
+    if (hintIcon && hintText) {
+        console.log('Hint elements found');
+        hintIcon.addEventListener('mouseenter', function() {
+            console.log('Mouse entered hint icon');
+            hintText.style.visibility = 'visible';
         });
+
+        hintIcon.addEventListener('mouseleave', function() {
+            console.log('Mouse left hint icon');
+            hintText.style.visibility = 'hidden';
+        });
+    } else {
+        console.log('Hint elements not found');
     }
 });

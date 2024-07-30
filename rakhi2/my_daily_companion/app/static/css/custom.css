@@ -98,3 +98,57 @@ body {
 .description {
     font-style: italic;
 }
+
+.mood-hint-container {
+    position: relative;
+    display: inline-block;
+}
+
+
+
+.hint-text {
+    visibility: hidden;
+    width: 200px;
+    background-color: #b5b00d;
+    color: #16ba37;
+    text-align: center;
+    border-radius: 5px;
+    padding: 5px;
+    position: absolute;
+    z-index: 1;
+    bottom: 125%; /* Position above the icon */
+    left: 50%;
+    transform: translateX(-50%);
+    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1);
+}
+
+.hint-text::after {
+    content: "";
+    position: absolute;
+    top: 100%; /* Arrow at the bottom */
+    left: 50%;
+    transform: translateX(-50%);
+    border-width: 5px;
+    border-style: solid;
+    border-color: #f9f9f9 transparent transparent transparent;
+}
+
+.hint-icon {
+    margin-left: 5px;
+    cursor: pointer;
+    border: 1px solid #1a4dc3;
+    border-radius: 50%;
+    padding: 2px 5px;
+    background-color: #151414;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.hint-icon:hover + .hint-text {
+    visibility: visible;
+}
