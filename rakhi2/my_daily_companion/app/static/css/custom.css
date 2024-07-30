@@ -136,11 +136,11 @@ body {
 .hint-icon {
     margin-left: 5px;
     cursor: pointer;
-    border: 1px solid #1a4dc3;
+    border: 1px solid black;
     border-radius: 50%;
     padding: 2px 5px;
     background-color: #151414;
-    display: inline-flex;
+    display: inline;
     align-items: center;
     justify-content: center;
     width: 20px;

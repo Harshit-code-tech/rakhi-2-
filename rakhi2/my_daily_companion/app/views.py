@@ -17,7 +17,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
 from .models import Mood, Reward, Reminder, Note, Journal
-from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm
+from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm, JournalReminderForm
 
 
 @login_required
@@ -49,8 +49,37 @@ def journal(request):
             return redirect('journal')
     else:
         form = JournalForm()
-    journals = Journal.objects.filter(user=request.user)
+    journals = Journal.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'journal.html', {'form': form, 'journals': journals})
+
+@login_required
+def set_journal_reminder(request):
+    if request.method == 'POST':
+        form = JournalReminderForm(request.POST)
+        if form.is_valid():
+            reminder = form.save(commit=False)
+            reminder.user = request.user
+            reminder.save()
+            schedule_notification(reminder)  # Schedule the notification
+            return redirect('journal')
+    else:
+        form = JournalReminderForm()
+    return render(request, 'set_journal_reminder.html', {'form': form})
+
+def schedule_notification(reminder):
+    reminder_time = datetime.combine(reminder.date, reminder.time)
+    reminder_time = timezone.make_aware(reminder_time)  # Make reminder_time timezone-aware
+    delay = (reminder_time - timezone.now()).total_seconds()
+    if delay > 0:
+        threading.Timer(delay, send_notification, [reminder]).start()
+
+def send_notification(reminder):
+    # Logic to send notification (e.g., using a push notification service)
+    print(f"Reminder: {reminder.title} - {reminder.description}")
+
+
+
+
 @login_required
 def reward(request):
     if request.method == 'POST':
@@ -64,6 +93,7 @@ def reward(request):
         form = RewardForm()
     rewards = Reward.objects.filter(user=request.user)
     return render(request, 'reward.html', {'form': form, 'rewards': rewards})
+
 
 @login_required
 def mood_statistics(request):

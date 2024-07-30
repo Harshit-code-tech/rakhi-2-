@@ -5,6 +5,7 @@ urlpatterns = [
     path('', views.home, name='home'),
     path('mood_tracker/', views.mood_tracker, name='mood_tracker'),
     path('journal/', views.journal, name='journal'),
+    path('set_journal_reminder/', views.set_journal_reminder, name='set_journal_reminder'),
     path('reward/', views.reward, name='reward'),
     path('mood_statistics/', views.mood_statistics, name='mood_statistics'),  # Update to mood_statistics
     path('settings/', views.settings, name='settings'),

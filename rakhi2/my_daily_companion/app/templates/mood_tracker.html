@@ -15,11 +15,12 @@
                         {{ form.date.label_tag }}
                         {{ form.date }}
                     </div>
-                    <div class="form-group mood-hint-container">
+                    <div class="form-group mood-hint-container" >
                         {{ form.level.label_tag }}
                         {{ form.level }}
-                        <span class="hint-icon">?</span>
-                        <span class="hint-text">Rate your day from 1 to 10. 0: Worse, 5: Neutral, 10: Best</span>
+                        <span ><i title="Rate your day from 1 to 10. 0: Worse, 5: Neutral, 10: Best" class="fa fa-question-circle" style="font-size:22px; "></i></span>
+
+                        {% comment %} <span class="hint-text">Rate your day from 1 to 10. 0: Worse, 5: Neutral, 10: Best</span> {% endcomment %}
                     </div>
                     <div class="form-group">
                         {{ form.mood.label_tag }}
