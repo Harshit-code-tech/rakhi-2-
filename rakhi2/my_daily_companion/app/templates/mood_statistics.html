@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header text-center box-heading">
+                    <h2>Mood Statistics</h2>
+                </div>
+                <div class="card-body">
+                    <div id="mood-statistics-graph">
+                        {{ graph|safe }}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
