@@ -38,6 +38,10 @@ class JournalForm(forms.ModelForm):
     class Meta:
         model = Journal
         fields = ['title', 'content']
+        widgets = {
+            'title': forms.TextInput(attrs={'placeholder': 'Enter the title', 'maxlength': 100}),
+            'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Write your journal entry here...'}),
+        }
 
 class RewardForm(forms.ModelForm):
     class Meta:

@@ -13,7 +13,7 @@ class Mood(models.Model):
 
 class Journal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)  # Ensure this field is not nullable and has no default
-    title = models.CharField(max_length=100, default='Untitled')
+    title = models.CharField(max_length=100, default='')
     content = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 
