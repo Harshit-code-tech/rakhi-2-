@@ -29,14 +29,15 @@ def mood_tracker(request):
     if request.method == 'POST':
         form = MoodForm(request.POST)
         if form.is_valid():
-            mood = form.save(commit=False)
-            mood.user = request.user
-            mood.save()
+            mood_entry = form.save(commit=False)
+            mood_entry.user = request.user  # Set the user field
+            mood_entry.save()
             return redirect('mood_tracker')
     else:
         form = MoodForm()
-    moods = Mood.objects.filter(user=request.user)
+    moods = Mood.objects.filter(user=request.user)  # Filter by user
     return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
+
 
 @login_required
 def journal(request):

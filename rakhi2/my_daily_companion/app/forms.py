@@ -8,17 +8,22 @@ class MoodForm(forms.ModelForm):
     mood = forms.ChoiceField(choices=[
         ('happy', 'Happy'),
         ('sad', 'Sad'),
-        ('neutral', 'Neutral'),
+        ('angry', 'Angry'),
+        ('excited', 'Excited'),
         (OTHER_MOOD_VALUE, 'Other (please specify)'),
     ], required=True)
     custom_mood = forms.CharField(required=False, max_length=255)
+    color = forms.CharField(widget=forms.TextInput(attrs={'type': 'color'}), initial='#ffffff')
 
     class Meta:
         model = Mood
-        fields = ['date', 'level', 'mood', 'custom_mood']
+        fields = ['date', 'level', 'mood', 'custom_mood', 'color']
         widgets = {
-            'level': forms.NumberInput(attrs={'min': 0, 'max': 10}),
             'date': forms.DateInput(attrs={'type': 'date'}),
+            'level': forms.NumberInput(attrs={'min': 0, 'max': 10}),
+            'mood': forms.TextInput(attrs={'placeholder': 'Describe your mood'}),
+            'custom_mood': forms.TextInput(attrs={'placeholder': 'Custom mood'}),
+            'color': forms.TextInput(attrs={'type': 'color'}),  # Add color input
         }
 
     def clean(self):
@@ -32,6 +37,7 @@ class MoodForm(forms.ModelForm):
             cleaned_data['mood'] = custom_mood
 
         return cleaned_data
+
 
 
 class JournalForm(forms.ModelForm):
