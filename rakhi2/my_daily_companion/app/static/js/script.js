@@ -1,3 +1,9 @@
+// script.js
+// Main JavaScript file
+
 document.addEventListener('DOMContentLoaded', function () {
-    console.log('JavaScript is loaded and working!');
+    // Example of handling a button click
+    document.querySelector('.btn-primary').addEventListener('click', function () {
+        alert('Button clicked!');
+    });
 });

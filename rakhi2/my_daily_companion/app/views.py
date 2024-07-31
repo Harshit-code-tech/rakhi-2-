@@ -175,6 +175,17 @@ def settings(request):
 #     mood.delete()
 #     return redirect('mood_tracker')
 
+def signup(request):
+    if request.method == 'POST':
+        form = UserCreationForm(request.POST)
+        if form.is_valid():
+            user = form.save()
+            login(request, user)
+            return redirect('home')
+    else:
+        form = UserCreationForm()
+    return render(request, 'signup.html', {'form': form})
+
 @login_required
 def delete_note(request, id):
     note = get_object_or_404(Note, id=id, user=request.user)
@@ -182,6 +193,7 @@ def delete_note(request, id):
         note.delete()
         return redirect('notes')
     return render(request, 'confirm_delete.html', {'object': note})
+
 
 @login_required
 def chatbot_room(request):

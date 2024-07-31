@@ -1,7 +1,37 @@
 {% extends 'base.html' %}
-{% block content %}
-<div class="jumbotron text-center">
-    <h2>Welcome to My Daily Companion!</h2>
-    <p>Track your mood, set daily habits, and earn rewards.</p>
+
+{% block title %}Home{% endblock %}
+
+{% block page_heading %}Welcome to My Daily Companion{% endblock %}
+
+{% block page_content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Mood Tracker</h5>
+                <p class="card-text">Track your daily mood and see your progress over time.</p>
+                <a href="{% url 'mood_tracker' %}" class="btn btn-primary">Go to Mood Tracker</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Journal</h5>
+                <p class="card-text">Write down your thoughts and feelings in your personal journal.</p>
+                <a href="{% url 'journal' %}" class="btn btn-primary">Go to Journal</a>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <h5 class="card-title">Rewards</h5>
+                <p class="card-text">Earn rewards for achieving your goals and milestones.</p>
+                <a href="{% url 'reward' %}" class="btn btn-primary">Go to Rewards</a>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

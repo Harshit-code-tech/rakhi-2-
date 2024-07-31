@@ -52,6 +52,9 @@ To-Do List
 1. Update Mood Entry Form
 Mood Category Selection:
 Add a dropdown menu for selecting a mood category (e.g., Happy, Sad, Angry, Excited, Other).
+
+
+
 Mood Intensity:
 Replace numeric level with a slider or a set of descriptive labels (Very Low, Low, Moderate, High, Very High) for indicating mood intensity.
 Mood Tags/Descriptors:
