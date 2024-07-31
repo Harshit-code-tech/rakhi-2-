@@ -1,24 +1,28 @@
 from django import forms
 from .models import Mood, Reward, Reminder, Note, Journal, JournalReminder
 
-
 class MoodForm(forms.ModelForm):
     OTHER_MOOD_VALUE = 'other'
 
     mood = forms.ChoiceField(choices=[
         ('happy', 'Happy'),
         ('sad', 'Sad'),
-        ('neutral', 'Neutral'),
+        ('angry', 'Angry'),
+        ('excited', 'Excited'),
         (OTHER_MOOD_VALUE, 'Other (please specify)'),
     ], required=True)
     custom_mood = forms.CharField(required=False, max_length=255)
+    color = forms.CharField(widget=forms.TextInput(attrs={'type': 'color'}), initial='#ffffff')
 
     class Meta:
         model = Mood
-        fields = ['date', 'level', 'mood', 'custom_mood']
+        fields = ['date', 'level', 'mood', 'custom_mood', 'color']
         widgets = {
-            'level': forms.NumberInput(attrs={'min': 0, 'max': 10}),
             'date': forms.DateInput(attrs={'type': 'date'}),
+            'level': forms.NumberInput(attrs={'min': 0, 'max': 10}),
+            'mood': forms.TextInput(attrs={'placeholder': 'Describe your mood'}),
+            'custom_mood': forms.TextInput(attrs={'placeholder': 'Custom mood'}),
+            'color': forms.TextInput(attrs={'type': 'color'}),  # Add color input
         }
 
     def clean(self):
@@ -33,7 +37,6 @@ class MoodForm(forms.ModelForm):
 
         return cleaned_data
 
-
 class JournalForm(forms.ModelForm):
     class Meta:
         model = Journal
@@ -43,7 +46,6 @@ class JournalForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Write your journal entry here...'}),
         }
 
-# forms.py
 class JournalReminderForm(forms.ModelForm):
     class Meta:
         model = JournalReminder
@@ -52,8 +54,6 @@ class JournalReminderForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
         }
-
-
 
 class RewardForm(forms.ModelForm):
     class Meta:

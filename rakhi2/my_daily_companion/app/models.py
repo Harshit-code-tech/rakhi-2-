@@ -3,14 +3,15 @@ from django.db import models
 from django.utils import timezone
 
 class Mood(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
     level = models.IntegerField()
     mood = models.CharField(max_length=255)
+    custom_mood = models.CharField(max_length=255, blank=True, null=True)
+    color = models.CharField(max_length=7, default='#FFFFFF')  # Add color field
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
 
     def __str__(self):
         return f"{self.date} - {self.mood} - {self.level}"
-
 
 class Journal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -20,7 +21,6 @@ class Journal(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class JournalReminder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -32,7 +32,6 @@ class JournalReminder(models.Model):
 
     def __str__(self):
         return self.title
-
 
 class Reward(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
