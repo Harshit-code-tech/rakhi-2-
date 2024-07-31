@@ -1,7 +1,6 @@
 from django import forms
 from .models import Mood, Reward, Reminder, Note, Journal, JournalReminder
 
-
 class MoodForm(forms.ModelForm):
     OTHER_MOOD_VALUE = 'other'
 
@@ -38,8 +37,6 @@ class MoodForm(forms.ModelForm):
 
         return cleaned_data
 
-
-
 class JournalForm(forms.ModelForm):
     class Meta:
         model = Journal
@@ -49,7 +46,6 @@ class JournalForm(forms.ModelForm):
             'content': forms.Textarea(attrs={'rows': 5, 'placeholder': 'Write your journal entry here...'}),
         }
 
-# forms.py
 class JournalReminderForm(forms.ModelForm):
     class Meta:
         model = JournalReminder
@@ -58,8 +54,6 @@ class JournalReminderForm(forms.ModelForm):
             'date': forms.DateInput(attrs={'type': 'date'}),
             'time': forms.TimeInput(attrs={'type': 'time'}),
         }
-
-
 
 class RewardForm(forms.ModelForm):
     class Meta:

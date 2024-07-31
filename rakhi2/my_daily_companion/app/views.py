@@ -110,11 +110,24 @@ def mood_statistics(request):
     fig.update_layout(title='Mood Statistics',
                       xaxis_title='Date',
                       yaxis_title='Mood Level',
-                      legend_title='Mood Type',
-                      xaxis=dict(tickformat='%Y-%m-%d'))
+                      legend_title='Mood')
 
+    # Convert Plotly figure to HTML
     graph_html = fig.to_html(full_html=False)
-    return render(request, 'mood_statistics.html', {'graph': graph_html})
+
+    return render(request, 'mood_statistics.html', {'graph_html': graph_html})
+
+@login_required
+def mood_entries(request):
+    entries = Mood.objects.filter(user=request.user).order_by('-date')
+    return render(request, 'mood_entries.html', {'entries': entries})
+
+
+@login_required
+def delete_mood(request, mood_id):
+    mood = get_object_or_404(Mood, id=mood_id, user=request.user)
+    mood.delete()
+    return redirect('mood_tracker')
 
 
 @login_required
@@ -156,11 +169,11 @@ def settings(request):
         password_form = PasswordChangeForm(user=request.user)
     return render(request, 'settings.html', {'password_form': password_form})
 
-@login_required
-def delete_mood(request, mood_id):
-    mood = Mood.objects.get(id=mood_id, user=request.user)
-    mood.delete()
-    return redirect('mood_tracker')
+# @login_required
+# def delete_mood(request, mood_id):
+#     mood = Mood.objects.get(id=mood_id, user=request.user)
+#     mood.delete()
+#     return redirect('mood_tracker')
 
 @login_required
 def delete_note(request, id):
