@@ -1,82 +1,53 @@
-/* Basic styling */
+/* style.css */
+/* Main styles for the website */
+
+/* General layout and typography */
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f4f4f4;
-    color: #333;
-    margin: 0;
-    padding: 0;
+    background: linear-gradient(135deg, #6B73FF 10%, #000DFF 100%);
+    min-height: 100vh;
+    font-family: 'Roboto', sans-serif;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    color: #007bff; /* Blue color for headings */
 }
 
 .container {
-    width: 80%;
-    margin: auto;
-    overflow: hidden;
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
 }
 
+/* Custom navigation styles */
 .navbar {
-    background-color: #333;
-    color: #fff;
-    padding: 10px 0;
-    text-align: center;
-}
-
-.navbar a {
-    color: #fff;
-    text-decoration: none;
-    padding: 14px 20px;
-    display: inline-block;
-}
-
-.navbar a:hover {
-    background-color: #575757;
-    color: #000; /* Changed hover text color to black */
-}
-
-.card {
-    background: #fff;
-    padding: 20px;
-    margin: 20px 0;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.card-header {
-    background: #0f59da;
-    color: #000;
+    background-color: #007bff; /* Blue background color for the navbar */
     padding: 10px;
-    text-align: center;
 }
 
-.card-body {
-    padding: 20px;
+.navbar .nav-link {
+    color: #fff; /* Ensure navbar links are white */
+    text-decoration: none;
+    margin: 0 15px;
 }
 
+.navbar .nav-link:hover, .navbar .nav-link.active {
+    background-color: #0056b3; /* Darker blue for active and hover states */
+    color: #fff; /* Keep hover color white */
+}
+
+/* Buttons */
 .btn {
-    display: inline-block;
     padding: 10px 20px;
-    color: #000; /* Changed text color to black */
-    background-color: #333;
-    text-align: center;
     border: none;
+    border-radius: 5px;
+    color: #fff;
     cursor: pointer;
 }
-.btn:hover {
-    background-color: #575757;
-    color: #000; /* Changed hover text color to black */
-}
-.fa-info-circle {
-    cursor: pointer;
-    margin-left: 5px;
-    color: #17a2b8; /* Adjust the color to match your theme */
-}
 
-
-@media (max-width: 768px) {
-    .container {
-        width: 100%;
-    }
-
-    .navbar a {
-        display: block;
-        padding: 10px;
-    }
+.btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
 }
