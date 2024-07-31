@@ -1,12 +1,19 @@
 // animations.js
 // JavaScript file for custom animations
 
-function fadeInElement(element) {
-    element.classList.add('fade-in');
-}
+document.addEventListener('DOMContentLoaded', function() {
+    var elements = document.querySelectorAll('.fade-in');
+    elements.forEach(function(element) {
+        element.style.opacity = 0;
+        element.style.transition = 'opacity 2s ease-in';
+        element.style.opacity = 1;
+    });
 
-// Example usage
-window.onload = function () {
-    const element = document.getElementById('fade-in-target');
-    fadeInElement(element);
-};
+    var navbarToggler = document.querySelector('.navbar-toggler');
+    var navbarCollapse = document.querySelector('.navbar-collapse');
+
+    navbarToggler.addEventListener('click', function() {
+        this.classList.toggle('active');
+        navbarCollapse.classList.toggle('active');
+    });
+});
