@@ -1,17 +1,28 @@
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
+from django.conf import settings
 
 class Mood(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     date = models.DateField()
-    level = models.IntegerField()
+    MOOD_INTENSITY_CHOICES = [
+        ('VL', 'Very Low'),
+        ('L', 'Low'),
+        ('M', 'Moderate'),
+        ('H', 'High'),
+        ('VH', 'Very High'),
+    ]
+    intensity = models.CharField(max_length=2, choices=MOOD_INTENSITY_CHOICES)
+    intensity = models.IntegerField(default=0)
     mood = models.CharField(max_length=255)
     custom_mood = models.CharField(max_length=255, blank=True, null=True)
-    color = models.CharField(max_length=7, default='#FFFFFF')  # Add color field
-    user = models.ForeignKey(User, on_delete=models.CASCADE, default=1)
+    color = models.CharField(max_length=7, default='#FFFFFF')
+    tags = models.CharField(max_length=255, blank=True, null=True)  # Tags or brief description
+    sentiment_score = models.FloatField(null=True, blank=True)  # Sentiment score field
 
     def __str__(self):
-        return f"{self.date} - {self.mood} - {self.level}"
+        return f"{self.date} - {self.mood}"
 
 class Journal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
