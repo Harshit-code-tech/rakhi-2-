@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center box-heading">
+                <h2>Mood Analytics</h2>
+            </div>
+            <div class="card-body">
+                <canvas id="moodPieChart"></canvas>
+                <canvas id="moodTimelineChart"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    // Pie Chart for Mood Distribution
+    var pieCtx = document.getElementById('moodPieChart').getContext('2d');
+    var pieData = {
+        labels: {{ moods.values_list('mood', flat=True) | safe }},
+        datasets: [{
+            data: {{ moods.values_list('level', flat=True) | safe }},
+            backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
+        }]
+    };
+    var moodPieChart = new Chart(pieCtx, {
+        type: 'pie',
+        data: pieData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Mood Distribution'
+                }
+            }
+        },
+    });
+
+    // Line Chart for Mood Intensity Over Time
+    var lineCtx = document.getElementById('moodTimelineChart').getContext('2d');
+    var lineData = {
+        labels: {{ moods.values_list('date', flat=True) | safe }},
+        datasets: [{
+            label: 'Mood Intensity Over Time',
+            data: {{ moods.values_list('level', flat=True) | safe }},
+            borderColor: '#FF6384',
+            fill: false,
+        }]
+    };
+    var moodTimelineChart = new Chart(lineCtx, {
+        type: 'line',
+        data: lineData,
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'top',
+                },
+                title: {
+                    display: true,
+                    text: 'Mood Intensity Over Time'
+                }
+            },
+            scales: {
+                x: {
+                    type: 'time',
+                    time: {
+                        unit: 'day'
+                    }
+                }
+            }
+        }
+    });
+</script>
+{% endblock %}

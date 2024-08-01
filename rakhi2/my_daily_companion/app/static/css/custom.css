@@ -1,19 +1,24 @@
 /* General styles */
 body {
     font-family: 'Helvetica Neue', sans-serif;
-    background-color: #eef2f7; /* Light background */
-    color: #333; /* Dark text color */
+    background-color: #eef2f7;
+    color: #333;
     overflow-x: hidden;
 }
 
 /* Navbar styles */
 .navbar {
-    background-color: #007bff; /* Blue background color */
-    color: #fff; /* White text color */
+    background-color: #007bff;
+    color: #fff;
     padding: 10px 20px;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    transition: background-color 0.3s;
+}
+
+.navbar.scrolled {
+    background-color: #0056b3;
 }
 
 .navbar-toggler {
@@ -26,18 +31,17 @@ body {
 }
 
 .navbar .nav-link {
-    color: #fff; /* White text color */
+    color: #fff;
     padding: 10px 20px;
     text-decoration: none;
 }
 
 .navbar .nav-link:hover, .navbar .nav-link.active {
-    background-color: #0056b3; /* Darker blue for active and hover states */
-    color: #fff; /* White text color */
+    background-color: #0056b3;
+    color: #fff;
     border-radius: 5px;
 }
 
-/* Responsive navbar */
 @media (max-width: 768px) {
     .navbar-collapse {
         display: none;
@@ -62,176 +66,72 @@ body {
 .page-heading {
     margin-top: 30px;
     font-size: 2.5rem;
-    color: #007bff; /* Blue text color */
-    background-color: #ffffff; /* White background */
-    padding: 10px; /* Padding for readability */
-    border-bottom: 2px solid #007bff; /* Blue bottom border */
-    text-align: center;
-    margin-bottom: 20px;
-}
-
-/* Container styles */
-.container {
-    margin-top: 30px;
-    background: #fff; /* White background */
-    padding: 20px;
-    border-radius: 10px; /* Rounded corners */
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
-
-/* Card styles */
-.card {
-    background-color: #ffffff; /* White background */
-    color: #212529; /* Dark text color */
-    border: 1px solid #007bff; /* Blue border */
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-    border-radius: 10px; /* Rounded corners */
-    margin-bottom: 20px;
-    transition: transform 0.3s ease;
-}
-
-.card:hover {
-    transform: scale(1.05); /* Slight scale effect on hover */
-}
-
-/* Card header styles */
-.card-header {
-    background-color: #007bff; /* Blue background */
-    color: #fff; /* White text color */
+    color: #007bff;
+    background-color: #ffffff;
     padding: 10px;
-    border-radius: 10px 10px 0 0; /* Rounded top corners */
+    border-bottom: 2px solid #007bff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    animation: fadeIn 2s ease-in-out;
 }
 
 /* Button styles */
 .btn-primary {
-    background-color: #007bff; /* Blue background */
-    border-color: #007bff;
-    color: #fff; /* White text color */
+    background-color: #007bff;
+    border: none;
+    color: #fff;
     padding: 10px 20px;
-    border-radius: 5px; /* Rounded corners */
-    cursor: pointer;
-    transition: background-color 0.3s ease;
+    border-radius: 5px;
+    transition: background-color 0.3s;
 }
 
 .btn-primary:hover {
-    background-color: #0056b3; /* Darker blue on hover */
+    background-color: #0056b3;
 }
 
-/* Jumbotron styles */
-.jumbotron {
-    background-color: #e9ecef; /* Light grey background */
-    color: #212529; /* Dark text color */
-    border-radius: 10px; /* Rounded corners */
-    padding: 20px;
-    margin-bottom: 20px;
+/* Card styles */
+.card {
+    background-color: #f8f9fa;
+    border: 1px solid #007bff;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s;
 }
 
-/* Text alignment */
-.text-center {
-    text-align: center;
+.card:hover {
+    transform: translateY(-5px);
 }
 
-/* List group item styles */
-.list-group-item {
-    background-color: #ffffff; /* White background */
-    color: #212529; /* Dark text color */
-    border-radius: 5px; /* Rounded corners */
-    margin-bottom: 10px;
+.card-title {
+    font-size: 1.5rem;
+    color: #007bff;
+}
+
+.card-text {
+    color: #333;
 }
 
 /* Footer styles */
 footer {
-    background-color: #007bff; /* Blue background */
-    color: #fff; /* White text color */
-    padding: 20px 0;
+    background-color: #007bff;
+    color: #fff;
+    padding: 10px;
+    text-align: center;
     position: fixed;
-    width: 100%;
     bottom: 0;
-    text-align: center;
-    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1); /* Subtle shadow */
-}
-
-/* Particle.js container */
-.particle-js {
-    position: absolute;
     width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: -1;
+    box-shadow: 0 -2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* Mood levels styles */
-.mood-levels {
-    display: flex;
-    flex-direction: column;
+/* Custom animation */
+.fade-in {
+    animation: fadeIn 1.5s ease-in-out;
 }
 
-.mood-level {
-    display: flex;
-    align-items: center;
-    margin-bottom: 10px;
-}
-
-.level {
-    font-weight: bold;
-    margin-right: 5px;
-}
-
-.description {
-    font-style: italic;
-}
-
-/* Hint styles */
-.mood-hint-container {
-    position: relative;
-    display: inline-block;
-}
-
-.hint-text {
-    visibility: hidden;
-    width: 200px;
-    background-color: #b5b00d; /* Background color */
-    color: #16ba37; /* Text color */
-    text-align: center;
-    border-radius: 5px; /* Rounded corners */
-    padding: 5px;
-    position: absolute;
-    z-index: 1;
-    bottom: 125%; /* Position above the icon */
-    left: 50%;
-    transform: translateX(-50%);
-    box-shadow: 0px 0px 10px 0px rgba(0,0,0,0.1); /* Subtle shadow */
-}
-
-.hint-text::after {
-    content: "";
-    position: absolute;
-    top: 100%; /* Arrow at the bottom */
-    left: 50%;
-    transform: translateX(-50%);
-    border-width: 5px;
-    border-style: solid;
-    border-color: #f9f9f9 transparent transparent transparent; /* Arrow color */
-}
-
-.hint-icon {
-    margin-left: 5px;
-    cursor: pointer;
-    border: 1px solid black; /* Border */
-    border-radius: 50%; /* Circle */
-    padding: 2px 5px;
-    background-color: #151414; /* Background color */
-    color: #fff; /* Text color */
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    font-size: 14px;
-    font-weight: bold;
-}
-
-.hint-icon:hover + .hint-text {
-    visibility: visible;
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
 }
