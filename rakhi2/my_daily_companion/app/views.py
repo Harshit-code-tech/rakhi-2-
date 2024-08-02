@@ -37,6 +37,9 @@ def send_notification(reminder):
     # Logic to send notification (e.g., using a push notification service)
     print(f"Reminder: {reminder.title} - {reminder.description}")
 
+@login_required
+def index(request):
+    return render(request, 'index.html')
 # Views
 @login_required
 def home(request):
