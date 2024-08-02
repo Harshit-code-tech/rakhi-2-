@@ -1,9 +1,11 @@
 // script.js
 // Main JavaScript file
 
-document.addEventListener('DOMContentLoaded', function () {
-    // Example of handling a button click
-    document.querySelector('.btn-primary').addEventListener('click', function () {
-        alert('Button clicked!');
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    var myElement = document.getElementById('myElement');
+    if (myElement) {
+        myElement.addEventListener('click', function() {
+            console.log('Element clicked');
+        });
+    }
 });

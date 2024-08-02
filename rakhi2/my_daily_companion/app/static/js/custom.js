@@ -1,13 +1,9 @@
-$(document).ready(function () {
-    $(window).scroll(function () {
-        if ($(this).scrollTop() > 50) {
-            $('.navbar').addClass('scrolled');
-        } else {
-            $('.navbar').removeClass('scrolled');
-        }
-    });
-
-    particlesJS.load('particles-js', '/static/js/particles.json', function() {
-        console.log('particles.json loaded...');
-    });
+document.addEventListener('DOMContentLoaded', function() {
+    if (typeof particlesJS !== 'undefined') {
+        particlesJS.load('particles-js', '{% static "js/particles-config.json" %}', function() {
+            console.log('callback - particles.js config loaded');
+        });
+    } else {
+        console.error('particlesJS is not defined');
+    }
 });
