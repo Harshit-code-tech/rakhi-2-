@@ -32,6 +32,10 @@
         .page-heading {
             margin-top: 20px;
             color: #333;
+            transition: transform 0.3s ease-in-out;
+        }
+        .page-heading:hover {
+            transform: scale(1.05);
         }
         .container {
             margin-top: 20px;
@@ -39,10 +43,11 @@
         .btn-primary {
             background-color: #007bff;
             border: none;
-            transition: background-color 0.3s ease-in-out;
+            transition: background-color 0.3s ease-in-out, transform 0.3s ease-in-out;
         }
         .btn-primary:hover {
             background-color: #0056b3;
+            transform: scale(1.1);
         }
         footer {
             background-color: #007bff;
@@ -52,6 +57,10 @@
             width: 100%;
             bottom: 0;
             text-align: center;
+            transition: background-color 0.3s ease-in-out;
+        }
+        footer:hover {
+            background-color: #0056b3;
         }
         .fade-in {
             opacity: 0;
@@ -73,16 +82,16 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     {% if user.is_authenticated %}
-                        <li class="nav-item"><a class="nav-link" href="{% url 'mood_tracker' %}">Mood Tracker</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'journal' %}">Journal</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'reward' %}">Rewards</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'mood_statistics' %}">Mood Statistics</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'chatbot_room' %}">Chatbot</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'emotion_detection_room' %}">Emotion Detection</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'reminder' %}">Reminders</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'notes' %}">Notes</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'settings' %}">Settings</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}">Logout</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mood_tracker' %}" data-aos="fade-right" data-aos-duration="800">Mood Tracker</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'journal' %}" data-aos="fade-left" data-aos-duration="800">Journal</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'reward' %}" data-aos="fade-up" data-aos-duration="800">Rewards</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'mood_statistics' %}" data-aos="fade-down" data-aos-duration="800">Mood Statistics</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'chatbot_room' %}" data-aos="zoom-in" data-aos-duration="800">Chatbot</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'emotion_detection_room' %}" data-aos="zoom-out" data-aos-duration="800">Emotion Detection</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'reminder' %}" data-aos="flip-left" data-aos-duration="800">Reminders</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'notes' %}" data-aos="flip-right" data-aos-duration="800">Notes</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'settings' %}" data-aos="fade-up-right" data-aos-duration="800">Settings</a></li>
+                        <li class="nav-item"><a class="nav-link" href="{% url 'logout' %}" data-aos="fade-up-left" data-aos-duration="800">Logout</a></li>
                     {% endif %}
                 </ul>
             </div>
