@@ -71,6 +71,16 @@ def mood_statistics(request):
         data = pd.DataFrame(list(moods.values('date', 'intensity', 'mood')))
         data['date'] = pd.to_datetime(data['date'])
 
+        # Mapping intensity levels to numeric values
+        intensity_mapping = {
+            'VL': 1,
+            'L': 2,
+            'M': 3,
+            'H': 4,
+            'VH': 5
+        }
+        data['intensity'] = data['intensity'].map(intensity_mapping)
+
         # Pivot table to organize data for plotting
         mood_trends = data.pivot_table(index='date', columns='mood', values='intensity', aggfunc='mean').fillna(0)
 
@@ -93,8 +103,6 @@ def mood_statistics(request):
     return render(request, 'mood_statistics.html', {
         'mood_statistics': json.dumps(mood_statistics),
     })
-
-
 @login_required
 def delete_mood(request, mood_id):
     mood = get_object_or_404(Mood, id=mood_id, user=request.user)
