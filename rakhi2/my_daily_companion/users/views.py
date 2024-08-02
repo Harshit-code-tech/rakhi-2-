@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .forms import UserRegisterForm, UserProfileForm
-
+from django.conf import settings
 def register(request):
     if request.method == 'POST':
         form = UserRegisterForm(request.POST)
@@ -16,7 +16,7 @@ def register(request):
             profile.save()
             login(request, user)
             messages.success(request, "Registration successful.")
-            return redirect('home')
+            return redirect(settings.LOGIN_REDIRECT_URL)
         else:
             messages.error(request, "Unsuccessful registration. Invalid information.")
     else:
@@ -34,7 +34,7 @@ def login_view(request):
             if user is not None:
                 login(request, user)
                 messages.success(request, f"Welcome back, {username}!")
-                return redirect('home')
+                return redirect(settings.LOGIN_REDIRECT_URL)
             else:
                 messages.error(request, "Invalid username or password.")
         else:
@@ -47,6 +47,6 @@ def login_view(request):
 def logout_view(request):
     logout(request)
     messages.success(request, "You have successfully logged out.")
-    return redirect('home')
+    return redirect(settings.LOGIN_REDIRECT_URL)
 
 
