@@ -1,8 +1,21 @@
 document.addEventListener("DOMContentLoaded", function() {
+    let moodDataElement = document.getElementById('moodData');
+    if (!moodDataElement) {
+        console.error('No element with id "moodData" found.');
+        return;
+    }
+
+    let moodDataText = moodDataElement.textContent;
+    console.log('Raw moodData text:', moodDataText); // Debugging: log the raw JSON text
+
+    // Decode Unicode characters
+    let decodedMoodDataText = decodeURIComponent(JSON.parse('"' + moodDataText.replace(/\"/g, '\\"') + '"'));
+    console.log('Decoded moodData text:', decodedMoodDataText); // Debugging: log the decoded JSON text
+
     let moodData;
     try {
         // Parse the mood data from the template
-        moodData = JSON.parse(document.getElementById('moodData').textContent);
+        moodData = JSON.parse(decodedMoodDataText);
         console.log('Parsed moodData:', moodData); // Debugging: check the parsed data
     } catch (e) {
         console.error('Error parsing JSON data:', e);
@@ -55,6 +68,12 @@ document.addEventListener("DOMContentLoaded", function() {
                         display: true,
                         text: 'Mood Intensity'
                     }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: true,
+                    position: 'top'
                 }
             }
         }
