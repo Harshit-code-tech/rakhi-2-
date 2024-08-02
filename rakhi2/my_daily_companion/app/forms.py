@@ -1,3 +1,4 @@
+# app/forms.py
 from django import forms
 from .models import Mood, Reward, Reminder, Note, Journal, JournalReminder
 
@@ -19,9 +20,10 @@ class MoodForm(forms.ModelForm):
         ('excited', 'Excited'),
         (OTHER_MOOD_VALUE, 'Other (please specify)'),
     ], required=True)
-    custom_mood = forms.CharField(required=False, max_length=255)
+    custom_mood = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'placeholder': 'Custom mood'}))
     color = forms.CharField(widget=forms.TextInput(attrs={'type': 'color'}), initial='#ffffff')
-    intensity = forms.ChoiceField(choices=MOOD_INTENSITY_CHOICES)
+    intensity = forms.ChoiceField(choices=MOOD_INTENSITY_CHOICES, required=True)
+    tags = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'placeholder': 'Tags/Descriptors'}))
 
     class Meta:
         model = Mood
@@ -43,7 +45,6 @@ class MoodForm(forms.ModelForm):
             cleaned_data['mood'] = custom_mood
 
         return cleaned_data
-
 class JournalForm(forms.ModelForm):
     class Meta:
         model = Journal
