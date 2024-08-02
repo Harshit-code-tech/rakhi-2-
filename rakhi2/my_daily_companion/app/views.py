@@ -13,7 +13,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import base64
 import urllib
-
+from io import BytesIO
 from .models import Mood, Reward, Reminder, Note, Journal
 from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm, JournalReminderForm
 from textblob import TextBlob
@@ -63,27 +63,38 @@ def mood_entries(request):
     entries = Mood.objects.filter(user=request.user).order_by('-date')
     return render(request, 'mood_entries.html', {'entries': entries})
 
+
 @login_required
 def mood_statistics(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
     data = pd.DataFrame(list(moods.values('date', 'intensity', 'mood')), columns=['date', 'intensity', 'mood'])
 
-    # Create pairplot
-    plt.figure(figsize=(10, 6))
-    pairplot = sns.pairplot(data, hue='mood', height=2.5)
-    plt.tight_layout()
+    # Ensure the 'date' column is datetime
+    data['date'] = pd.to_datetime(data['date'])
 
-    # Save plot to a buffer
-    buffer = io.BytesIO()
-    pairplot.savefig(buffer, format='png')
+    mood_labels = data['mood'].unique().tolist()
+    mood_distribution = data['mood'].value_counts().tolist()
+    mood_dates = data['date'].dt.strftime('%Y-%m-%d').tolist()
+    mood_intensities = data['intensity'].tolist()
+
+    # Generating a pairplot as a base64 image
+    plt.figure(figsize=(10, 6))
+    sns.pairplot(data)
+    buffer = BytesIO()
+    plt.savefig(buffer, format="png")
     buffer.seek(0)
     image_png = buffer.getvalue()
     buffer.close()
-
-    # Encode plot to base64 string
     graph = base64.b64encode(image_png).decode('utf-8')
 
-    return render(request, 'mood_statistics.html', {'graph': graph})
+    return render(request, 'mood_statistics.html', {
+        'mood_labels': mood_labels,
+        'mood_distribution': mood_distribution,
+        'mood_dates': mood_dates,
+        'mood_intensities': mood_intensities,
+        'graph': graph
+    })
+
 
 @login_required
 def delete_mood(request, mood_id):
