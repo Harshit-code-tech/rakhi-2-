@@ -13,11 +13,11 @@ import plotly.graph_objects as go
 import pandas as pd
 import base64
 import urllib
-
+from io import BytesIO
 from .models import Mood, Reward, Reminder, Note, Journal
 from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm, JournalReminderForm
 from textblob import TextBlob
-
+import json
 matplotlib.use('Agg')  # Use a non-GUI backend
 
 # Utility Functions
@@ -63,27 +63,37 @@ def mood_entries(request):
     entries = Mood.objects.filter(user=request.user).order_by('-date')
     return render(request, 'mood_entries.html', {'entries': entries})
 
+
 @login_required
 def mood_statistics(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
-    data = pd.DataFrame(list(moods.values('date', 'intensity', 'mood')), columns=['date', 'intensity', 'mood'])
+    if moods.exists():
+        data = pd.DataFrame(list(moods.values('date', 'intensity', 'mood')))
+        data['date'] = pd.to_datetime(data['date'])
 
-    # Create pairplot
-    plt.figure(figsize=(10, 6))
-    pairplot = sns.pairplot(data, hue='mood', height=2.5)
-    plt.tight_layout()
+        # Pivot table to organize data for plotting
+        mood_trends = data.pivot_table(index='date', columns='mood', values='intensity', aggfunc='mean').fillna(0)
 
-    # Save plot to a buffer
-    buffer = io.BytesIO()
-    pairplot.savefig(buffer, format='png')
-    buffer.seek(0)
-    image_png = buffer.getvalue()
-    buffer.close()
+        # Extracting the necessary data for plotting
+        mood_dates = mood_trends.index.strftime('%Y-%m-%d').tolist()
+        mood_intensity_data = {mood: mood_trends[mood].tolist() for mood in mood_trends.columns}
 
-    # Encode plot to base64 string
-    graph = base64.b64encode(image_png).decode('utf-8')
+        mood_statistics = {
+            'dates': mood_dates,
+            'intensity_data': mood_intensity_data,
+            'moods': list(mood_trends.columns)
+        }
+    else:
+        mood_statistics = {
+            'dates': [],
+            'intensity_data': {},
+            'moods': []
+        }
 
-    return render(request, 'mood_statistics.html', {'graph': graph})
+    return render(request, 'mood_statistics.html', {
+        'mood_statistics': json.dumps(mood_statistics),
+    })
+
 
 @login_required
 def delete_mood(request, mood_id):

@@ -1,3 +1,4 @@
+// mood.js
 document.addEventListener('DOMContentLoaded', function() {
     console.log('DOM fully loaded and parsed');
     const hintIcon = document.querySelector('.hint-icon');
