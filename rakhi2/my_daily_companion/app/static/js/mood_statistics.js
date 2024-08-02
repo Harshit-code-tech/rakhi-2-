@@ -1,3 +1,7 @@
+// Import Chart.js and the date adapter
+import Chart from './node_modules/chart.js/auto';
+import './node_modules/chartjs-adapter-date-fns';
+
 document.addEventListener("DOMContentLoaded", function() {
     let moodDataElement = document.getElementById('moodData');
     if (!moodDataElement) {
