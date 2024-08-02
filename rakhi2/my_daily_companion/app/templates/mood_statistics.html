@@ -1,3 +1,4 @@
+{#mood_statistics.html#}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -7,9 +8,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .chart-container {
-            width: 100%;
-            height: 400px; /* Define a fixed height for the charts */
-            margin-bottom: 20px;
+            max-width: 800px;
+            margin: auto;
+            height: 400px;
         }
     </style>
 </head>
@@ -17,21 +18,21 @@
     <h1>Mood Statistics</h1>
 
     <div class="chart-container">
-        <h2>Mood Intensity Over Time</h2>
         <canvas id="moodTimelineChart"></canvas>
     </div>
 
     <script>
         const moodData = JSON.parse('{{ mood_statistics|escapejs }}');
 
-        // Mood Intensity Over Time Line Chart
         var ctxLine = document.getElementById('moodTimelineChart').getContext('2d');
         var datasets = [];
+        var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+
         Object.keys(moodData.intensity_data).forEach((mood, index) => {
             datasets.push({
                 label: mood,
                 data: moodData.intensity_data[mood],
-                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'][index % 5], // Cycle through colors
+                borderColor: colors[index % colors.length],
                 fill: false
             });
         });
@@ -43,39 +44,22 @@
                 datasets: datasets
             },
             options: {
-                responsive: true,
-                maintainAspectRatio: false,
                 scales: {
                     x: {
+                        type: 'time',
+                        time: {
+                            unit: 'day'
+                        },
                         title: {
                             display: true,
                             text: 'Date'
                         }
                     },
                     y: {
+                        beginAtZero: true,
                         title: {
                             display: true,
-                            text: 'Intensity'
-                        },
-                        min: 0,
-                        max: 10  // Adjust this range based on the intensity scale used
-                    }
-                },
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top'
-                    },
-                    tooltip: {
-                        callbacks: {
-                            label: function(context) {
-                                let label = context.dataset.label || '';
-                                if (label) {
-                                    label += ': ';
-                                }
-                                label += context.raw;
-                                return label;
-                            }
+                            text: 'Mood Intensity'
                         }
                     }
                 }
