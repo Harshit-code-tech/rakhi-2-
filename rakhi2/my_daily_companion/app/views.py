@@ -1,3 +1,4 @@
+# app/views.py
 import io
 import threading
 from datetime import datetime, timedelta
@@ -41,22 +42,21 @@ def send_notification(reminder):
 def home(request):
     return render(request, 'home.html')
 
+
 @login_required
 def mood_tracker(request):
     if request.method == 'POST':
         form = MoodForm(request.POST)
         if form.is_valid():
             mood_entry = form.save(commit=False)
-            mood_entry.user = request.user
-            if form.cleaned_data['mood'] == MoodForm.OTHER_MOOD_VALUE:
-                mood_entry.mood = form.cleaned_data['custom_mood']
-            mood_entry.sentiment_score = analyze_sentiment(mood_entry.mood)
+            mood_entry.user = request.user  # Set the user field
             mood_entry.save()
             return redirect('mood_tracker')
     else:
         form = MoodForm()
-    moods = Mood.objects.filter(user=request.user)
+    moods = Mood.objects.filter(user=request.user).order_by('-date')  # Ensure moods are ordered by date
     return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
+
 
 @login_required
 def mood_entries(request):
