@@ -2,11 +2,10 @@
 // JavaScript file for custom animations
 
 document.addEventListener('DOMContentLoaded', function() {
-    var elements = document.querySelectorAll('.fade-in');
-    elements.forEach(function(element) {
-        element.style.opacity = 0;
-        element.style.transition = 'opacity 2s ease-in';
-        element.style.opacity = 1;
+    var anotherElement = document.getElementById('anotherElement');
+    if (anotherElement) {
+        anotherElement.addEventListener('mouseover', function() {
+            console.log('Element hovered');
     });
 
     var navbarToggler = document.querySelector('.navbar-toggler');
@@ -16,4 +15,4 @@ document.addEventListener('DOMContentLoaded', function() {
         this.classList.toggle('active');
         navbarCollapse.classList.toggle('active');
     });
-});
+}});
