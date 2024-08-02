@@ -7,8 +7,9 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         .chart-container {
-            width: 80%;
-            margin: auto;
+            width: 100%;
+            height: 400px; /* Define a fixed height for the charts */
+            margin-bottom: 20px;
         }
     </style>
 </head>
@@ -16,84 +17,69 @@
     <h1>Mood Statistics</h1>
 
     <div class="chart-container">
-        <!-- Pie Chart for Mood Distribution -->
-        <canvas id="moodPieChart"></canvas>
-    </div>
-    <div class="chart-container">
-        <!-- Line Chart for Mood Intensity Over Time -->
+        <h2>Mood Intensity Over Time</h2>
         <canvas id="moodTimelineChart"></canvas>
     </div>
 
-    <h2>Pairplot of Mood Data</h2>
-    <img src="data:image/png;base64,{{ graph }}" alt="Mood Statistics Pairplot">
-
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Pie chart data and options
-            var moodPieData = {
-                labels: {{ mood_labels | safe }},
-                datasets: [{
-                    label: 'Mood Distribution',
-                    data: {{ mood_distribution | safe }},
-                    backgroundColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'],
-                }]
-            };
+        const moodData = JSON.parse('{{ mood_statistics|escapejs }}');
 
-            var moodPieOptions = {
-                responsive: true,
-                maintainAspectRatio: false,
-                legend: {
-                    position: 'top',
-                }
-            };
-
-            var ctxPie = document.getElementById('moodPieChart').getContext('2d');
-            new Chart(ctxPie, {
-                type: 'pie',
-                data: moodPieData,
-                options: moodPieOptions
+        // Mood Intensity Over Time Line Chart
+        var ctxLine = document.getElementById('moodTimelineChart').getContext('2d');
+        var datasets = [];
+        Object.keys(moodData.intensity_data).forEach((mood, index) => {
+            datasets.push({
+                label: mood,
+                data: moodData.intensity_data[mood],
+                borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'][index % 5], // Cycle through colors
+                fill: false
             });
+        });
 
-            // Line chart data and options
-            var moodTimelineData = {
-                labels: {{ mood_dates | safe }},
-                datasets: [{
-                    label: 'Mood Intensity Over Time',
-                    data: {{ mood_intensities | safe }},
-                    borderColor: '#FF6384',
-                    fill: false,
-                }]
-            };
-
-            var moodTimelineOptions = {
+        var moodTimelineChart = new Chart(ctxLine, {
+            type: 'line',
+            data: {
+                labels: moodData.dates,
+                datasets: datasets
+            },
+            options: {
                 responsive: true,
                 maintainAspectRatio: false,
                 scales: {
-                    xAxes: [{
-                        type: 'time',
-                        time: {
-                            unit: 'day'
+                    x: {
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        title: {
+                            display: true,
+                            text: 'Intensity'
                         },
-                        distribution: 'linear',
-                        ticks: {
-                            source: 'data'
+                        min: 0,
+                        max: 10  // Adjust this range based on the intensity scale used
+                    }
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        position: 'top'
+                    },
+                    tooltip: {
+                        callbacks: {
+                            label: function(context) {
+                                let label = context.dataset.label || '';
+                                if (label) {
+                                    label += ': ';
+                                }
+                                label += context.raw;
+                                return label;
+                            }
                         }
-                    }],
-                    yAxes: [{
-                        ticks: {
-                            beginAtZero: true,
-                            stepSize: 1
-                        }
-                    }]
+                    }
                 }
-            };
-
-            var ctxLine = document.getElementById('moodTimelineChart').getContext('2d');
-            new Chart(ctxLine, {
-                type: 'line',
-                data: moodTimelineData,
-                options: moodTimelineOptions
-            });
+            }
         });
     </script>
 </body>
