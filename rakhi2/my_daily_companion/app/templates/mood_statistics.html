@@ -1,70 +1,15 @@
-{#mood_statistics.html#}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Mood Statistics</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        .chart-container {
-            max-width: 800px;
-            margin: auto;
-            height: 400px;
-        }
-    </style>
-</head>
-<body>
-    <h1>Mood Statistics</h1>
+{% extends 'base.html' %}
+{% load static %}
 
+{% block content %}
+<div class="container">
+    <h2 class="text-center">Mood Statistics</h2>
     <div class="chart-container">
         <canvas id="moodTimelineChart"></canvas>
     </div>
-
-    <script>
-        const moodData = JSON.parse('{{ mood_statistics|escapejs }}');
-
-        var ctxLine = document.getElementById('moodTimelineChart').getContext('2d');
-        var datasets = [];
-        var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
-
-        Object.keys(moodData.intensity_data).forEach((mood, index) => {
-            datasets.push({
-                label: mood,
-                data: moodData.intensity_data[mood],
-                borderColor: colors[index % colors.length],
-                fill: false
-            });
-        });
-
-        var moodTimelineChart = new Chart(ctxLine, {
-            type: 'line',
-            data: {
-                labels: moodData.dates,
-                datasets: datasets
-            },
-            options: {
-                scales: {
-                    x: {
-                        type: 'time',
-                        time: {
-                            unit: 'day'
-                        },
-                        title: {
-                            display: true,
-                            text: 'Date'
-                        }
-                    },
-                    y: {
-                        beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Mood Intensity'
-                        }
-                    }
-                }
-            }
-        });
-    </script>
-</body>
-</html>
+    <!-- Hidden element to store JSON data for JavaScript -->
+    <div id="moodData" style="display: none;">{{ mood_statistics|escapejs }}</div>
+</div>
+<!-- Include the JavaScript file -->
+<script src="{% static 'js/mood_statistics.js' %}"></script>
+{% endblock %}
