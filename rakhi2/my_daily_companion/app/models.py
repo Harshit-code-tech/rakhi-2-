@@ -1,3 +1,4 @@
+# app/models.py
 from django.contrib.auth.models import User
 from django.db import models
 from django.utils import timezone
@@ -13,8 +14,7 @@ class Mood(models.Model):
         ('H', 'High'),
         ('VH', 'Very High'),
     ]
-    intensity = models.CharField(max_length=2, choices=MOOD_INTENSITY_CHOICES)
-    intensity = models.IntegerField(default=0)
+    intensity = models.CharField(max_length=2, choices=MOOD_INTENSITY_CHOICES)  # Keep this one
     mood = models.CharField(max_length=255)
     custom_mood = models.CharField(max_length=255, blank=True, null=True)
     color = models.CharField(max_length=7, default='#FFFFFF')
