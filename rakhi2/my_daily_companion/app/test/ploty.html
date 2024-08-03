@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Plotly Example</title>
+    <title>Plotly Line Chart with Interactive Legend</title>
     <script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
 </head>
 <body>
@@ -20,20 +20,19 @@
                 }
             };
 
-            var traces = [];
-            Object.keys(moodData.intensity_data).forEach((mood, index) => {
-                traces.push({
-                    x: moodData.dates,
-                    y: moodData.intensity_data[mood],
-                    mode: 'lines',
-                    name: mood
-                });
-            });
+            var traces = Object.keys(moodData.intensity_data).map((mood, index) => ({
+                x: moodData.dates,
+                y: moodData.intensity_data[mood],
+                type: 'scatter',
+                mode: 'lines+markers',
+                name: mood,
+                line: { color: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'][index % 4] }
+            }));
 
             var layout = {
                 title: 'Mood Intensity Over Time',
                 xaxis: { title: 'Date' },
-                yaxis: { title: 'Mood Intensity' }
+                yaxis: { title: 'Intensity' }
             };
 
             Plotly.newPlot('plotly-container', traces, layout);
