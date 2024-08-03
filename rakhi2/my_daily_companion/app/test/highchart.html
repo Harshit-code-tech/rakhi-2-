@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Highcharts Example</title>
+    <title>Highcharts Line Chart with Interactive Legend</title>
     <script src="https://code.highcharts.com/highcharts.js"></script>
 </head>
 <body>
@@ -22,18 +22,38 @@
 
             Highcharts.chart('highcharts-container', {
                 title: { text: 'Mood Intensity Over Time' },
-                xAxis: { categories: moodData.dates },
-                yAxis: { title: { text: 'Mood Intensity' } },
-                series: []
-            });
-
-            var colors = Highcharts.getOptions().colors;
-            Object.keys(moodData.intensity_data).forEach((mood, index) => {
-                Highcharts.chart('highcharts-container').addSeries({
+                xAxis: {
+                    categories: moodData.dates,
+                    labels: {
+                        rotation: -45
+                    }
+                },
+                yAxis: {
+                    title: { text: 'Intensity' }
+                },
+                legend: {
+                    enabled: true
+                },
+                series: Object.keys(moodData.intensity_data).map((mood, index) => ({
                     name: mood,
                     data: moodData.intensity_data[mood],
-                    color: colors[index % colors.length]
-                });
+                    color: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'][index % 4]
+                })),
+                plotOptions: {
+                    series: {
+                        events: {
+                            legendItemClick: function(event) {
+                                var series = this;
+                                if (series.visible) {
+                                    series.hide();
+                                } else {
+                                    series.show();
+                                }
+                                return false;
+                            }
+                        }
+                    }
+                }
             });
         });
     </script>
