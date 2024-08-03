@@ -1,4 +1,4 @@
-// animations.js
+// app/static/js/animations.js
 // JavaScript file for custom animations
 
 document.addEventListener('DOMContentLoaded', function() {
