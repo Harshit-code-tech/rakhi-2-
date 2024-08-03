@@ -39,7 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
         title: {
             text: 'Mood Intensity Over Time',
             left: 'center',
-            bottom: '5%'
+            bottom: '-30%'
         },
         tooltip: {
             trigger: 'axis',
