@@ -1,3 +1,5 @@
+// static/js/mood_slider.js
+// Mood intensity slider with description
 document.addEventListener('DOMContentLoaded', function() {
     const intensitySlider = document.getElementById('intensity-slider');
     const intensityBox = document.getElementById('intensity-box');

@@ -1,9 +1,9 @@
+// static/js/mood_intensity_slider.js
 document.addEventListener('DOMContentLoaded', function() {
     const intensitySlider = document.getElementById('intensity-slider');
-    const intensityBox = document.getElementById('intensity-box');
-
-    if (intensitySlider && intensityBox) {
-        function updateIntensity() {
+    const intensityValue = document.getElementById('intensity-value');
+    if (intensitySlider && intensityValue) {
+        intensitySlider.addEventListener('input', function() {
             const value = parseFloat(intensitySlider.value);
             let description = '';
             if (value >= 0 && value < 1) {
@@ -17,10 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
             } else if (value >= 4 && value <= 5) {
                 description = 'Very High';
             }
-            intensityBox.value = description + ' (' + value.toFixed(1) + ')';
-        }
-
-        intensitySlider.addEventListener('input', updateIntensity);
-        updateIntensity(); // Initial call to set the box value on page load
+            intensityValue.textContent = description + ' (' + value.toFixed(1) + ')';
+        });
     }
 });
