@@ -69,12 +69,6 @@
         .fade-in.visible {
             opacity: 1;
         }
-        #particles-js {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            z-index: -1;
-        }
     </style>
     {% block extra_head %}{% endblock %}
 </head>
@@ -103,7 +97,6 @@
             </div>
         </div>
     </nav>
-    <div id="particles-js"></div>
     <div class="container mt-4 fade-in" data-aos="fade-up">
         {% block content %}
             <h1 class="page-heading">{% block page_heading %}{% endblock %}</h1>
@@ -119,15 +112,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.3.3/echarts.min.js"></script> <!-- Include ECharts -->
     <script>
         document.addEventListener('DOMContentLoaded', function(){
-            // Initialize particlesJS
-            if (typeof particlesJS !== 'undefined') {
-                particlesJS.load('particles-js', '{% static "js/particles-config.json" %}', function() {
-                    console.log('callback - particles.js config loaded');
-                });
-            } else {
-                console.error('particlesJS is not defined');
-            }
-
             // Additional initialization
             $('[data-bs-toggle="tooltip"]').tooltip();
             $('.navbar-toggler').click(function() {
@@ -153,6 +137,28 @@
             setTimeout(function() {
                 $('.fade-in').addClass('visible');
             }, 100);
+
+            // Mood intensity slider with description
+            const intensitySlider = document.getElementById('intensity-slider');
+            const intensityValue = document.getElementById('intensity-value');
+            if (intensitySlider && intensityValue) {
+                intensitySlider.addEventListener('input', function() {
+                    const value = parseFloat(intensitySlider.value);
+                    let description = '';
+                    if (value >= 0 && value < 1) {
+                        description = 'Very Low';
+                    } else if (value >= 1 && value < 2) {
+                        description = 'Low';
+                    } else if (value >= 2 && value < 3) {
+                        description = 'Moderate';
+                    } else if (value >= 3 && value < 4) {
+                        description = 'High';
+                    } else if (value >= 4 && value <= 5) {
+                        description = 'Very High';
+                    }
+                    intensityValue.textContent = description + ' (' + value.toFixed(1) + ')';
+                });
+            }
         });
     </script>
     {% block extra_scripts %}{% endblock %}
