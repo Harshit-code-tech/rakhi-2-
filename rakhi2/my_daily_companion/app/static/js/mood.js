@@ -1,21 +1,26 @@
-// mood.js
 document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM fully loaded and parsed');
-    const hintIcon = document.querySelector('.hint-icon');
-    const hintText = document.querySelector('.hint-text');
+    const intensitySlider = document.getElementById('intensity-slider');
+    const intensityBox = document.getElementById('intensity-box');
 
-    if (hintIcon && hintText) {
-        console.log('Hint elements found');
-        hintIcon.addEventListener('mouseenter', function() {
-            console.log('Mouse entered hint icon');
-            hintText.style.visibility = 'visible';
-        });
+    if (intensitySlider && intensityBox) {
+        function updateIntensity() {
+            const value = parseFloat(intensitySlider.value);
+            let description = '';
+            if (value >= 0 && value < 1) {
+                description = 'Very Low';
+            } else if (value >= 1 && value < 2) {
+                description = 'Low';
+            } else if (value >= 2 && value < 3) {
+                description = 'Moderate';
+            } else if (value >= 3 && value < 4) {
+                description = 'High';
+            } else if (value >= 4 && value <= 5) {
+                description = 'Very High';
+            }
+            intensityBox.value = description + ' (' + value.toFixed(1) + ')';
+        }
 
-        hintIcon.addEventListener('mouseleave', function() {
-            console.log('Mouse left hint icon');
-            hintText.style.visibility = 'hidden';
-        });
-    } else {
-        console.log('Hint elements not found');
+        intensitySlider.addEventListener('input', updateIntensity);
+        updateIntensity(); // Initial call to set the box value on page load
     }
 });
