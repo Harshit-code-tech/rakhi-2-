@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive ECharts Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 20px;
+            justify-content: center;
+        }
+        .chart {
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .chart.expanded {
+            flex: 1;
+            min-width: 700px;
+            height: 500px;
+        }
+        .chart-title {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        .chart-container.pie-charts {
+            flex-direction: row;
+            justify-content: space-between;
+        }
+        .chart-container.line-chart {
+            margin-top: 40px;
+            justify-content: center;
+        }
+        .chart-container.line-chart .chart {
+            flex: 1;
+            min-width: 600px;
+            height: 500px;
+        }
+        @media (max-width: 768px) {
+            .chart-container {
+                flex-direction: column;
+            }
+            .chart-container.line-chart .chart {
+                min-width: 100%;
+                height: 400px;
+            }
+        }
+    </style>
+    <!-- ECharts library -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<h1>Interactive ECharts Dashboard</h1>
+
+<div class="chart-container pie-charts">
+    <div class="chart" onclick="toggleExpand(this)">
+        <div id="category-distribution" style="height: 300px;"></div>
+        <div class="chart-title">Mood Category Distribution</div>
+    </div>
+    <div class="chart" onclick="toggleExpand(this)">
+        <div id="mood-wheel" style="height: 300px;"></div>
+        <div class="chart-title">Mood Wheel</div>
+    </div>
+</div>
+
+<div class="chart-container line-chart">
+    <div class="chart">
+        <div id="intensity-timeline" style="height: 500px;"></div>
+        <div class="chart-title">Mood Intensity Timeline</div>
+    </div>
+</div>
+
+<script>
+    function initChart(id, options) {
+        var chart = echarts.init(document.getElementById(id));
+        chart.setOption(options);
+        return chart;
+    }
+
+    function toggleExpand(chartElement) {
+        var charts = document.querySelectorAll('.chart');
+        charts.forEach(chart => {
+            if (chart !== chartElement) {
+                chart.classList.remove('expanded');
+            }
+        });
+        chartElement.classList.toggle('expanded');
+    }
+
+    // Sample Data
+    var sampleTimelineData = {
+        dates: ['2024-08-01', '2024-08-02', '2024-08-03', '2024-08-04'],
+        intensity_data: {
+            angry: [2.0, 1.0, 3.0, 2.5],
+            happy: [5.0, 4.5, 4.0, 5.0],
+            sad: [1.0, 2.0, 1.5, 1.0],
+            anxious: [3.0, 3.5, 3.0, 2.5]
+        }
+    };
+
+    var sampleCategoryData = [
+        { value: 5, name: 'Happy' },
+        { value: 2, name: 'Sad' },
+        { value: 3, name: 'Angry' },
+        { value: 1, name: 'Relaxed' },
+        { value: 4, name: 'Anxious' }
+    ];
+
+    var sampleWheelData = [
+        { value: 40, name: 'Happy' },
+        { value: 25, name: 'Sad' },
+        { value: 20, name: 'Angry' },
+        { value: 10, name: 'Relaxed' },
+        { value: 5, name: 'Anxious' }
+    ];
+
+    // Mood Intensity Timeline
+    var timelineOption = {
+        title: { text: 'Mood Intensity Timeline', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        legend: {
+            data: Object.keys(sampleTimelineData.intensity_data),
+            bottom: 0,
+            textStyle: { color: '#7f8c8d' }
+        },
+        xAxis: {
+            type: 'category',
+            data: sampleTimelineData.dates,
+            axisLabel: { rotate: 45, align: 'right', color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+            splitLine: { lineStyle: { type: 'dashed' } }
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: { formatter: '{value}', color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+            splitLine: { lineStyle: { type: 'dashed' } }
+        },
+        series: Object.keys(sampleTimelineData.intensity_data).map((mood, index) => ({
+            name: mood,
+            type: 'line',
+            data: sampleTimelineData.intensity_data[mood],
+            smooth: true,
+            itemStyle: { color: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'][index % 4] },
+            lineStyle: { width: 3 },
+            emphasis: { focus: 'series' }
+        })),
+        tooltip: { trigger: 'axis' },
+        dataZoom: [{ type: 'slider', start: 0, end: 100 }]
+    };
+    initChart('intensity-timeline', timelineOption);
+
+    // Mood Category Distribution
+    var categoryOption = {
+        title: { text: 'Mood Category Distribution', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        series: [
+            {
+                name: 'Mood Categories',
+                type: 'pie',
+                radius: '50%',
+                data: sampleCategoryData,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 20,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    }
+                },
+                itemStyle: { borderRadius: 10 },
+                tooltip: { formatter: '{b}: {c} ({d}%)' }
+            }
+        ]
+    };
+    initChart('category-distribution', categoryOption);
+
+    // Mood Wheel
+    var wheelOption = {
+        title: { text: 'Mood Wheel', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        series: [
+            {
+                name: 'Mood Wheel',
+                type: 'pie',
+                radius: ['30%', '70%'],
+                data: sampleWheelData,
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 20,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.3)'
+                    }
+                },
+                tooltip: { formatter: '{b}: {c} ({d}%)' }
+            }
+        ]
+    };
+    initChart('mood-wheel', wheelOption);
+</script>
+
+</body>
+</html>
