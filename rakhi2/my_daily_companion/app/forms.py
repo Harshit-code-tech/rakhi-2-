@@ -22,7 +22,7 @@ class MoodForm(forms.ModelForm):
     ], required=True)
     custom_mood = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'placeholder': 'Custom mood'}))
     color = forms.CharField(widget=forms.TextInput(attrs={'type': 'color'}), initial='#ffffff')
-    intensity = forms.ChoiceField(choices=MOOD_INTENSITY_CHOICES, required=True)
+    intensity = forms.FloatField(min_value=0, max_value=5, required=True)
     tags = forms.CharField(required=False, max_length=255, widget=forms.TextInput(attrs={'placeholder': 'Tags/Descriptors'}))
 
     class Meta:
@@ -31,6 +31,7 @@ class MoodForm(forms.ModelForm):
         widgets = {
             'date': forms.DateInput(attrs={'type': 'date'}),
             'custom_mood': forms.TextInput(attrs={'placeholder': 'Custom mood'}),
+            'intensity': forms.NumberInput(attrs={'step': 0.1}),
             'tags': forms.TextInput(attrs={'placeholder': 'Tags/Descriptors'}),
         }
 
