@@ -5,24 +5,15 @@ from django.utils import timezone
 from django.conf import settings
 
 class Mood(models.Model):
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
-    MOOD_INTENSITY_CHOICES = [
-        ('VL', 'Very Low'),
-        ('L', 'Low'),
-        ('M', 'Moderate'),
-        ('H', 'High'),
-        ('VH', 'Very High'),
-    ]
-    intensity = models.CharField(max_length=2, choices=MOOD_INTENSITY_CHOICES)  # Keep this one
     mood = models.CharField(max_length=255)
-    custom_mood = models.CharField(max_length=255, blank=True, null=True)
-    color = models.CharField(max_length=7, default='#FFFFFF')
-    tags = models.CharField(max_length=255, blank=True, null=True)  # Tags or brief description
-    sentiment_score = models.FloatField(null=True, blank=True)  # Sentiment score field
+    intensity = models.FloatField()
+    color = models.CharField(max_length=7)
+    tags = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
-        return f"{self.date} - {self.mood}"
+        return f"{self.user.username} - {self.date} - {self.mood}"
 
 class Journal(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
