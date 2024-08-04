@@ -7,17 +7,22 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     let moodDataText = moodDataElement.textContent;
-    console.log('Raw moodData text:', moodDataText); // Debugging: log the raw JSON text
+    console.log('Raw moodData text:', moodDataText);
 
-    // Decode Unicode characters
-    let decodedMoodDataText = decodeURIComponent(JSON.parse('"' + moodDataText.replace(/\"/g, '\\"') + '"'));
-    console.log('Decoded moodData text:', decodedMoodDataText); // Debugging: log the decoded JSON text
+    let decodedMoodDataText;
+    try {
+        // Decode and parse the JSON data
+        decodedMoodDataText = decodeURIComponent(JSON.parse('"' + moodDataText.replace(/\"/g, '\\"') + '"'));
+        console.log('Decoded moodData text:', decodedMoodDataText);
+    } catch (e) {
+        console.error('Error decoding JSON data:', e);
+        return;
+    }
 
     let moodData;
     try {
-        // Parse the mood data from the template
         moodData = JSON.parse(decodedMoodDataText);
-        console.log('Parsed moodData:', moodData); // Debugging: check the parsed data
+        console.log('Parsed moodData:', moodData);
     } catch (e) {
         console.error('Error parsing JSON data:', e);
         return;
@@ -30,7 +35,7 @@ document.addEventListener("DOMContentLoaded", function() {
     var seriesData = Object.keys(moodData.intensity_data).map((mood, index) => ({
         name: mood,
         type: 'line',
-        data: moodData.intensity_data[mood].map((value, idx) => [moodData.dates[idx], value]),
+        data: moodData.intensity_data[mood].map((value, idx) => [moodData.dates[idx], parseFloat(value)]), // Ensure value is a float
         itemStyle: { color: colors[index % colors.length] },
         smooth: true
     }));
@@ -39,7 +44,7 @@ document.addEventListener("DOMContentLoaded", function() {
         title: {
             text: 'Mood Intensity Over Time',
             left: 'center',
-            bottom: '-30%'
+            bottom: '5%' // Adjusted for better placement
         },
         tooltip: {
             trigger: 'axis',
@@ -54,7 +59,7 @@ document.addEventListener("DOMContentLoaded", function() {
         },
         legend: {
             data: Object.keys(moodData.intensity_data),
-            selectedMode: 'multiple'  // Enable toggling of series
+            selectedMode: 'multiple'
         },
         xAxis: {
             type: 'category',
@@ -67,17 +72,14 @@ document.addEventListener("DOMContentLoaded", function() {
                 }
             },
             boundaryGap: false,
-            name: 'Date'  // Label for the x-axis
+            name: 'Date'
         },
         yAxis: {
             type: 'value',
             axisLabel: {
                 formatter: '{value}'
             },
-            name: 'Mood Intensity',  // Label for the y-axis
-            title: {
-                text: 'Mood Intensity'
-            }
+            name: 'Mood Intensity'
         },
         series: seriesData
     };
