@@ -34,7 +34,7 @@
             overflow: hidden;
             transition: all 0.3s ease;
             text-align: center;
-            line-height: 150px;
+            line-height: 200px;
             font-size: 16px;
             color: #34495e;
             font-weight: bold;
@@ -42,8 +42,8 @@
             z-index: 1;
         }
         .chart-button:hover {
-            width: 400px; /* Expanded size */
-            height: 400px;
+            width: 450px; /* Expanded size */
+            height: 450px;
             z-index: 10;
         }
         .chart-button:nth-child(1) {
@@ -64,8 +64,9 @@
             padding-bottom: 10px;
         }
         #category-distribution, #mood-wheel {
-            width: 100%;
-            height: 100%;
+            width: 80%;
+            height: 80%;
+            margin-top: -140px;
         }
         #intensity-timeline {
             width: 100%;
@@ -125,7 +126,7 @@
         chartButtons.forEach(button => {
             var chartDiv = button.querySelector(`#${chartId}`);
             if (chartDiv) {
-                if (button.style.width === '400px') {
+                if (button.style.width === '40px') {
                     button.style.width = '150px';
                     button.style.height = '150px';
                     chartDiv.style.width = '150px';
