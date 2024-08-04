@@ -1,3 +1,4 @@
+// mood_statistics.js
 document.addEventListener("DOMContentLoaded", function() {
     let moodDataElement = document.getElementById('moodData');
 
