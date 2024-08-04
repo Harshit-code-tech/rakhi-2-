@@ -20,6 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 description = 'Very High';
             }
             intensityBox.value = description + ' (' + value.toFixed(1) + ')';
+            intensitySlider.setAttribute('value', value.toFixed(1));
         }
 
         intensitySlider.addEventListener('input', updateIntensity);
