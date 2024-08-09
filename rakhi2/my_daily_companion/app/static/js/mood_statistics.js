@@ -1,4 +1,3 @@
-// mood_statistics.js
 document.addEventListener("DOMContentLoaded", function() {
     let moodDataElement = document.getElementById('moodData');
 
@@ -8,44 +7,62 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     let moodDataText = moodDataElement.textContent;
-    console.log('Raw moodData text:', moodDataText);
-
-    let decodedMoodDataText;
-    try {
-        // Decode and parse the JSON data
-        decodedMoodDataText = decodeURIComponent(JSON.parse('"' + moodDataText.replace(/\"/g, '\\"') + '"'));
-        console.log('Decoded moodData text:', decodedMoodDataText);
-    } catch (e) {
-        console.error('Error decoding JSON data:', e);
-        return;
-    }
 
     let moodData;
     try {
-        moodData = JSON.parse(decodedMoodDataText);
+        moodData = JSON.parse(moodDataText);
         console.log('Parsed moodData:', moodData);
     } catch (e) {
         console.error('Error parsing JSON data:', e);
         return;
     }
 
-    // Initialize ECharts instance
-    var chart = echarts.init(document.getElementById('moodTimelineChart'));
+    // Function to initialize ECharts
+    const initChart = (id, options) => {
+        const chart = echarts.init(document.getElementById(id));
+        chart.setOption(options);
+        return chart;
+    };
 
-    var colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
-    var seriesData = Object.keys(moodData.intensity_data).map((mood, index) => ({
+    // Function to toggle expand/collapse of charts
+    const toggleExpand = (chartId) => {
+        const timeline = document.getElementById('moodTimelineChart');
+        const chartDiv = document.getElementById(chartId);
+        const buttonDiv = chartDiv.parentElement;
+
+        if (buttonDiv.style.width === '400px') {
+            // Collapse
+            buttonDiv.style.width = '150px';
+            buttonDiv.style.height = '150px';
+            chartDiv.style.width = '150px';
+            chartDiv.style.height = '150px';
+            timeline.style.marginTop = '0';
+        } else {
+            // Expand
+            buttonDiv.style.width = '400px';
+            buttonDiv.style.height = '400px';
+            chartDiv.style.width = '400px';
+            chartDiv.style.height = '400px';
+            timeline.style.marginTop = '420px';
+        }
+        echarts.getInstanceByDom(chartDiv).resize();
+    };
+
+    // Mood Timeline Chart
+    const colors = ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0', '#9966FF'];
+    const seriesData = Object.keys(moodData.intensity_data).map((mood, index) => ({
         name: mood,
         type: 'line',
-        data: moodData.intensity_data[mood].map((value, idx) => [moodData.dates[idx], parseFloat(value)]), // Ensure value is a float
+        data: moodData.intensity_data[mood].map((value, idx) => [moodData.dates[idx], parseFloat(value)]),
         itemStyle: { color: colors[index % colors.length] },
         smooth: true
     }));
 
-    var option = {
+    const timelineOption = {
         title: {
             text: 'Mood Intensity Over Time',
             left: 'center',
-            bottom: '5%' // Adjusted for better placement
+            bottom: '5%'
         },
         tooltip: {
             trigger: 'axis',
@@ -85,5 +102,63 @@ document.addEventListener("DOMContentLoaded", function() {
         series: seriesData
     };
 
-    chart.setOption(option);
+    initChart('moodTimelineChart', timelineOption);
+
+    // Mood Category Distribution Chart
+    const categoryOption = {
+        title: {
+            text: 'Mood Category Distribution',
+            left: 'center',
+            textStyle: { fontSize: 24, color: '#2c3e50' }
+        },
+        series: [{
+            name: 'Mood Categories',
+            type: 'pie',
+            radius: '50%',
+            data: moodData.category_data.map(item => ({ name: item.category, value: item.value })),
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 20,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.3)'
+                }
+            },
+            itemStyle: { borderRadius: 10 },
+            tooltip: { formatter: '{b}: {c} ({d}%)' }
+        }]
+    };
+
+    initChart('category-distribution', categoryOption);
+
+    // Mood Wheel Chart
+    const wheelOption = {
+        title: {
+            text: 'Mood Wheel',
+            left: 'center',
+            textStyle: { fontSize: 24, color: '#2c3e50' }
+        },
+        series: [{
+            name: 'Mood Wheel',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            data: moodData.wheel_data.map(item => ({ name: item.mood, value: item.value })),
+            label: {
+                show: true,
+                formatter: '{b}: {c} ({d}%)',
+                color: '#333'
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }]
+    };
+
+    initChart('mood-wheel', wheelOption);
+
+    // Attach the toggleExpand function to the window for global access
+    window.toggleExpand = toggleExpand;
 });

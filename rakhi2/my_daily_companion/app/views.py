@@ -6,6 +6,7 @@ import seaborn as sns
 import matplotlib
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
+from django.db.models import Count
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -107,21 +108,36 @@ def mood_statistics(request):
         mood_dates = mood_trends.index.strftime('%Y-%m-%d').tolist()
         mood_intensity_data = {mood: mood_trends[mood].tolist() for mood in mood_trends.columns}
 
+        # Calculating mood distribution for pie charts
+        mood_distribution = moods.values('mood').annotate(count=Count('mood'))
+        category_data = [
+            {'category': item['mood'], 'value': item['count']}
+            for item in mood_distribution
+        ]
+
+        wheel_data = category_data  # Assuming you want similar data for the mood wheel
+
         mood_statistics = {
             'dates': mood_dates,
             'intensity_data': mood_intensity_data,
-            'moods': list(mood_trends.columns)
+            'moods': list(mood_trends.columns),
+            'category_data': category_data,  # Added category data
+            'wheel_data': wheel_data         # Added wheel data
         }
     else:
         mood_statistics = {
             'dates': [],
             'intensity_data': {},
-            'moods': []
+            'moods': [],
+            'category_data': [],  # Empty in case of no data
+            'wheel_data': []      # Empty in case of no data
         }
 
     return render(request, 'mood_statistics.html', {
-        'mood_statistics': json.dumps(mood_statistics),
+        'mood_statistics': json.dumps(mood_statistics) if mood_statistics else None,
+        'no_data_message': "No mood data available for statistics." if not moods.exists() else None,
     })
+
 
 
 
