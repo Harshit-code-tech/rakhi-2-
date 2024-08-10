@@ -83,6 +83,8 @@ def mood_entries(request):
 @login_required
 def mood_statistics(request):
     moods = Mood.objects.filter(user=request.user).order_by('date')
+    mood_statistics = {}
+
     if moods.exists():
         data = pd.DataFrame(list(moods.values('date', 'intensity', 'mood')))
         data['date'] = pd.to_datetime(data['date'])
@@ -124,19 +126,12 @@ def mood_statistics(request):
             'category_data': category_data,  # Added category data
             'wheel_data': wheel_data         # Added wheel data
         }
-    else:
-        mood_statistics = {
-            'dates': [],
-            'intensity_data': {},
-            'moods': [],
-            'category_data': [],  # Empty in case of no data
-            'wheel_data': []      # Empty in case of no data
-        }
 
     return render(request, 'mood_statistics.html', {
-        'mood_statistics': json.dumps(mood_statistics) if mood_statistics else None,
+        'mood_statistics': json.dumps(mood_statistics),
         'no_data_message': "No mood data available for statistics." if not moods.exists() else None,
     })
+
 
 
 
