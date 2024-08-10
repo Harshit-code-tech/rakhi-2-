@@ -1,26 +1,29 @@
-{#mood_statistics.html#}
 {% extends 'base.html' %}
 {% load static %}
 
+{% block title %}Mood Statistics{% endblock %}
+
+{% block extra_head %}
+<link rel="stylesheet" href="{% static 'css/mood_statistics.css' %}">
+{% endblock %}
+
 {% block content %}
-<div class="container">
-    <h2 class="text-center">Mood Statistics</h2>
+<h2>Mood Statistics</h2>
+
+{% if no_data_message %}
+    <p>{{ no_data_message }}</p>
+{% else %}
     <div class="chart-container">
-        <div class="chart-button" id="category-button" onclick="toggleExpand('category-distribution')">
-            Mood Category Distribution
-            <div id="category-distribution"></div>
-        </div>
-        <div class="chart-button" id="mood-wheel-button" onclick="toggleExpand('mood-wheel')">
-            Mood Wheel
-            <div id="mood-wheel"></div>
-        </div>
+        <div class="chart-button" id="category-distribution"></div>
+        <div class="chart-button" id="mood-wheel"></div>
     </div>
-    <div class="chart-container">
-        <div id="moodTimelineChart" style="width: 100%; height: 500px;"></div>
-    </div>
-    <!-- Hidden element to store JSON data for JavaScript -->
-    <div id="moodData" style="display: none;">{{ mood_statistics|escapejs }}</div>
-</div>
-<!-- Include the JavaScript file -->
+    <div id="intensity-timeline"></div>
+{% endif %}
+
+<div id="moodData" style="display:none;">{{ mood_statistics|safe }}</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.0.2/echarts.min.js"></script>
 <script src="{% static 'js/mood_statistics.js' %}"></script>
 {% endblock %}

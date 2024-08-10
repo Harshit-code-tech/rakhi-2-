@@ -1,12 +1,13 @@
 document.addEventListener("DOMContentLoaded", function() {
-    let moodDataElement = document.getElementById('moodData');
+    const moodDataElement = document.getElementById('moodData');
 
     if (!moodDataElement) {
         console.error('No element with id "moodData" found.');
         return;
     }
 
-    let moodDataText = moodDataElement.textContent;
+    const moodDataText = moodDataElement.textContent.trim(); // Ensure no extra whitespace
+    console.log('Raw moodDataText:', moodDataText); // Log the raw JSON data
 
     let moodData;
     try {
@@ -24,28 +25,65 @@ document.addEventListener("DOMContentLoaded", function() {
         return chart;
     };
 
-    // Function to toggle expand/collapse of charts
-    const toggleExpand = (chartId) => {
-        const timeline = document.getElementById('moodTimelineChart');
-        const chartDiv = document.getElementById(chartId);
-        const buttonDiv = chartDiv.parentElement;
-
-        if (buttonDiv.style.width === '400px') {
-            // Collapse
-            buttonDiv.style.width = '150px';
-            buttonDiv.style.height = '150px';
-            chartDiv.style.width = '150px';
-            chartDiv.style.height = '150px';
-            timeline.style.marginTop = '0';
-        } else {
-            // Expand
-            buttonDiv.style.width = '400px';
-            buttonDiv.style.height = '400px';
-            chartDiv.style.width = '400px';
-            chartDiv.style.height = '400px';
-            timeline.style.marginTop = '420px';
+    // Pie Chart for Mood Category Distribution
+    const categoryOption = {
+        title: {
+            text: 'Mood Category Distribution',
+            left: 'center',
+            textStyle: { fontSize: 24, color: '#2c3e50' }
+        },
+        series: [{
+            name: 'Mood Categories',
+            type: 'pie',
+            radius: '50%',
+            data: moodData.category_data.map(item => ({ name: item.category, value: item.value })),
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 20,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.3)'
+                }
+            },
+            itemStyle: { borderRadius: 10 },
+            tooltip: { formatter: '{b}: {c} ({d}%)' }
+        }],
+        legend: {
+            orient: 'vertical',
+            left: 'left',
+            data: moodData.category_data.map(item => item.category)
         }
-        echarts.getInstanceByDom(chartDiv).resize();
+    };
+
+    // Pie Chart for Mood Wheel
+    const wheelOption = {
+        title: {
+            text: 'Mood Wheel',
+            left: 'center',
+            textStyle: { fontSize: 24, color: '#2c3e50' }
+        },
+        series: [{
+            name: 'Mood Wheel',
+            type: 'pie',
+            radius: ['40%', '70%'],
+            data: moodData.wheel_data.map(item => ({ name: item.category, value: item.value })), // Fixed key 'mood' to 'category'
+            label: {
+                show: true,
+                formatter: '{b}: {c} ({d}%)',
+                color: '#333'
+            },
+            emphasis: {
+                itemStyle: {
+                    shadowBlur: 10,
+                    shadowOffsetX: 0,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            }
+        }],
+        legend: {
+            orient: 'vertical',
+            right: 'right',
+            data: moodData.wheel_data.map(item => item.category) // Fixed key 'mood' to 'category'
+        }
     };
 
     // Mood Timeline Chart
@@ -102,63 +140,8 @@ document.addEventListener("DOMContentLoaded", function() {
         series: seriesData
     };
 
-    initChart('moodTimelineChart', timelineOption);
-
-    // Mood Category Distribution Chart
-    const categoryOption = {
-        title: {
-            text: 'Mood Category Distribution',
-            left: 'center',
-            textStyle: { fontSize: 24, color: '#2c3e50' }
-        },
-        series: [{
-            name: 'Mood Categories',
-            type: 'pie',
-            radius: '50%',
-            data: moodData.category_data.map(item => ({ name: item.category, value: item.value })),
-            emphasis: {
-                itemStyle: {
-                    shadowBlur: 20,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.3)'
-                }
-            },
-            itemStyle: { borderRadius: 10 },
-            tooltip: { formatter: '{b}: {c} ({d}%)' }
-        }]
-    };
-
+    // Initialize all charts
     initChart('category-distribution', categoryOption);
-
-    // Mood Wheel Chart
-    const wheelOption = {
-        title: {
-            text: 'Mood Wheel',
-            left: 'center',
-            textStyle: { fontSize: 24, color: '#2c3e50' }
-        },
-        series: [{
-            name: 'Mood Wheel',
-            type: 'pie',
-            radius: ['40%', '70%'],
-            data: moodData.wheel_data.map(item => ({ name: item.mood, value: item.value })),
-            label: {
-                show: true,
-                formatter: '{b}: {c} ({d}%)',
-                color: '#333'
-            },
-            emphasis: {
-                itemStyle: {
-                    shadowBlur: 10,
-                    shadowOffsetX: 0,
-                    shadowColor: 'rgba(0, 0, 0, 0.5)'
-                }
-            }
-        }]
-    };
-
     initChart('mood-wheel', wheelOption);
-
-    // Attach the toggleExpand function to the window for global access
-    window.toggleExpand = toggleExpand;
+    initChart('intensity-timeline', timelineOption);
 });
