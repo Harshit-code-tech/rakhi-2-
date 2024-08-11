@@ -16,7 +16,7 @@ import pandas as pd
 import base64
 import urllib
 from io import BytesIO
-from .models import Mood, Reward, Reminder, Note, Journal
+from .models import Mood, Reward, Reminder, Note, Journal, Achievement
 from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm, JournalReminderForm
 from textblob import TextBlob
 import json
@@ -60,17 +60,19 @@ def mood_tracker(request):
         form = MoodForm(request.POST)
         if form.is_valid():
             mood_entry = form.save(commit=False)
-            mood_entry.user = request.user  # Set the user field
+            mood_entry.user = request.user
             mood_entry.save()
-            print("Mood entry saved:", mood_entry)  # Debug statement
+
+            # Check if any rewards should be unlocked
+            if check_unlock_conditions(request.user):
+                # Optionally, add a message or notification about the unlocked reward
+                print("A reward has been unlocked!")
+
             return redirect('mood_tracker')
-        else:
-            print("Form errors:", form.errors)  # Debug statement
     else:
         form = MoodForm()
 
-    moods = Mood.objects.filter(user=request.user).order_by('-date')  # Ensure moods are ordered by date
-    print("Moods retrieved:", moods)  # Debug statement
+    moods = Mood.objects.filter(user=request.user).order_by('-date')
     return render(request, 'mood_tracker.html', {'form': form, 'moods': moods})
 
 
@@ -191,9 +193,36 @@ def reward(request):
             return redirect('reward')
     else:
         form = RewardForm()
-    rewards = Reward.objects.filter(user=request.user)
-    return render(request, 'reward.html', {'form': form, 'rewards': rewards})
 
+    # Check if any rewards should be unlocked
+    check_unlock_conditions(request.user)
+
+    rewards = Reward.objects.filter(user=request.user)
+    achievements = Achievement.objects.filter(user=request.user)
+    return render(request, 'reward.html', {'form': form, 'rewards': rewards, 'achievements': achievements})
+
+
+def check_unlock_conditions(user):
+    now = timezone.now()
+    one_week_ago = now - timedelta(days=7)
+    mood_count = Mood.objects.filter(user=user, date__gte=one_week_ago).count()
+
+    if mood_count >= 10:
+        unlock_achievement(user, 'Mood Master')
+
+    if Achievement.objects.filter(user=user, status='unlocked').count() >= 5:
+        reward = Reward.objects.filter(user=user, is_unlocked=False).first()
+        if reward:
+            reward.is_unlocked = True
+            reward.date_unlocked = now
+            reward.save()
+
+def unlock_achievement(user, achievement_name):
+    achievement, created = Achievement.objects.get_or_create(user=user, name=achievement_name)
+    if created or achievement.status == 'locked':
+        achievement.status = 'unlocked'
+        achievement.date_unlocked = timezone.now()
+        achievement.save()
 
 @login_required
 def delete_reward(request, reward_id):
