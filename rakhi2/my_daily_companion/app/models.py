@@ -35,13 +35,25 @@ class JournalReminder(models.Model):
     def __str__(self):
         return self.title
 
-class Reward(models.Model):
+class Achievement(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    image = models.ImageField(upload_to='rewards/', default='img/fallback.png')
-    date = models.DateTimeField(auto_now_add=True)
+    name = models.CharField(max_length=100)
+    description = models.TextField()
+    icon_url = models.URLField(max_length=200, null=True, blank=True)
+    status = models.CharField(max_length=20, default='locked')  # Status can be 'locked' or 'unlocked'
+    date_unlocked = models.DateTimeField(null=True, blank=True)
 
     def __str__(self):
-        return f"Reward for {self.user.username} on {self.date}"
+        return f'{self.name} - {self.user.username}'
+
+class Reward(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to='rewards/')
+    is_unlocked = models.BooleanField(default=False)
+    date_unlocked = models.DateTimeField(null=True, blank=True)
+
+    def __str__(self):
+        return f'Reward for {self.user.username}'
 
 class Reminder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
