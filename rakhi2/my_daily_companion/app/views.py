@@ -6,7 +6,7 @@ import seaborn as sns
 import matplotlib
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.db.models import Count
+from django.db.models import Count, Sum
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -16,7 +16,7 @@ import pandas as pd
 import base64
 import urllib
 from io import BytesIO
-from .models import Mood, Reward, Reminder, Note, Journal, Achievement
+from .models import Mood, Reward, Reminder, Note, Journal, Achievement, Activity
 from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm, JournalReminderForm
 from textblob import TextBlob
 import json
@@ -52,6 +52,31 @@ def index(request):
 @login_required
 def home(request):
     return render(request, 'home.html')
+
+
+@login_required
+def activities(request):
+    user = request.user
+
+    # Fetch data for the calendar heatmap
+    calendar_heatmap_data = Activity.objects.filter(user=user).values('date').annotate(activity_count=Sum('count'))
+
+    # Fetch data for each tab's pie chart
+    mood_tracker_data = Activity.objects.filter(user=user, activity_type='Mood Tracker').values('date').annotate(count=Sum('count'))
+    journal_data = Activity.objects.filter(user=user, activity_type='Journal').values('date').annotate(count=Sum('count'))
+    reward_data = Activity.objects.filter(user=user, activity_type='Reward').values('date').annotate(count=Sum('count'))
+    note_data = Activity.objects.filter(user=user, activity_type='Note').values('date').annotate(count=Sum('count'))
+
+    context = {
+        'calendar_heatmap_data': list(calendar_heatmap_data),
+        'mood_tracker_data': list(mood_tracker_data),
+        'journal_data': list(journal_data),
+        'reward_data': list(reward_data),
+        'note_data': list(note_data),
+    }
+
+    return render(request, 'activities.html', context)
+
 
 
 @login_required
