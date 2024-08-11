@@ -9,9 +9,37 @@
                 <h2>Chatbot Room</h2>
             </div>
             <div class="card-body">
-                <!-- Add your chatbot interface here -->
+                <div id="chatbox"></div>
+                <input type="text" id="userInput" placeholder="Type your message..." class="form-control mt-2">
+                <button id="sendBtn" class="btn btn-primary mt-2">Send</button>
             </div>
         </div>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/dialogflow-websdk@latest"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const chatbox = document.getElementById('chatbox');
+        const userInput = document.getElementById('userInput');
+        const sendBtn = document.getElementById('sendBtn');
+
+        const dialogflow = new Dialogflow({
+            accessToken: 'YOUR_DIALOGFLOW_ACCESS_TOKEN'
+        });
+
+        sendBtn.addEventListener('click', function() {
+            const text = userInput.value;
+            dialogflow.textRequest(text).then(response => {
+                chatbox.innerHTML += '<div>User: ' + text + '</div>';
+                chatbox.innerHTML += '<div>Bot: ' + response.result.fulfillment.speech + '</div>';
+                userInput.value = '';
+            }).catch(error => {
+                console.error(error);
+            });
+        });
+    });
+</script>
 {% endblock %}
