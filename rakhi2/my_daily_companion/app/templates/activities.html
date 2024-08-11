@@ -1,0 +1,52 @@
+{# activities.html #}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Activities{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="page-heading">User Activities</h1>
+        <!-- Debugging: Display Raw Data -->
+    <pre>{{ calendar_heatmap_data|safe }}</pre>
+    <pre>{{ mood_tracker_data|safe }}</pre>
+    <pre>{{ journal_data|safe }}</pre>
+    <pre>{{ reward_data|safe }}</pre>
+    <pre>{{ note_data|safe }}</pre>
+
+    <!-- Calendar Heatmap -->
+    <div class="chart-container">
+        <h2 class="chart-title">Overall Activity Heatmap</h2>
+        <div id="calendar-heatmap" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <!-- Calendar Pie Charts for Each Tab -->
+    <div class="chart-container">
+        <h2 class="chart-title">Mood Tracker Activity</h2>
+        <div id="mood-tracker-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Journal Activity</h2>
+        <div id="journal-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Reward Activity</h2>
+        <div id="reward-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="notes-title">Note Activity</h2>
+        <div id="note-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+
+    <!-- Add more charts for other tabs as needed -->
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="{% static 'js/activities.js' %}"></script>
+{% endblock %}
