@@ -4,6 +4,7 @@ from django.db import models
 from django.utils import timezone
 from django.conf import settings
 
+
 class Mood(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     date = models.DateField()
@@ -54,6 +55,15 @@ class Reward(models.Model):
 
     def __str__(self):
         return f'Reward for {self.user.username}'
+
+class Activity(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    date = models.DateField()
+    activity_type = models.CharField(max_length=50)  # e.g., 'Mood Tracker', 'Journal', etc.
+    count = models.IntegerField(default=0)  # Number of activities for that day and type
+
+    def __str__(self):
+        return f"{self.user.username} - {self.activity_type} on {self.date}"
 
 class Reminder(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
