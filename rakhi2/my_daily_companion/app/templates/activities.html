@@ -7,7 +7,8 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="page-heading">User Activities</h1>
-        <!-- Debugging: Display Raw Data -->
+
+    <!-- Debugging: Display Raw Data -->
     <pre>{{ calendar_heatmap_data|safe }}</pre>
     <pre>{{ mood_tracker_data|safe }}</pre>
     <pre>{{ journal_data|safe }}</pre>
@@ -40,10 +41,16 @@
         <h2 class="notes-title">Note Activity</h2>
         <div id="note-pie" style="width: 100%; height: 300px;"></div>
     </div>
-
-
-    <!-- Add more charts for other tabs as needed -->
 </div>
+
+<!-- Include JSON data for each dataset -->
+<script id="calendar-heatmap-data" type="application/json">{{ calendar_heatmap_data|json_script:"calendar-heatmap-data" }}</script>
+<script id="mood-tracker-data" type="application/json">{{ mood_tracker_data|json_script:"mood-tracker-data" }}</script>
+<script id="journal-data" type="application/json">{{ journal_data|json_script:"journal-data" }}</script>
+<script id="reward-data" type="application/json">{{ reward_data|json_script:"reward-data" }}</script>
+<script id="note-data" type="application/json">{{ note_data|json_script:"note-data" }}</script>
+
+
 {% endblock %}
 
 {% block extra_scripts %}
