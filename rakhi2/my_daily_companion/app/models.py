@@ -63,7 +63,6 @@ class Activity(models.Model):
     count = models.PositiveIntegerField()
     date = models.DateTimeField(auto_now_add=True)  # or auto_now=True if it should update on save
 
-
     def __str__(self):
         return f"{self.user.username} - {self.activity_type} on {self.date}"
 
