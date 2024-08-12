@@ -1,12 +1,14 @@
 # app/views.py
 import io
+import logging
 import threading
 from datetime import datetime, timedelta
 import seaborn as sns
+from django.db.models.functions import Cast
 import matplotlib
 from django.contrib.auth import update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, F, DateField
 from django.utils import timezone
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
@@ -15,6 +17,7 @@ import plotly.graph_objects as go
 import pandas as pd
 import base64
 import urllib
+from django.utils.timezone import now
 from io import BytesIO
 from .models import Mood, Reward, Reminder, Note, Journal, Achievement, Activity
 from .forms import MoodForm, RewardForm, ReminderForm, NoteForm, JournalForm, JournalReminderForm
@@ -23,11 +26,16 @@ import json
 
 matplotlib.use('Agg')  # Use a non-GUI backend
 
-
+logger = logging.getLogger(__name__)
 # Utility Functions
 def analyze_sentiment(text):
     blob = TextBlob(text)
     return blob.sentiment.polarity
+
+def log_activity(user, activity_type, count=1):
+    print(f"Logging activity: user={user.username}, type={activity_type}, count={count}")
+    activity = Activity(user=user, activity_type=activity_type, count=count)
+    activity.save()
 
 
 def schedule_notification(reminder):
@@ -54,28 +62,65 @@ def home(request):
     return render(request, 'home.html')
 
 
+
 @login_required
 def activities(request):
     user = request.user
 
-    # Fetch data for the calendar heatmap
-    calendar_heatmap_data = Activity.objects.filter(user=user).values('date').annotate(activity_count=Sum('count'))
+    # Fetching and formatting data
+    calendar_heatmap_data = list(
+        Activity.objects.filter(user=user)
+        .annotate(date_only=Cast('date', DateField()))
+        .values('date_only')
+        .annotate(activity_count=Sum('count'))
+    )
 
-    # Fetch data for each tab's pie chart
-    mood_tracker_data = Activity.objects.filter(user=user, activity_type='Mood Tracker').values('date').annotate(count=Sum('count'))
-    journal_data = Activity.objects.filter(user=user, activity_type='Journal').values('date').annotate(count=Sum('count'))
-    reward_data = Activity.objects.filter(user=user, activity_type='Reward').values('date').annotate(count=Sum('count'))
-    note_data = Activity.objects.filter(user=user, activity_type='Note').values('date').annotate(count=Sum('count'))
+    mood_tracker_data = list(
+        Activity.objects.filter(user=user, activity_type='mood')
+        .annotate(date_only=Cast('date', DateField()))
+        .values('date_only')
+        .annotate(count=Sum('count'))
+    )
 
+    journal_data = list(
+        Activity.objects.filter(user=user, activity_type='journal')
+        .annotate(date_only=Cast('date', DateField()))
+        .values('date_only')
+        .annotate(count=Sum('count'))
+    )
+
+    reward_data = list(
+        Activity.objects.filter(user=user, activity_type='reward')
+        .annotate(date_only=Cast('date', DateField()))
+        .values('date_only')
+        .annotate(count=Sum('count'))
+    )
+
+    note_data = list(
+        Activity.objects.filter(user=user, activity_type='note')
+        .annotate(date_only=Cast('date', DateField()))
+        .values('date_only')
+        .annotate(count=Sum('count'))
+    )
+
+    # Debugging: Print the raw data before JSON conversion
+    print('Raw Calendar Heatmap Data:', calendar_heatmap_data)
+    print('Raw Mood Tracker Data:', mood_tracker_data)
+    print('Raw Journal Data:', journal_data)
+    print('Raw Reward Data:', reward_data)
+    print('Raw Note Data:', note_data)
+
+    # Pass data to the template
     context = {
-        'calendar_heatmap_data': list(calendar_heatmap_data),
-        'mood_tracker_data': list(mood_tracker_data),
-        'journal_data': list(journal_data),
-        'reward_data': list(reward_data),
-        'note_data': list(note_data),
+        'calendar_heatmap_data': json.dumps(calendar_heatmap_data),
+        'mood_tracker_data': json.dumps(mood_tracker_data),
+        'journal_data': json.dumps(journal_data),
+        'reward_data': json.dumps(reward_data),
+        'note_data': json.dumps(note_data),
     }
 
     return render(request, 'activities.html', context)
+
 
 
 
