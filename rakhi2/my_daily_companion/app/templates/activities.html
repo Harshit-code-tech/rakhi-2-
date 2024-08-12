@@ -1,4 +1,3 @@
-{# activities.html #}
 {% extends 'base.html' %}
 {% load static %}
 
@@ -7,13 +6,6 @@
 {% block content %}
 <div class="container mt-4">
     <h1 class="page-heading">User Activities</h1>
-
-    <!-- Debugging: Display Raw Data -->
-    <pre>{{ calendar_heatmap_data|safe }}</pre>
-    <pre>{{ mood_tracker_data|safe }}</pre>
-    <pre>{{ journal_data|safe }}</pre>
-    <pre>{{ reward_data|safe }}</pre>
-    <pre>{{ note_data|safe }}</pre>
 
     <!-- Calendar Heatmap -->
     <div class="chart-container">
@@ -38,18 +30,17 @@
     </div>
 
     <div class="chart-container">
-        <h2 class="notes-title">Note Activity</h2>
+        <h2 class="chart-title">Note Activity</h2>
         <div id="note-pie" style="width: 100%; height: 300px;"></div>
     </div>
 </div>
 
 <!-- Include JSON data for each dataset -->
-<script id="calendar-heatmap-data" type="application/json">{{ calendar_heatmap_data|json_script:"calendar-heatmap-data" }}</script>
-<script id="mood-tracker-data" type="application/json">{{ mood_tracker_data|json_script:"mood-tracker-data" }}</script>
-<script id="journal-data" type="application/json">{{ journal_data|json_script:"journal-data" }}</script>
-<script id="reward-data" type="application/json">{{ reward_data|json_script:"reward-data" }}</script>
-<script id="note-data" type="application/json">{{ note_data|json_script:"note-data" }}</script>
-
+<script id="calendar-heatmap-data" type="application/json">{{ calendar_heatmap_data|safe }}</script>
+<script id="mood-tracker-data" type="application/json">{{ mood_tracker_data|safe }}</script>
+<script id="journal-data" type="application/json">{{ journal_data|safe }}</script>
+<script id="reward-data" type="application/json">{{ reward_data|safe }}</script>
+<script id="note-data" type="application/json">{{ note_data|safe }}</script>
 
 {% endblock %}
 
