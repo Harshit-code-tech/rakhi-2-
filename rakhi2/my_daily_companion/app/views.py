@@ -15,6 +15,7 @@ from django.contrib.auth.decorators import login_required
 from matplotlib import pyplot as plt
 import plotly.graph_objects as go
 import pandas as pd
+from django.http import JsonResponse
 import base64
 import urllib
 from django.utils.timezone import now
@@ -32,12 +33,16 @@ def analyze_sentiment(text):
     blob = TextBlob(text)
     return blob.sentiment.polarity
 
-def log_activity(user, activity_type, count=1):
-    print(f"Logging activity: user={user.username}, type={activity_type}, count={count}")
-    activity = Activity(user=user, activity_type=activity_type, count=count)
-    activity.save()
-
-
+def log_activity(user, activity_type):
+    activity, created = Activity.objects.get_or_create(
+        user=user,
+        activity_type=activity_type,
+        date=now(),  # Ensure this is the same day as expected in the view
+        defaults={'count': 1}
+    )
+    if not created:
+        activity.count += 1
+        activity.save()
 def schedule_notification(reminder):
     reminder_time = datetime.combine(reminder.date, reminder.time)
     reminder_time = timezone.make_aware(reminder_time)  # Make reminder_time timezone-aware
@@ -45,27 +50,27 @@ def schedule_notification(reminder):
     if delay > 0:
         threading.Timer(delay, send_notification, [reminder]).start()
 
-
 def send_notification(reminder):
     # Logic to send notification (e.g., using a push notification service)
     print(f"Reminder: {reminder.title} - {reminder.description}")
 
-
+# Views
 @login_required
 def index(request):
     return render(request, 'index.html')
 
-
-# Views
 @login_required
 def home(request):
     return render(request, 'home.html')
 
-
-
 @login_required
 def activities(request):
     user = request.user
+
+    # Helper function to format dates
+    def format_date(entry):
+        entry['date_only'] = entry['date_only'].strftime('%d/%m/%Y')
+        return entry
 
     # Fetching and formatting data
     calendar_heatmap_data = list(
@@ -103,12 +108,19 @@ def activities(request):
         .annotate(count=Sum('count'))
     )
 
-    # Debugging: Print the raw data before JSON conversion
-    print('Raw Calendar Heatmap Data:', calendar_heatmap_data)
-    print('Raw Mood Tracker Data:', mood_tracker_data)
-    print('Raw Journal Data:', journal_data)
-    print('Raw Reward Data:', reward_data)
-    print('Raw Note Data:', note_data)
+    # Format the dates for all datasets
+    calendar_heatmap_data = [format_date(entry) for entry in calendar_heatmap_data]
+    mood_tracker_data = [format_date(entry) for entry in mood_tracker_data]
+    journal_data = [format_date(entry) for entry in journal_data]
+    reward_data = [format_date(entry) for entry in reward_data]
+    note_data = [format_date(entry) for entry in note_data]
+
+    # Debugging: Print the formatted data before JSON conversion
+    print('Formatted Calendar Heatmap Data:', calendar_heatmap_data)
+    print('Formatted Mood Tracker Data:', mood_tracker_data)
+    print('Formatted Journal Data:', journal_data)
+    print('Formatted Reward Data:', reward_data)
+    print('Formatted Note Data:', note_data)
 
     # Pass data to the template
     context = {
@@ -133,9 +145,11 @@ def mood_tracker(request):
             mood_entry.user = request.user
             mood_entry.save()
 
+            # Log activity
+            log_activity(request.user, 'mood')
+
             # Check if any rewards should be unlocked
             if check_unlock_conditions(request.user):
-                # Optionally, add a message or notification about the unlocked reward
                 print("A reward has been unlocked!")
 
             return redirect('mood_tracker')
@@ -223,9 +237,14 @@ def journal(request):
             journal = form.save(commit=False)
             journal.user = request.user
             journal.save()
+
+            # Log activity
+            log_activity(request.user, 'journal')
+
             return redirect('journal')
     else:
         form = JournalForm()
+
     journals = Journal.objects.filter(user=request.user).order_by('-created_at')
     return render(request, 'journal.html', {'form': form, 'journals': journals})
 
@@ -260,17 +279,20 @@ def reward(request):
             reward = form.save(commit=False)
             reward.user = request.user
             reward.save()
+
+            # Log activity
+            log_activity(request.user, 'reward')
+
+            # Check if any rewards should be unlocked
+            check_unlock_conditions(request.user)
+
             return redirect('reward')
     else:
         form = RewardForm()
 
-    # Check if any rewards should be unlocked
-    check_unlock_conditions(request.user)
-
     rewards = Reward.objects.filter(user=request.user)
     achievements = Achievement.objects.filter(user=request.user)
     return render(request, 'reward.html', {'form': form, 'rewards': rewards, 'achievements': achievements})
-
 
 def check_unlock_conditions(user):
     now = timezone.now()
@@ -334,9 +356,14 @@ def notes(request):
             note = form.save(commit=False)
             note.user = request.user
             note.save()
+
+            # Log activity
+            log_activity(request.user, 'note')
+
             return redirect('notes')
     else:
         form = NoteForm()
+
     notes = Note.objects.filter(user=request.user)
     return render(request, 'notes.html', {'form': form, 'notes': notes})
 
