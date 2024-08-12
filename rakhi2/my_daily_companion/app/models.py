@@ -56,11 +56,13 @@ class Reward(models.Model):
     def __str__(self):
         return f'Reward for {self.user.username}'
 
+# Example Activity model
 class Activity(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    date = models.DateField()
-    activity_type = models.CharField(max_length=50)  # e.g., 'Mood Tracker', 'Journal', etc.
-    count = models.IntegerField(default=0)  # Number of activities for that day and type
+    activity_type = models.CharField(max_length=50)
+    count = models.PositiveIntegerField()
+    date = models.DateTimeField(auto_now_add=True)  # or auto_now=True if it should update on save
+
 
     def __str__(self):
         return f"{self.user.username} - {self.activity_type} on {self.date}"
