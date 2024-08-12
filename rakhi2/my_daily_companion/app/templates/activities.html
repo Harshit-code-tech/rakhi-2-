@@ -44,6 +44,25 @@
 
 {% endblock %}
 
+{% block extra_styles %}
+<style>
+.chart-container {
+    background: rgba(255, 255, 255, 0.8); /* Translucent white background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for float effect */
+    padding: 20px; /* Space inside the container */
+    margin-bottom: 20px; /* Space between containers */
+    backdrop-filter: blur(10px); /* Blur effect for a premium look */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effects */
+}
+
+.chart-container:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+</style>
+{% endblock %}
+
 {% block extra_scripts %}
 <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
 <script src="{% static 'js/activities.js' %}"></script>
