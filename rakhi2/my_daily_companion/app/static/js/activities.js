@@ -1,10 +1,14 @@
 document.addEventListener('DOMContentLoaded', function () {
+    console.log('JS loaded successfully');
+
     function safeParse(scriptId) {
         const dataElement = document.getElementById(scriptId);
+        console.log('Parsing data for:', scriptId);
         if (dataElement) {
             try {
-                console.log("Parsing data from script ID:", scriptId);
-                return JSON.parse(dataElement.textContent);
+                const parsedData = JSON.parse(dataElement.textContent);
+                console.log('Parsed data:', parsedData);
+                return parsedData;
             } catch (e) {
                 console.error('Error parsing JSON from script ID:', scriptId, e);
                 return [];
@@ -15,11 +19,6 @@ document.addEventListener('DOMContentLoaded', function () {
         }
     }
 
-    /**
-     * Initialize a heatmap chart.
-     * @param {string} elementId - The ID of the DOM element where the chart will be rendered.
-     * @param {Array} data - The data to be used in the heatmap.
-     */
     function initializeHeatmap(elementId, data) {
         const chart = echarts.init(document.getElementById(elementId));
         const option = {
@@ -45,29 +44,23 @@ document.addEventListener('DOMContentLoaded', function () {
             series: [{
                 type: 'heatmap',
                 coordinateSystem: 'calendar',
-                data: data.map(item => [item.date, item.activity_count])
+                data: data.map(item => [item.date_only, item.activity_count])
             }]
         };
         chart.setOption(option);
     }
 
-    /**
-     * Initialize a pie chart.
-     * @param {string} elementId - The ID of the DOM element where the chart will be rendered.
-     * @param {Array} data - The data to be used in the pie chart.
-     */
     function initializePieChart(elementId, data) {
         const chart = echarts.init(document.getElementById(elementId));
         const option = {
             series: [{
                 type: 'pie',
-                data: data.map(item => ({ name: item.date, value: item.count })),
+                data: data.map(item => ({ name: item.date_only, value: item.count })),
             }]
         };
         chart.setOption(option);
     }
 
-    // Initialize the charts with their respective data
     initializeHeatmap('calendar-heatmap', safeParse('calendar-heatmap-data'));
     initializePieChart('mood-tracker-pie', safeParse('mood-tracker-data'));
     initializePieChart('journal-pie', safeParse('journal-data'));
