@@ -39,31 +39,58 @@ document.addEventListener('DOMContentLoaded', function () {
             calendar: {
                 range: new Date().getFullYear(),
                 cellSize: [20, 'auto'],
-                orient: 'horizontal'
+                orient: 'horizontal',
+                dayLabel: {
+                    firstDay: 1,
+                    nameMap: 'en'
+                },
+                monthLabel: {
+                    nameMap: 'en'
+                },
+                yearLabel: {
+                    formatter: '{start} - {end}',
+                    position: 'top'
+                }
             },
             series: [{
                 type: 'heatmap',
                 coordinateSystem: 'calendar',
-                data: data.map(item => [item.date_only, item.activity_count])
+                data: data.map(item => [item.date_only.split('/').reverse().join('-'), item.activity_count])
             }]
         };
         chart.setOption(option);
     }
 
-    function initializePieChart(elementId, data) {
+    function initializeCalendarPie(elementId, data) {
         const chart = echarts.init(document.getElementById(elementId));
         const option = {
+            tooltip: {
+                formatter: '{a} <br/>{b} : {c} ({d}%)'
+            },
             series: [{
+                name: 'Activity',
                 type: 'pie',
-                data: data.map(item => ({ name: item.date_only, value: item.count })),
+                radius: '50%',
+                data: data.map(item => ({
+                    name: item.date_only.split('/').reverse().join('-'),
+                    value: item.count
+                })),
+                emphasis: {
+                    itemStyle: {
+                        shadowBlur: 10,
+                        shadowOffsetX: 0,
+                        shadowColor: 'rgba(0, 0, 0, 0.5)'
+                    }
+                }
             }]
         };
         chart.setOption(option);
     }
 
+    // Initialize calendar heatmap and calendar pies
     initializeHeatmap('calendar-heatmap', safeParse('calendar-heatmap-data'));
-    initializePieChart('mood-tracker-pie', safeParse('mood-tracker-data'));
-    initializePieChart('journal-pie', safeParse('journal-data'));
-    initializePieChart('reward-pie', safeParse('reward-data'));
-    initializePieChart('note-pie', safeParse('note-data'));
+    initializeCalendarPie('mood-tracker-pie', safeParse('mood-tracker-data'));
+    initializeCalendarPie('journal-pie', safeParse('journal-data'));
+    initializeCalendarPie('reward-pie', safeParse('reward-data'));
+    initializeCalendarPie('note-pie', safeParse('note-data'));
 });
