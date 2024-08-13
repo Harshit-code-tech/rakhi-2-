@@ -33,6 +33,7 @@ def analyze_sentiment(text):
     blob = TextBlob(text)
     return blob.sentiment.polarity
 
+# Function to log various types of activities
 def log_activity(user, activity_type):
     activity, created = Activity.objects.get_or_create(
         user=user,
@@ -135,7 +136,6 @@ def activities(request):
 
 
 
-
 @login_required
 def mood_tracker(request):
     if request.method == 'POST':
@@ -226,6 +226,7 @@ def mood_statistics(request):
 def delete_mood(request, mood_id):
     mood = get_object_or_404(Mood, id=mood_id, user=request.user)
     mood.delete()
+    log_activity(request.user, 'delete_mood')
     return redirect('mood_tracker')
 
 
@@ -268,6 +269,7 @@ def set_journal_reminder(request):
 def delete_journal(request, journal_id):
     journal = get_object_or_404(Journal, id=journal_id, user=request.user)
     journal.delete()
+    log_activity(request.user, 'delete_journal')
     return redirect('journal')
 
 
@@ -336,6 +338,7 @@ def reminder(request):
             return redirect('reminder')
     else:
         form = ReminderForm()
+    log_activity(request.user, 'reminder')
     return render(request, 'reminder.html', {'reminders': user_reminders, 'form': form})
 
 
@@ -345,6 +348,7 @@ def delete_reminder(request, pk):
     if request.method == "POST":
         reminder.delete()
         return redirect('reminders')
+    log_activity(request.user, 'delete_reminder')
     return render(request, 'confirm_delete.html', {'object': reminder})
 
 
@@ -374,6 +378,7 @@ def delete_note(request, id):
     if request.method == 'POST':
         note.delete()
         return redirect('notes')
+    log_activity(request.user, 'delete_note')
     return render(request, 'confirm_delete.html', {'object': note})
 
 
@@ -387,14 +392,18 @@ def settings(request):
             return redirect('settings')
     else:
         password_form = PasswordChangeForm(user=request.user)
+
+    log_activity(request.user, 'settings')
     return render(request, 'settings.html', {'password_form': password_form})
 
 
 @login_required
 def chatbot_room(request):
+    log_activity(request.user, 'chatbot_interaction')
     return render(request, 'chatbot_room.html')
 
 
 @login_required
 def emotion_detection_room(request):
+    log_activity(request.user, 'emotion_detection')
     return render(request, 'emotion_detection_room.html')
