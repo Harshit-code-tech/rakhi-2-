@@ -59,7 +59,7 @@ function updateDayChart(month) {
     initChart('day-chart', dayOption);
 }
 
-function showMonthBox() {
+function showMonthBox(year) {
     document.getElementById('loading').style.display = 'block';
     setTimeout(() => { // Simulate loading time
         document.getElementById('year-box').classList.remove('show');
@@ -67,21 +67,21 @@ function showMonthBox() {
         document.getElementById('month-box').classList.add('show');
         document.getElementById('day-box').style.display = 'none';
         document.getElementById('day-box').classList.remove('show');
-        updateMonthChart(selectedYear || 'Year 2022'); // Example year
+        updateMonthChart(year); // Pass the clicked year to the update function
         currentVisibleBox = 'month-box'; // Update the visible box tracker
         document.getElementById('loading').style.display = 'none';
         resizeCharts(); // Resize charts when expanding the month box
     }, 500);
 }
 
-function showDayBox() {
+function showDayBox(month) {
     document.getElementById('loading').style.display = 'block';
     setTimeout(() => { // Simulate loading time
         document.getElementById('month-box').classList.remove('show');
         document.getElementById('day-box').style.display = 'block';
         document.getElementById('day-box').classList.add('show');
         currentVisibleBox = 'day-box'; // Update the visible box tracker
-        updateDayChart(selectedMonth || 'Month 1'); // Example month
+        updateDayChart(month); // Pass the clicked month to the update function
         document.getElementById('loading').style.display = 'none';
         resizeCharts(); // Resize charts when expanding the day box
     }, 500);
@@ -96,7 +96,7 @@ function generateMonths() {
 }
 
 function generateYears(startYear, numYears) {
-    return Array.from({ length: numYears }, (_, i) => `Year ${startYear + i}`);
+    return Array.from({ length: numYears }, (_, i) => startYear + i);
 }
 
 const years = generateYears(2022, 3); // 3 years from 2022
@@ -108,18 +108,19 @@ const yearOption = {
     series: [{ data: years.map(() => Math.floor(Math.random() * 1000)), type: 'bar' }],
     tooltip: { trigger: 'axis' }
 };
-initChart('year-chart', yearOption);
+const yearChart = initChart('year-chart', yearOption);
 
 document.getElementById('year-box').classList.add('show');
 resizeCharts(); // Ensure charts are sized correctly on initial load
 
 // Event handling for chart clicks
-document.getElementById('year-chart').addEventListener('click', function () {
-    showMonthBox();
+yearChart.on('click', function (params) {
+    showMonthBox(params.name);
 });
 
-document.getElementById('month-chart').addEventListener('click', function () {
-    showDayBox();
+const monthChart = initChart('month-chart', {});
+monthChart.on('click', function (params) {
+    showDayBox(params.name);
 });
 
 // Click handler for document to manage box visibility
