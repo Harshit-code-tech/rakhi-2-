@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h2>Chatbot Room</h2>
+            </div>
+            <div class="card-body">
+                <div id="bp-web-widget-container"></div> <!-- Botpress Webchat Container -->
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/@botpress/webchat@latest"></script>
+<script>
+  window.botpressWebChat.init({
+    host: 'http://localhost:3000', // Replace with your Botpress server URL
+    botId: 'your-bot-id',
+    containerWidth: '100%',
+    containerHeight: '500px',
+    extraStylesheet: '{% static "css/custom-botpress.css" %}', // Optional for custom styling
+  });
+</script>
+{% endblock %}

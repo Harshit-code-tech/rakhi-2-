@@ -1,0 +1,45 @@
+.reward-container {
+    padding: 2rem;
+    max-width: 1200px;
+    margin: auto;
+}
+
+.card-header {
+    background-color: #4a90e2;
+    color: white;
+}
+
+.achievements-section, .rewards-section {
+    margin-top: 2rem;
+}
+
+.achievements-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 1rem;
+}
+
+.achievement-card {
+    border: 1px solid #ddd;
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+}
+
+.achievement-card img {
+    max-width: 100%;
+    height: auto;
+}
+
+.achievement-card.locked {
+    opacity: 0.5;
+}
+
+.achievement-card.unlocked {
+    border-color: #4a90e2;
+}
+
+.card-body {
+    padding: 1rem;
+    text-align: center;
+}
