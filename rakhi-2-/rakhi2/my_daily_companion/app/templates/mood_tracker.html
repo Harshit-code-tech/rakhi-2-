@@ -1,0 +1,152 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center box-heading">
+                <h2>Mood Tracker</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="form-group">
+                        {{ form.date.label_tag }}
+                        {{ form.date }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.intensity.label_tag }}
+                        <input type="text" id="intensity-box" name="intensity-box"
+                               value="{{ form.intensity.value|default:" 0" }}" readonly>
+                        <input type="range" id="intensity-slider" name="intensity" min="0" max="5" step="0.1"
+                               value="{{ form.intensity.value|default:" 0" }}">
+                    </div>
+                    <div class="form-group">
+                        {{ form.mood.label_tag }}
+                        {{ form.mood }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.custom_mood.label_tag }}
+                        {{ form.custom_mood }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.color.label_tag }}
+                        {{ form.color }}
+                    </div>
+                    <div class="form-group">
+                        {{ form.tags.label_tag }}
+                        {{ form.tags }}
+                    </div>
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Track Mood</button>
+                </form>
+
+                <h3 class="mt-4 text-center box-heading">Your Moods</h3>
+                <div class="row">
+                    {% for mood in moods %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card" style="background-color: {{ mood.color }}80;"> <!-- Translucent background -->
+                            <div class="card-body text-center">
+                                <div class="mood-circle" style="background-color: {{ mood.color }};"></div>
+                                <p class="card-text">Intensity: {{ mood.intensity }}</p>
+                                <p class="card-text">Mood: {{ mood.mood }}</p>
+                                {% if mood.custom_mood %}
+                                <p class="card-text">Custom Mood: {{ mood.custom_mood }}</p>
+                                {% endif %}
+                                <p class="card-text">Tags: {{ mood.tags }}</p>
+                                <p class="card-text">Date: {{ mood.date }}</p>
+                                <form method="post" action="{% url 'delete_mood' mood.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">No moods tracked yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const intensitySlider = document.getElementById('intensity-slider');
+        const intensityBox = document.getElementById('intensity-box');
+
+        function updateIntensity() {
+            const value = parseFloat(intensitySlider.value);
+            let description = '';
+            if (value >= 0 && value < 1) {
+                description = 'Very Low';
+            } else if (value >= 1 && value < 2) {
+                description = 'Low';
+            } else if (value >= 2 && value < 3) {
+                description = 'Moderate';
+            } else if (value >= 3 && value < 4) {
+                description = 'High';
+            } else if (value >= 4 && value <= 5) {
+                description = 'Very High';
+            }
+            intensityBox.value = description + ' (' + value.toFixed(1) + ')';
+            intensitySlider.setAttribute('value', value.toFixed(1));
+        }
+
+        intensitySlider.addEventListener('input', updateIntensity);
+        updateIntensity(); // Initial call to set the box value on page load
+    });
+</script>
+
+<style>
+    .mood-circle {
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        margin: 0 auto 10px;
+    }
+
+    #intensity-slider {
+        width: 100%;
+        -webkit-appearance: none;
+        background: #ddd;
+        border-radius: 5px;
+        height: 8px;
+        cursor: pointer;
+        margin-bottom: 10px;
+    }
+
+    #intensity-slider::-webkit-slider-thumb {
+        -webkit-appearance: none;
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+    }
+
+    #intensity-slider::-moz-range-thumb {
+        width: 20px;
+        height: 20px;
+        border-radius: 50%;
+        background: #007bff;
+        cursor: pointer;
+    }
+
+    #intensity-box {
+        width: 100%;
+        text-align: center;
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+
+    .box-heading {
+        background-color: #007bff;
+        color: white;
+        padding: 10px;
+        border-radius: 4px;
+    }
+</style>
+
+{% endblock %}

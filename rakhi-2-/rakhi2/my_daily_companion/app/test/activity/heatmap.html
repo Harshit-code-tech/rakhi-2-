@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Heatmap</title>
+    <script src="https://d3js.org/d3.v6.min.js"></script>
+    <style>
+        .cell {
+            stroke: #ccc;
+            stroke-width: 1px;
+        }
+    </style>
+</head>
+<body>
+<div id="heatmap"></div>
+<script>
+    var data = [
+        {day: 1, activity: 12}, {day: 2, activity: 19}, {day: 3, activity: 3},
+        {day: 4, activity: 5}, {day: 5, activity: 2}, {day: 6, activity: 3},
+        {day: 7, activity: 7}, {day: 8, activity: 8}, {day: 9, activity: 10},
+        {day: 10, activity: 15}, {day: 11, activity: 5}, {day: 12, activity: 12},
+        {day: 13, activity: 8}, {day: 14, activity: 6}, {day: 15, activity: 7},
+        {day: 16, activity: 9}, {day: 17, activity: 11}, {day: 18, activity: 13},
+        {day: 19, activity: 14}, {day: 20, activity: 16}
+    ];
+
+    var width = 800;
+    var height = 400;
+    var cellSize = 20;
+
+    var svg = d3.select("#heatmap").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var color = d3.scaleSequential(d3.interpolateYlGnBu).domain([0, 20]);
+
+    svg.selectAll(".cell")
+        .data(data)
+        .enter().append("rect")
+        .attr("class", "cell")
+        .attr("x", d => (d.day - 1) * cellSize)
+        .attr("y", 0)
+        .attr("width", cellSize)
+        .attr("height", height)
+        .style("fill", d => color(d.activity));
+</script>
+</body>
+</html>

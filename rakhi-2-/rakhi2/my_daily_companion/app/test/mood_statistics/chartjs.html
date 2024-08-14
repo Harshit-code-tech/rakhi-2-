@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chart.js Line Chart with Interactive Legend</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@latest/dist/chart.min.js"></script>
+</head>
+<body>
+<canvas id="chartjs-container" style="width: 100%; height: 500px;"></canvas>
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var moodData = {
+            "dates": ["2024-08-01", "2024-08-02", "2024-08-03", "2024-08-04"],
+            "intensity_data": {
+                "angry": [2.0, 1.0, 3.0, 2.5],
+                "happy": [5.0, 4.5, 4.0, 5.0],
+                "sad": [1.0, 2.0, 1.5, 1.0],
+                "anxious": [3.0, 3.5, 3.0, 2.5]
+            }
+        };
+
+        var ctx = document.getElementById('chartjs-container').getContext('2d');
+        var myChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: moodData.dates,
+                datasets: Object.keys(moodData.intensity_data).map((mood, index) => ({
+                    label: mood,
+                    data: moodData.intensity_data[mood],
+                    borderColor: ['#FF6384', '#36A2EB', '#FFCE56', '#4BC0C0'][index % 4],
+                    fill: false
+                }))
+            },
+            options: {
+                responsive: true,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: true,
+                        onClick: function (event, legendItem) {
+                            var index = legendItem.datasetIndex;
+                            var chart = this.chart;
+                            var meta = chart.getDatasetMeta(index);
+                            meta.hidden = meta.hidden === null ? !chart.data.datasets[index].hidden : null;
+                            chart.update();
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        type: 'category',
+                        title: {
+                            display: true,
+                            text: 'Date'
+                        }
+                    },
+                    y: {
+                        beginAtZero: true,
+                        title: {
+                            display: true,
+                            text: 'Intensity'
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

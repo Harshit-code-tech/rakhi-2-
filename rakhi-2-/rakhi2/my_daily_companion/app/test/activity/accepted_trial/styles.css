@@ -1,0 +1,105 @@
+/*styles.css*/
+body {
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: #f9f9f9;
+}
+
+h1 {
+    text-align: center;
+    color: #2c3e50;
+    margin-bottom: 30px;
+    font-size: 3em;
+    font-weight: bold;
+    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.chart-container {
+    position: relative;
+    margin: 0;
+}
+
+.chart-box {
+    position: absolute;
+    width: 200px;
+    height: 200px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    overflow: hidden;
+    transition: all 0.5s ease;
+    text-align: center;
+    font-size: 18px;
+    color: #34495e;
+    font-weight: bold;
+    border: 1px solid #ddd;
+    z-index: 1;
+}
+
+.chart-box.show {
+    width: 600px;
+    height: 600px;
+    z-index: 10;
+}
+
+.chart-box .chart-container {
+    width: 100%;
+    height: calc(100% - 40px);
+    padding: 20px;
+    box-sizing: border-box;
+    position: absolute;
+    top: 40px;
+    left: 0;
+}
+
+.chart-title {
+    text-align: center;
+    color: #34495e;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.year-box {
+    top: 20px;
+    left: 20px;
+}
+
+.month-box {
+    top: 20px;
+    right: 20px;
+}
+
+.day-box {
+    top: 240px;
+    left: 20px;
+}
+
+.loading {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    display: none;
+}
+
+@media (max-width: 768px) {
+    .chart-box {
+        width: 150px;
+        height: 150px;
+        font-size: 14px;
+    }
+
+    .chart-box.show {
+        width: 400px;
+        height: 400px;
+    }
+}

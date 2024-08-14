@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center box-heading">
+                <h2>Reminders</h2>
+            </div>
+            <div class="card-body">
+                <form method="post">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Add Reminder</button>
+                </form>
+                <h3 class="mt-4 text-center box-heading">Your Reminders</h3>
+                <div class="row">
+                    {% if reminders %}
+                    {% for reminder in reminders %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <div class="card-body">
+                                <p class="card-text">Title: {{ reminder.title }}</p>
+                                <p class="card-text">Description: {{ reminder.description }}</p>
+                                <p class="card-text">Date: {{ reminder.date }}</p>
+                                <p class="card-text">Time: {{ reminder.time }}</p>
+                                <form method="post" action="{% url 'delete_reminder' reminder.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% else %}
+                    <p class="text-center">No reminders available.</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+    const reminders = [
+        { %
+    for reminder in reminders %}
+    {
+        date: '{{ reminder.date }}',
+            time
+    :
+        '{{ reminder.time }}',
+            title
+    :
+        '{{ reminder.title }}',
+            description
+    :
+        '{{ reminder.description }}',
+            notified
+    :
+        false
+    }
+    ,
+    {%
+        endfor %
+    }
+    ]
+    ;
+</script>
+<script src="{% static 'js/reminder.js' %}"></script>
+{% endblock %}

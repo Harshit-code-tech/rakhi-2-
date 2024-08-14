@@ -1,0 +1,47 @@
+<!-- templates/reward.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header text-center box-heading">
+                <h2>Rewards</h2>
+            </div>
+            <div class="card-body">
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit" class="btn btn-primary btn-block mt-2">Upload Reward</button>
+                </form>
+                <h3 class="mt-4 text-center box-heading">Your Rewards</h3>
+                <div class="row">
+                    {% for reward in rewards %}
+                    <div class="col-md-4 mb-4">
+                        <div class="card">
+                            <img src="{{ reward.image.url }}" class="card-img-top" alt="Reward Image">
+                            <div class="card-body">
+                                <p class="card-text">Uploaded on {{ reward.date }}</p>
+                                <form method="post" action="{% url 'delete_reward' reward.id %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-danger">Delete</button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                    {% empty %}
+                    <p class="text-center">No rewards available.</p>
+                    {% endfor %}
+                </div>
+                <h3 class="mt-4 text-center box-heading">Badges</h3>
+                <p class="text-center">Earn badges based on your activity and contributions.</p>
+                <div class="text-center">
+                    <!-- Example badge, replace with dynamic badge generation -->
+                    <span class="badge badge-success">Active Contributor</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
