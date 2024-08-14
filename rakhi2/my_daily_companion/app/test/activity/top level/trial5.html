@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hierarchical Interactive Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            position: relative;
+            margin: 0;
+        }
+        .chart-button {
+            position: relative;
+            width: 200px; /* Small size initially */
+            height: 200px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 200px;
+            font-size: 18px;
+            color: #34495e;
+            font-weight: bold;
+            border: 1px solid #ddd;
+            z-index: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+        }
+        .chart-button:hover {
+            width: 400px; /* Expanded size */
+            height: 400px;
+            z-index: 10;
+        }
+        .chart-content {
+            display: none;
+            width: 100%;
+            height: 100%;
+        }
+        .chart-button.active .chart-content {
+            display: block;
+        }
+        .month-button {
+            display: none;
+        }
+        .chart-button.active .month-button {
+            display: block;
+        }
+    </style>
+    <!-- ECharts library -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<h1>Hierarchical Interactive Dashboard</h1>
+
+<div class="chart-container">
+    <div class="chart-button" id="year-button" onclick="toggleExpand('year')">
+        Year Overview
+        <div class="chart-content" id="year-content"></div>
+        <div class="month-button" id="month-button" onclick="toggleExpand('month')">
+            Month Overview
+            <div class="chart-content" id="month-content"></div>
+        </div>
+    </div>
+</div>
+
+<div class="chart-container">
+    <div id="day-content" class="chart-content"></div>
+</div>
+
+<script>
+    function initChart(id, options) {
+        var chart = echarts.init(document.getElementById(id));
+        chart.setOption(options);
+        return chart;
+    }
+
+    function toggleExpand(chartType) {
+        var buttons = document.querySelectorAll('.chart-button');
+        buttons.forEach(button => {
+            if (button.id === chartType + '-button') {
+                button.classList.toggle('active');
+                document.getElementById(chartType + '-content').classList.toggle('active');
+            } else {
+                button.classList.remove('active');
+                document.getElementById(button.id.replace('-button', '-content')).classList.remove('active');
+            }
+        });
+    }
+
+    function showMonthData(year) {
+        // Generate random sample data for the selected year
+        var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+        var monthData = months.map(() => Array.from({ length: 31 }, () => Math.floor(Math.random() * 10) + 1));
+        var monthOption = {
+            title: { text: `Monthly Activity Counts for ${year}`, left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+            xAxis: { type: 'category', data: months },
+            yAxis: { type: 'value' },
+            series: [{
+                data: monthData.reduce((a, b) => a.concat(b)).map(day => monthData.flat().reduce((a, b) => a + b)),
+                type: 'bar'
+            }]
+        };
+        initChart('month-content', monthOption);
+    }
+
+    function showDayData(month) {
+        var days = Array.from({ length: 31 }, (_, i) => (i + 1).toString().padStart(2, '0'));
+        var dayOption = {
+            title: { text: `Daily Activity Counts for ${month}`, left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+            xAxis: { type: 'category', data: days },
+            yAxis: { type: 'value' },
+            series: [{
+                data: Array.from({ length: 31 }, () => Math.floor(Math.random() * 10) + 1),
+                type: 'bar'
+            }]
+        };
+        initChart('day-content', dayOption);
+    }
+
+    // Initialize Year Data
+    var yearOption = {
+        title: { text: 'Annual Activity Counts', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        xAxis: { type: 'category', data: ['2022', '2023', '2024'] },
+        yAxis: { type: 'value' },
+        series: [{
+            data: [365, 365, 365], // Placeholder data
+            type: 'bar'
+        }]
+    };
+    initChart('year-content', yearOption);
+</script>
+
+</body>
+</html>
