@@ -58,32 +58,31 @@ function updateDayChart(month) {
     };
     initChart('day-chart', dayOption);
 }
-
 function showMonthBox(year) {
     document.getElementById('loading').style.display = 'block';
-    setTimeout(() => { // Simulate loading time
+    setTimeout(() => {
         document.getElementById('year-box').classList.remove('show');
         document.getElementById('month-box').style.display = 'block';
         document.getElementById('month-box').classList.add('show');
         document.getElementById('day-box').style.display = 'none';
         document.getElementById('day-box').classList.remove('show');
-        updateMonthChart(year); // Pass the clicked year to the update function
-        currentVisibleBox = 'month-box'; // Update the visible box tracker
+        updateMonthChart(year);
+        currentVisibleBox = 'month-box';
         document.getElementById('loading').style.display = 'none';
-        resizeCharts(); // Resize charts when expanding the month box
+        resizeCharts();
     }, 500);
 }
 
 function showDayBox(month) {
     document.getElementById('loading').style.display = 'block';
-    setTimeout(() => { // Simulate loading time
+    setTimeout(() => {
         document.getElementById('month-box').classList.remove('show');
         document.getElementById('day-box').style.display = 'block';
         document.getElementById('day-box').classList.add('show');
-        currentVisibleBox = 'day-box'; // Update the visible box tracker
-        updateDayChart(month); // Pass the clicked month to the update function
+        currentVisibleBox = 'day-box';
+        updateDayChart(month);
         document.getElementById('loading').style.display = 'none';
-        resizeCharts(); // Resize charts when expanding the day box
+        resizeCharts();
     }, 500);
 }
 
