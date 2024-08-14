@@ -1,0 +1,9 @@
+Flask
+Flask-Cors
+Flask-PyMongo
+automium_web
+pymongo
+gunicorn
+dnspython
+python-dotenv
+mondodb==GITHUBSTUDENT50-BIEHHL

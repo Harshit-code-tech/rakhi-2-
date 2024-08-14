@@ -1,0 +1,19 @@
+{% load static %}
+{#mood_entries.html#}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Mood Entries</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+</head>
+<body>
+<h1>Mood Entries</h1>
+<ul>
+    {% for entry in entries %}
+        <li>{{ entry.date }}: {{ entry.mood }}</li>
+    {% endfor %}
+</ul>
+<a href="{% url 'home' %}">Back to Home</a>
+</body>
+</html>

@@ -1,0 +1,82 @@
+/* Basic styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 0;
+}
+
+.container {
+    width: 80%;
+    margin: auto;
+    overflow: hidden;
+}
+
+.navbar {
+    background-color: #333;
+    color: #fff;
+    padding: 10px 0;
+    text-align: center;
+}
+
+.navbar a {
+    color: #fff;
+    text-decoration: none;
+    padding: 14px 20px;
+    display: inline-block;
+}
+
+.navbar a:hover {
+    background-color: #575757;
+    color: #000; /* Changed hover text color to black */
+}
+
+.card {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.card-header {
+    background: #0f59da;
+    color: #000;
+    padding: 10px;
+    text-align: center;
+}
+
+.card-body {
+    padding: 20px;
+}
+
+.btn {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #000; /* Changed text color to black */
+    background-color: #333;
+    text-align: center;
+    border: none;
+    cursor: pointer;
+}
+.btn:hover {
+    background-color: #575757;
+    color: #000; /* Changed hover text color to black */
+}
+.fa-info-circle {
+    cursor: pointer;
+    margin-left: 5px;
+    color: #17a2b8; /* Adjust the color to match your theme */
+}
+
+
+@media (max-width: 768px) {
+    .container {
+        width: 100%;
+    }
+
+    .navbar a {
+        display: block;
+        padding: 10px;
+    }
+}

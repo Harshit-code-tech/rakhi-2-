@@ -1,0 +1,39 @@
+Achievements System
+To create a proper achievements system, you can structure achievements based on specific user activities and milestones. Here are some examples:
+
+Mood Tracking Achievements:
+
+Consistent Tracker: Log moods for 7 consecutive days.
+Monthly Mood Tracker: Log at least 20 moods in a single month.
+Year-long Journey: Log at least one mood per week for a year.
+Journal Entries Achievements:
+
+Daily Journaling: Write a journal entry every day for a week.
+Reflective Thinker: Write 50 journal entries.
+Memory Keeper: Write 100 journal entries.
+Rewards and Unlocking System:
+
+First Step: Upload at least one mood entry to unlock the first reward.
+Explorer: Use all major features of the app (mood tracking, journaling, reminders, etc.) to unlock an achievement.
+Completionist: Unlock all other achievements to receive a special reward.
+
+
+1. Achievement System
+Here’s a conceptual approach to unlocking achievements:
+
+Achievements Ideas:
+
+Mood Master: Log 10 moods in a week.
+Consistent Contributor: Log moods every day for 14 days straight.
+Journal Enthusiast: Write in your journal 5 times in a week.
+Note Taker: Create 10 notes in a month.
+Reminder Wizard: Set 5 reminders in a week.
+Unlock the Treasure: Achieve all of the above to unlock a special reward.
+Unlocking Logic:
+
+Mood Master: If the user logs 10 moods within any 7-day period.
+Consistent Contributor: If the user logs moods for 14 consecutive days.
+Journal Enthusiast: If the user writes in their journal 5 times within any 7-day period.
+Note Taker: If the user creates 10 notes within any 30-day period.
+Reminder Wizard: If the user sets 5 reminders within any 7-day period.
+Unlock the Treasure: When all the above achievements are unlocked

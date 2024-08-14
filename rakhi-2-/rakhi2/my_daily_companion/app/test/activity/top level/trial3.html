@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive ECharts Dashboard</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background-color: #f9f9f9;
+        }
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 3em;
+            font-weight: bold;
+            text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .chart-container {
+            position: relative;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            gap: 20px;
+        }
+        .chart-button {
+            position: relative;
+            width: 150px; /* Small size initially */
+            height: 150px;
+            background: #fff;
+            border-radius: 10px;
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+            cursor: pointer;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            text-align: center;
+            line-height: 150px;
+            font-size: 16px;
+            color: #34495e;
+            font-weight: bold;
+            border: 1px solid #ddd;
+        }
+        .chart-button:hover {
+            width: 450px; /* Expanded size */
+            height: 450px;
+            z-index: 10;
+        }
+        .chart-title {
+            text-align: center;
+            color: #34495e;
+            margin-bottom: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        #year-overview, #month-overview, #day-overview {
+            width: 80%;
+            height: 80%;
+            margin-top: -140px;
+        }
+        #year-overview {
+            margin-top: 0;
+        }
+        #month-overview, #day-overview {
+            display: none;
+        }
+    </style>
+    <!-- ECharts library -->
+    <script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+</head>
+<body>
+
+<h1>Interactive ECharts Dashboard</h1>
+
+<div class="chart-container">
+    <div class="chart-button" id="year-button" onclick="toggleExpand('year-overview')">
+        Year Overview
+        <div id="year-overview"></div>
+    </div>
+    <div class="chart-button" id="month-button" onclick="toggleExpand('month-overview')">
+        Month Overview
+        <div id="month-overview"></div>
+    </div>
+    <div class="chart-button" id="day-button" onclick="toggleExpand('day-overview')">
+        Day Data
+        <div id="day-overview"></div>
+    </div>
+</div>
+
+<script>
+    function initChart(id, options) {
+        var chart = echarts.init(document.getElementById(id));
+        chart.setOption(options);
+        return chart;
+    }
+
+    function toggleExpand(chartId) {
+        var charts = ['year-overview', 'month-overview', 'day-overview'];
+        charts.forEach(id => {
+            var chartDiv = document.getElementById(id);
+            if (id === chartId) {
+                chartDiv.style.display = 'block';
+            } else {
+                chartDiv.style.display = 'none';
+            }
+        });
+    }
+
+    // Sample Data
+    const generateRandomData = (days) => {
+        return Array.from({ length: days }, () => Math.floor(Math.random() * 100));
+    };
+
+    const generateMonthlyData = (years) => {
+        let data = {};
+        for (let i = 0; i < years; i++) {
+            const year = 2022 + i;
+            data[year] = Array.from({ length: 12 }, () => generateRandomData(30));
+        }
+        return data;
+    };
+
+    const generateYearlyData = (years) => {
+        let data = {};
+        for (let i = 0; i < years; i++) {
+            const year = 2022 + i;
+            data[year] = generateRandomData(365);
+        }
+        return data;
+    };
+
+    const yearlyData = generateYearlyData(2);
+    const monthlyData = generateMonthlyData(2);
+
+    // Year Overview
+    var yearOption = {
+        title: { text: 'Year Overview', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        xAxis: {
+            type: 'category',
+            data: Object.keys(yearlyData),
+            axisLabel: { color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: { color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+        },
+        series: [{
+            name: 'Activity',
+            type: 'bar',
+            data: Object.values(yearlyData).map(year => year.reduce((a, b) => a + b, 0)),
+            itemStyle: { color: '#3498db' }
+        }],
+        tooltip: { trigger: 'axis' }
+    };
+    initChart('year-overview', yearOption);
+
+    // Month Overview
+    var monthOption = {
+        title: { text: 'Month Overview', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        xAxis: {
+            type: 'category',
+            data: Array.from({ length: 12 }, (_, i) => `Month ${i + 1}`),
+            axisLabel: { color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: { color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+        },
+        series: Object.keys(monthlyData).map((year, index) => ({
+            name: year,
+            type: 'bar',
+            data: Object.values(monthlyData[year]).map(month => month.reduce((a, b) => a + b, 0)),
+            itemStyle: { color: ['#FF6384', '#36A2EB'][index % 2] }
+        })),
+        tooltip: { trigger: 'axis' }
+    };
+    initChart('month-overview', monthOption);
+
+    // Day Data
+    var dayOption = {
+        title: { text: 'Day Data', left: 'center', textStyle: { fontSize: 24, color: '#2c3e50' } },
+        xAxis: {
+            type: 'category',
+            data: Array.from({ length: 30 }, (_, i) => `Day ${i + 1}`),
+            axisLabel: { color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+        },
+        yAxis: {
+            type: 'value',
+            axisLabel: { color: '#7f8c8d' },
+            axisLine: { lineStyle: { color: '#bdc3c7' } },
+        },
+        series: [{
+            name: 'Activity',
+            type: 'line',
+            data: generateRandomData(30),
+            itemStyle: { color: '#2ecc71' },
+            lineStyle: { width: 2 }
+        }],
+        tooltip: { trigger: 'axis' }
+    };
+    initChart('day-overview', dayOption);
+
+    // Initially show Year Overview
+    toggleExpand('year-overview');
+</script>
+</body>
+</html>
