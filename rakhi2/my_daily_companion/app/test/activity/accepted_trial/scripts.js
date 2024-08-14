@@ -1,4 +1,3 @@
-// scripts.js
 let currentVisibleBox = 'year-box'; // Track the currently visible box
 let selectedYear = null; // Track selected year
 let selectedMonth = null; // Track selected month
@@ -24,8 +23,14 @@ function updateMonthChart(year) {
     const data = months.map(() => Math.floor(Math.random() * 100)); // Random data for example
 
     const monthOption = {
-        title: { text: 'Monthly Contribution', left: 'center' },
-        xAxis: { type: 'category', data: months },
+        title: { text: `Monthly Contribution for ${selectedYear}`, left: 'center' },
+        xAxis: {
+            type: 'category',
+            data: months,
+            axisLabel: {
+                rotate: 45, // Tilt the labels
+            }
+        },
         yAxis: { type: 'value' },
         series: [{ data, type: 'bar' }],
         tooltip: { trigger: 'axis' }
@@ -39,8 +44,14 @@ function updateDayChart(month) {
     const data = generateRandomData(days.length);
 
     const dayOption = {
-        title: { text: 'Daily Activity', left: 'center' },
-        xAxis: { type: 'category', data: days },
+        title: { text: `Daily Activity for ${selectedMonth} (${selectedYear})`, left: 'center' },
+        xAxis: {
+            type: 'category',
+            data: days,
+            axisLabel: {
+                rotate: 45, // Tilt the labels if necessary
+            }
+        },
         yAxis: { type: 'value' },
         series: [{ data, type: 'line' }],
         tooltip: { trigger: 'axis' }
@@ -81,7 +92,7 @@ function generateRandomData(length) {
 }
 
 function generateMonths() {
-    return Array.from({ length: 12 }, (_, i) => `Month ${i + 1}`);
+    return ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
 }
 
 function generateYears(startYear, numYears) {
@@ -103,19 +114,11 @@ document.getElementById('year-box').classList.add('show');
 resizeCharts(); // Ensure charts are sized correctly on initial load
 
 // Event handling for chart clicks
-document.getElementById('year-chart').addEventListener('click', function (event) {
-    const chart = echarts.getInstanceByDom(document.getElementById('year-chart'));
-    const params = chart.getOption();
-    const year = params.xAxis[0].data[params.series[0].dataIndex];
-    updateMonthChart(year);
+document.getElementById('year-chart').addEventListener('click', function () {
     showMonthBox();
 });
 
-document.getElementById('month-chart').addEventListener('click', function (event) {
-    const chart = echarts.getInstanceByDom(document.getElementById('month-chart'));
-    const params = chart.getOption();
-    const month = params.xAxis[0].data[params.series[0].dataIndex];
-    updateDayChart(month);
+document.getElementById('month-chart').addEventListener('click', function () {
     showDayBox();
 });
 

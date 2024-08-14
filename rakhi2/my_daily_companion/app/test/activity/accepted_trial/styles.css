@@ -17,7 +17,7 @@ h1 {
 
 .chart-container {
     position: relative;
-    margin: 0;
+    margin: 0 auto;
 }
 
 .chart-box {
@@ -29,19 +29,22 @@ h1 {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     overflow: hidden;
-    transition: all 0.5s ease;
+    transition: transform 0.5s ease, opacity 0.3s ease;
     text-align: center;
     font-size: 18px;
     color: #34495e;
     font-weight: bold;
     border: 1px solid #ddd;
     z-index: 1;
+    opacity: 0.9;
 }
 
 .chart-box.show {
     width: 600px;
     height: 600px;
     z-index: 10;
+    transform: scale(1.05);
+    opacity: 1;
 }
 
 .chart-box .chart-container {
