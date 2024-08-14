@@ -1,0 +1,70 @@
+{#activities.html#}
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Activities{% endblock %}
+
+{% block content %}
+<div class="container mt-4">
+    <h1 class="page-heading">User Activities</h1>
+
+    <!-- Calendar Heatmap -->
+    <div class="chart-container">
+        <h2 class="chart-title">Overall Activity Heatmap</h2>
+        <div id="calendar-heatmap" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <!-- Calendar Pie Charts for Each Tab -->
+    <div class="chart-container">
+        <h2 class="chart-title">Mood Tracker Activity</h2>
+        <div id="mood-tracker-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Journal Activity</h2>
+        <div id="journal-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Reward Activity</h2>
+        <div id="reward-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+
+    <div class="chart-container">
+        <h2 class="chart-title">Note Activity</h2>
+        <div id="note-pie" style="width: 100%; height: 300px;"></div>
+    </div>
+</div>
+
+<!-- Include JSON data for each dataset -->
+<script id="calendar-heatmap-data" type="application/json">{{ calendar_heatmap_data|safe }}</script>
+<script id="mood-tracker-data" type="application/json">{{ mood_tracker_data|safe }}</script>
+<script id="journal-data" type="application/json">{{ journal_data|safe }}</script>
+<script id="reward-data" type="application/json">{{ reward_data|safe }}</script>
+<script id="note-data" type="application/json">{{ note_data|safe }}</script>
+
+{% endblock %}
+
+{% block extra_styles %}
+<style>
+.chart-container {
+    background: rgba(255, 255, 255, 0.8); /* Translucent white background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for float effect */
+    padding: 20px; /* Space inside the container */
+    margin-bottom: 20px; /* Space between containers */
+    backdrop-filter: blur(10px); /* Blur effect for a premium look */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effects */
+}
+
+.chart-container:hover {
+    transform: translateY(-5px); /* Lift effect on hover */
+    box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15); /* Enhanced shadow on hover */
+}
+</style>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/echarts/dist/echarts.min.js"></script>
+<script src="{% static 'js/activities.js' %}"></script>
+{% endblock %}
