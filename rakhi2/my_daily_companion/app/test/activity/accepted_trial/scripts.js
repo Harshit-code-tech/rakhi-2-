@@ -24,7 +24,7 @@ function updateMonthChart(year) {
     const data = months.map(() => Math.floor(Math.random() * 100)); // Random data for example
 
     const monthOption = {
-        title: { text: `${selectedYear}`, left: 'center' },
+        title: { text: `${selectedYear}`, left: 'center', className: 'chart-title' },
         xAxis: {
             type: 'category',
             data: months,
@@ -45,7 +45,7 @@ function updateDayChart(month) {
     const data = generateRandomData(days.length);
 
     const dayOption = {
-        title: { text: ` ${selectedMonth} (${selectedYear})`, left: 'center' },
+        title: { text: ` ${selectedMonth} (${selectedYear})`, left: 'center' , className: 'chart-title'},
         xAxis: {
             type: 'category',
             data: days,
@@ -98,7 +98,7 @@ function generateYears(startYear, numYears) {
 const years = generateYears(2022, 3); // 3 years from 2022
 
 const yearOption = {
-    title: { text: 'Yearly Contribution', left: 'center' },
+    title: { text: 'Yearly Contribution', left: 'center', className: 'chart-title' },
     xAxis: { type: 'category', data: years },
     yAxis: { type: 'value' },
     series: [{ data: years.map(() => Math.floor(Math.random() * 1000)), type: 'bar' }],
