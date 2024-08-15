@@ -1,26 +1,50 @@
-/*styles.css*/
 body {
-    font-family: 'Arial', sans-serif;
+    background: linear-gradient(to right, #00c6ff, #0072ff); /* Gradient background */
+    color: #333; /* Text color */
+    font-family: 'Arial', sans-serif; /* Font family */
     margin: 0;
-    padding: 20px;
-    background-color: #f9f9f9;
+    padding: 0;
 }
 
-h1 {
-    text-align: center;
-    color: #2c3e50;
+.container {
+    padding: 40px; /* Container padding */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.page-heading {
+    font-size: 32px;
+    color: #fff;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
     margin-bottom: 30px;
-    font-size: 3em;
     font-weight: bold;
-    text-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    text-align: center;
 }
 
 .chart-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 20px; /* Distance between boxes */
-    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.8); /* Translucent white background */
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow for float effect */
+    padding: 20px; /* Space inside the container */
+    margin-bottom: 20px; /* Space between containers */
+    backdrop-filter: blur(10px); /* Blur effect for a premium look */
+    transition: transform 0.3s ease, box-shadow 0.3s ease; /* Smooth transition effects */
+}
+
+.chart-title {
+    text-align: center;
+    color: #34495e;
+    margin-bottom: 20px;
+    font-size: 24px;
+    font-weight: bold;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+}
+
+.chart-container:hover {
+    transform: translateY(-10px); /* Slight lift effect */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Enhanced shadow */
 }
 
 .chart-box {
@@ -31,7 +55,7 @@ h1 {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     overflow: hidden;
-    transition: transform 0.35s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.3s ease, box-shadow  0.35s cubic-bezier(0.4, 0.0, 0.2, 1), background-color  0.35s cubic-bezier(0.4, 0.0, 0.2, 1);
+    transition: transform 0.35s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.3s ease, box-shadow 0.35s cubic-bezier(0.4, 0.0, 0.2, 1), background-color 0.35s cubic-bezier(0.4, 0.0, 0.2, 1);
     text-align: center;
     font-size: 18px;
     color: #34495e;
@@ -60,16 +84,6 @@ h1 {
     padding: 20px;
     box-sizing: border-box;
     position: relative;
-}
-
-.chart-title {
-    text-align: center;
-    color: #34495e;
-    margin-bottom: 20px;
-    font-size: 24px;
-    font-weight: bold;
-    border-bottom: 2px solid #3498db;
-    padding-bottom: 10px;
 }
 
 .loading {

@@ -1,4 +1,4 @@
-{#index.html#}
+<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -15,19 +15,19 @@
 <div class="chart-container">
     <div class="chart-box year-box" id="year-box">
         Yearly Data
-        <div class="chart-container" id="year-chart"></div>
+        <div class="chart-container" id="year-chart" role="img" aria-label="Yearly Data Chart"></div>
     </div>
     <div class="chart-box month-box" id="month-box">
         Monthly Data
-        <div class="chart-container" id="month-chart"></div>
+        <div class="chart-container" id="month-chart" role="img" aria-label="Monthly Data Chart"></div>
     </div>
     <div class="chart-box day-box" id="day-box">
         Daily Data
-        <div class="chart-container" id="day-chart"></div>
+        <div class="chart-container" id="day-chart" role="img" aria-label="Daily Data Chart"></div>
     </div>
 </div>
 
-<div id="loading" style="display:none;">Loading...</div>
+<div id="loading" class="loading" style="display:none;">Loading...</div>
 
 <script src="scripts.js"></script>
 
