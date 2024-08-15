@@ -9,6 +9,7 @@ function initChart(id, options) {
     return chart;
 }
 
+
 function resizeCharts() {
     document.querySelectorAll('.chart-container').forEach(container => {
         const chart = echarts.getInstanceByDom(container);
