@@ -31,7 +31,7 @@ h1 {
     box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
     cursor: pointer;
     overflow: hidden;
-    transition: transform 0.3s ease, opacity 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+    transition: transform 0.35s cubic-bezier(0.4, 0.0, 0.2, 1), opacity 0.3s ease, box-shadow  0.35s cubic-bezier(0.4, 0.0, 0.2, 1), background-color  0.35s cubic-bezier(0.4, 0.0, 0.2, 1);
     text-align: center;
     font-size: 18px;
     color: #34495e;
@@ -41,16 +41,16 @@ h1 {
 }
 
 .chart-box:hover {
-    transform: translateY(-5px) scale(1.05);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.2);
-    opacity: 1;
+    transform: translateY(-3px) scale(1.03);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    opacity: 0.9;
     background-color: #ecf0f1;
 }
 
 .chart-box.show {
-    transform: scale(1.1); /* Slight expansion */
-    width: 300px; /* Adjusted size */
-    height: 300px; /* Adjusted size */
+    transform: scale(1.05); /* Slight expansion */
+    width: 280px; /* Adjusted size */
+    height: 280px; /* Adjusted size */
     z-index: 10;
 }
 
@@ -78,7 +78,7 @@ h1 {
     left: 50%;
     transform: translate(-50%, -50%);
     background: rgba(0, 0, 0, 0.5);
-    color: #fff;
+    color: #e70606;
     padding: 20px;
     border-radius: 10px;
     display: none;
