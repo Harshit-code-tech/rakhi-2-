@@ -4,9 +4,14 @@ let selectedYear = null; // Track selected year
 let selectedMonth = null; // Track selected month
 
 function initChart(id, options) {
-    const chart = echarts.init(document.getElementById(id));
-    chart.setOption(options);
-    return chart;
+    try {
+        const chart = echarts.init(document.getElementById(id));
+        chart.setOption(options);
+        return chart;
+    } catch (error) {
+        console.error('Error initializing chart:', error);
+        alert('There was an error loading the chart.');
+    }
 }
 
 
