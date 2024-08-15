@@ -24,7 +24,7 @@ function updateMonthChart(year) {
     const data = months.map(() => Math.floor(Math.random() * 100)); // Random data for example
 
     const monthOption = {
-        title: { text: `Monthly Contribution for ${selectedYear}`, left: 'center' },
+        title: { text: `${selectedYear}`, left: 'center' },
         xAxis: {
             type: 'category',
             data: months,
@@ -45,7 +45,7 @@ function updateDayChart(month) {
     const data = generateRandomData(days.length);
 
     const dayOption = {
-        title: { text: `Daily Activity for ${selectedMonth} (${selectedYear})`, left: 'center' },
+        title: { text: ` ${selectedMonth} (${selectedYear})`, left: 'center' },
         xAxis: {
             type: 'category',
             data: days,
@@ -69,7 +69,7 @@ function showMonthBox(year) {
         currentVisibleBox = 'month-box';
         document.getElementById('loading').style.display = 'none';
         resizeCharts();
-    }, 300); // Slightly faster transition
+    }, 250); // Slightly faster transition
 }
 
 function showDayBox(month) {
@@ -81,7 +81,7 @@ function showDayBox(month) {
         currentVisibleBox = 'day-box';
         document.getElementById('loading').style.display = 'none';
         resizeCharts();
-    }, 300); // Slightly faster transition
+    }, 250); // Slightly faster transition
 }
 function generateRandomData(length) {
     return Array.from({ length }, () => Math.floor(Math.random() * 100));
