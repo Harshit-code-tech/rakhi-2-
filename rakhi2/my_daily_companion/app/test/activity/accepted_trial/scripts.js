@@ -1,3 +1,4 @@
+// script.js
 let currentVisibleBox = 'year-box'; // Track the currently visible box
 let selectedYear = null; // Track selected year
 let selectedMonth = null; // Track selected month
@@ -62,30 +63,26 @@ function showMonthBox(year) {
     document.getElementById('loading').style.display = 'block';
     setTimeout(() => {
         document.getElementById('year-box').classList.remove('show');
-        document.getElementById('month-box').style.display = 'block';
         document.getElementById('month-box').classList.add('show');
-        document.getElementById('day-box').style.display = 'none';
         document.getElementById('day-box').classList.remove('show');
         updateMonthChart(year);
         currentVisibleBox = 'month-box';
         document.getElementById('loading').style.display = 'none';
         resizeCharts();
-    }, 500);
+    }, 300); // Slightly faster transition
 }
 
 function showDayBox(month) {
     document.getElementById('loading').style.display = 'block';
     setTimeout(() => {
         document.getElementById('month-box').classList.remove('show');
-        document.getElementById('day-box').style.display = 'block';
         document.getElementById('day-box').classList.add('show');
-        currentVisibleBox = 'day-box';
         updateDayChart(month);
+        currentVisibleBox = 'day-box';
         document.getElementById('loading').style.display = 'none';
         resizeCharts();
-    }, 500);
+    }, 300); // Slightly faster transition
 }
-
 function generateRandomData(length) {
     return Array.from({ length }, () => Math.floor(Math.random() * 100));
 }
@@ -127,12 +124,10 @@ document.addEventListener('click', function (event) {
     if (!event.target.closest('.chart-box')) {
         if (currentVisibleBox === 'month-box') {
             document.getElementById('month-box').classList.remove('show');
-            document.getElementById('month-box').style.display = 'none';
             document.getElementById('year-box').classList.add('show');
             currentVisibleBox = 'year-box';
         } else if (currentVisibleBox === 'day-box') {
             document.getElementById('day-box').classList.remove('show');
-            document.getElementById('day-box').style.display = 'none';
             document.getElementById('month-box').classList.add('show');
             currentVisibleBox = 'month-box';
         }
