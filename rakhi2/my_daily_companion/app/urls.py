@@ -4,13 +4,12 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('home/', views.home, name='home'),
-    # path('signup/', views.signup, name='signup'),
     path('mood_tracker/', views.mood_tracker, name='mood_tracker'),
     path('activities/', views.activities, name='activities'),
     path('journal/', views.journal, name='journal'),
     path('set_journal_reminder/', views.set_journal_reminder, name='set_journal_reminder'),
     path('reward/', views.reward, name='reward'),
-    path('mood_statistics/', views.mood_statistics, name='mood_statistics'),  # Update to mood_statistics
+    path('mood_statistics/', views.mood_statistics, name='mood_statistics'),
     path('settings/', views.settings, name='settings'),
     path('reminder/', views.reminder, name='reminder'),
     path('notes/', views.notes, name='notes'),
