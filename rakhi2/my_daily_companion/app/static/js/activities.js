@@ -60,6 +60,7 @@ document.addEventListener('DOMContentLoaded', function () {
             }]
         };
         chart.setOption(option);
+        return chart;
     }
 
     function initializeCalendarPie(elementId, data) {
@@ -86,12 +87,22 @@ document.addEventListener('DOMContentLoaded', function () {
             }]
         };
         chart.setOption(option);
+        return chart;
     }
 
     // Initialize calendar heatmap and calendar pies
-    initializeHeatmap('calendar-heatmap', safeParse('calendar-heatmap-data'));
-    initializeCalendarPie('mood-tracker-pie', safeParse('mood-tracker-data'));
-    initializeCalendarPie('journal-pie', safeParse('journal-data'));
-    initializeCalendarPie('reward-pie', safeParse('reward-data'));
-    initializeCalendarPie('note-pie', safeParse('note-data'));
+    const heatmapChart = initializeHeatmap('calendar-heatmap', safeParse('calendar-heatmap-data'));
+    const moodTrackerPieChart = initializeCalendarPie('mood-tracker-pie', safeParse('mood-tracker-data'));
+    const journalPieChart = initializeCalendarPie('journal-pie', safeParse('journal-data'));
+    const rewardPieChart = initializeCalendarPie('reward-pie', safeParse('reward-data'));
+    const notePieChart = initializeCalendarPie('note-pie', safeParse('note-data'));
+
+    // Resize charts on window resize
+    window.addEventListener('resize', function () {
+        heatmapChart.resize();
+        moodTrackerPieChart.resize();
+        journalPieChart.resize();
+        rewardPieChart.resize();
+        notePieChart.resize();
+    });
 });
