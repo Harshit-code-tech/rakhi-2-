@@ -1,4 +1,4 @@
-// script.js
+
 let currentVisibleBox = 'year-box'; // Track the currently visible box
 let selectedYear = null; // Track selected year
 let selectedMonth = null; // Track selected month
@@ -81,7 +81,8 @@ function showMonthBox(year) {
 function showDayBox(month) {
     document.getElementById('loading').style.display = 'block';
     setTimeout(() => {
-        document.getElementById('month-box').classList.remove('show');
+        document.getElementById('month-box').classList.remove(
+            'show');
         document.getElementById('day-box').classList.add('show');
         updateDayChart(month);
         currentVisibleBox = 'day-box';
